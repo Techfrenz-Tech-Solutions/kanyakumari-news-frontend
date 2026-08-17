@@ -1,0 +1,76 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Autoplay, Navigation, Pagination } from 'swiper/modules'
+import { FiClock, FiShare2, FiBookmark } from 'react-icons/fi'
+import newsService from '../../services/newsService.js'
+import Badge from '../ui/Badge.jsx'
+import { timeAgo } from '../../utils/format.js'
+import { useLang } from '../../context/LanguageContext.jsx'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+
+export default function HeroSlider() {
+  const { lang, t } = useLang()
+  const [slides,     setSlides]     = useState([])
+  const [bookmarked, setBookmarked] = useState({})
+
+  useEffect(() => {
+    let active = true
+    newsService.getHero().then((data) => { if (active) setSlides(data) })
+    return () => { active = false }
+  }, [])
+
+  function toggleBookmark(id, e) {
+    e.preventDefault(); e.stopPropagation()
+    setBookmarked((b) => ({ ...b, [id]: !b[id] }))
+  }
+
+  const titleOf = (a) => lang === 'TA' ? (a.titleTA || a.title) : a.title
+  const excOf   = (a) => lang === 'TA' ? (a.excerptTA || a.excerpt) : a.excerpt
+
+  if (slides.length === 0) {
+    return <div className="aspect-[16/8] md:aspect-[21/8] bg-black/5 animate-pulse rounded-md" />
+  }
+
+  return (
+    <Swiper modules={[Autoplay, Navigation, Pagination]}
+      autoplay={{ delay: 5000, disableOnInteraction: false }}
+      navigation pagination={{ clickable: true }} loop
+      className="rounded-md overflow-hidden hero-swiper">
+      {slides.map((a) => (
+        <SwiperSlide key={a.id}>
+          <Link to={`/article/${a.slug}`} className="relative block aspect-[16/9] md:aspect-[21/9]">
+            <img src={a.image} alt={titleOf(a)} className="w-full h-full object-cover"
+              onError={(e) => { e.target.src = 'https://picsum.photos/id/0/800/500' }} />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            <div className="absolute top-4 left-4 flex gap-2">
+              {a.breaking && <Badge variant="breaking" pulse>{t.breaking}</Badge>}
+              <span className="eyebrow text-accent bg-black/40 px-2 py-0.5 rounded-sm">{a.category}</span>
+            </div>
+            <div className="absolute right-4 top-4 flex gap-2">
+              <button onClick={(e) => toggleBookmark(a.id, e)} aria-label="Bookmark"
+                className={`w-8 h-8 rounded-full flex items-center justify-center backdrop-blur bg-black/40 hover:bg-primary transition-colors ${bookmarked[a.id] ? 'text-accent' : 'text-white'}`}>
+                <FiBookmark size={14} />
+              </button>
+              <button onClick={(e) => e.preventDefault()} aria-label="Share"
+                className="w-8 h-8 rounded-full flex items-center justify-center backdrop-blur bg-black/40 text-white hover:bg-primary transition-colors">
+                <FiShare2 size={14} />
+              </button>
+            </div>
+            <div className="absolute bottom-0 p-5 md:p-8 max-w-3xl">
+              <h2 className="font-display text-2xl md:text-4xl font-bold text-white leading-tight">{titleOf(a)}</h2>
+              <p className="hidden md:block text-white/70 mt-2 line-clamp-2 max-w-xl">{excOf(a)}</p>
+              <div className="flex items-center gap-3 text-white/70 text-xs font-mono mt-3">
+                <span>{a.author.name}</span>
+                <span className="flex items-center gap-1"><FiClock size={11} /> {timeAgo(a.publishedAt)}</span>
+                <span>· {a.readTime} {t.minutesRead}</span>
+              </div>
+            </div>
+          </Link>
+        </SwiperSlide>
+      ))}
+    </Swiper>
+  )
+}
