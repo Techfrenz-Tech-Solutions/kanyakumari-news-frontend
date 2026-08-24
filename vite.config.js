@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,       // use port 3000 — less likely to conflict than 5173
-    strictPort: false, // if 3000 is taken, move to 3001 automatically
-    open: true,        // automatically open the browser when you run npm run dev
+    strictPort: true,  // keep the configured URL stable for backend CORS
+    open: false,
     host: true,        // expose on local network (useful for testing on phone/tablet)
   },
   preview: {
