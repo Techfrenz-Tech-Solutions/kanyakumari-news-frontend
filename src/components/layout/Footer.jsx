@@ -54,7 +54,7 @@ export default function Footer() {
           <div className="mt-5 space-y-2 text-xs text-white/40">
             <p className="flex items-start gap-2"><FiMapPin size={12} className="shrink-0 mt-0.5" /> No. 5, Main Road, Nagercoil – 629 001</p>
             <p className="flex items-center gap-2"><FiPhone size={12} /> 04652-232100</p>
-            <p className="flex items-center gap-2"><FiMail size={12} /> contact@kanyakumaritoday.com</p>
+            <p className="flex items-center gap-2"><FiMail size={12} /> kanyakumaritoday2026@gmail.com</p>
           </div>
         </div>
 

@@ -5,9 +5,14 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Base font size — 18px instead of the browser default 16px.
+       All Tailwind rem-based utilities (text-sm, text-base, etc.) scale up proportionally. */
+    font-size: 18px;
   }
   body {
     @apply bg-surface text-ink font-body antialiased transition-colors duration-300;
+    /* Comfortable line-height for Tamil + English at larger size */
+    line-height: 1.7;
   }
   html.dark body {
     @apply bg-surface-dark text-ink-invert;
@@ -35,10 +40,10 @@
 
 @layer components {
   .eyebrow {
-    @apply font-mono text-[11px] tracking-[0.18em] uppercase text-primary font-medium;
+    @apply font-mono text-[12px] tracking-[0.18em] uppercase text-primary font-medium;
   }
   .section-title {
-    @apply font-display text-2xl md:text-3xl font-bold text-ink dark:text-white relative pl-4 border-l-4 border-primary;
+    @apply font-display text-3xl md:text-4xl font-bold text-ink dark:text-white relative pl-4 border-l-4 border-primary;
   }
   .card-surface {
     @apply bg-surface-card dark:bg-surface-darkcard rounded-md shadow-sm hover:shadow-md transition-shadow duration-300 border border-black/5 dark:border-white/5;

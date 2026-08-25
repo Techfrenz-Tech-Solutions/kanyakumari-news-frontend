@@ -90,11 +90,15 @@ export default function Header() {
           <FiMenu size={24} />
         </button>
 
-        <Link to="/" className="flex flex-col items-start">
-          <span className="font-display text-2xl md:text-3xl font-black tracking-tight text-ink dark:text-white leading-none">
-            Kanyakumari <span className="text-primary">Today</span>
-          </span>
-          <span className="text-[10px] font-mono tracking-widest uppercase text-ink-soft dark:text-white/50 mt-0.5 hidden sm:block">
+        <Link to="/" className="flex flex-col items-center gap-1">
+          {/* Logo image */}
+          <img
+            src="/logo.png"
+            alt="Kanyakumari Today"
+            className="h-15 md:h-20  w-auto object-contain"
+          />
+          {/* Tagline directly below the logo */}
+          <span className="text-[12px] font-mono tracking-widest uppercase text-ink-soft dark:text-white/50 hidden sm:block text-center whitespace-nowrap">
             {t.tagline}
           </span>
         </Link>
@@ -182,13 +186,11 @@ export default function Header() {
               transition={{ type: 'tween', duration: 0.25 }}
               className="fixed top-0 left-0 bottom-0 w-72 bg-white dark:bg-surface-darkcard z-50 p-5 overflow-y-auto lg:hidden"
             >
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2 mb-6">
+                <img src="/logo.png" alt="Kanyakumari Today" className="h-9 w-auto object-contain" />
                 <span className="font-display text-lg font-bold">
                   Kanyakumari <span className="text-primary">Today</span>
                 </span>
-                <button onClick={() => setMenuOpen(false)} aria-label="Close menu">
-                  <FiX size={22} />
-                </button>
               </div>
               {MOBILE_GROUPS.map((group) => (
                 <div key={group.title} className="mb-5">
