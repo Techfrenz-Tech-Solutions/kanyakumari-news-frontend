@@ -1,11 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FiArrowRight, FiPlay, FiBriefcase, FiMapPin, FiImage, FiExternalLink } from 'react-icons/fi'
 import newsService from '../services/newsService.js'
 import AdBanner from '../components/ui/AdBanner.jsx'
 import { useLang } from '../context/LanguageContext.jsx'
+import { usePublicContent } from '../context/PublicContentContext.jsx'
+import HeroSlider from '../components/news/HeroSlider.jsx'
+import NewsCard from '../components/news/NewsCard.jsx'
+import MostRead from '../components/widgets/MostRead.jsx'
+import { ApiErrorState, EmptyState } from '../components/ui/ApiState.jsx'
 
-const FALLBACK = 'https://picsum.photos/id/0/400/250'
+const FALLBACK = '/news-placeholder.svg'
 
 // ── Sub-components ────────────────────────────────────────────────────────
 
@@ -83,40 +88,80 @@ function NewsColumn({ col, articles, loading, titleFn, excerptFn, moreLabel }) {
 
 export default function Home() {
   const { lang, t } = useLang()
+  const { categories } = usePublicContent()
 
   // Language helpers
   const titleFn   = (a) => lang === 'TA' ? (a.titleTA   || a.title)   : a.title
   const excerptFn = (a) => lang === 'TA' ? (a.excerptTA || a.excerpt) : a.excerpt
 
-  const NEWS_COLS = [
-    { slug: 'kanyakumari', label: t.kanyakumariNews, headerBg: 'bg-primary',   accent: 'text-yellow-200' },
-    { slug: 'tamil-nadu',  label: t.tamilnaduNews,   headerBg: 'bg-secondary', accent: 'text-blue-200'   },
-    { slug: 'national',    label: t.nationalNews,     headerBg: 'bg-green-700', accent: 'text-green-200'  },
-    { slug: 'world',       label: t.worldNews,        headerBg: 'bg-amber-600', accent: 'text-amber-100'  },
-  ]
+  const NEWS_COLS = useMemo(() => {
+    const styles = [
+      ['bg-primary', 'text-yellow-200'], ['bg-secondary', 'text-blue-200'],
+      ['bg-green-700', 'text-green-200'], ['bg-amber-600', 'text-amber-100'],
+    ]
+    return categories.slice(0, 4).map((category, index) => ({ ...category, headerBg: styles[index][0], accent: styles[index][1] }))
+  }, [categories])
 
   const [colData, setColData] = useState({})
   const [videos,  setVideos]  = useState(null)
   const [gallery, setGallery] = useState(null)
   const [jobs,    setJobs]    = useState(null)
   const [weather, setWeather] = useState(null)
+  const [home, setHome] = useState(null)
+  const [homeError, setHomeError] = useState(null)
+  const [columnError, setColumnError] = useState(null)
 
   useEffect(() => {
-    Promise.all(NEWS_COLS.map((c) => newsService.getByCategory(c.slug, 5)))
+    if (!NEWS_COLS.length) return undefined
+    const controller = new AbortController()
+    Promise.all(NEWS_COLS.map((c) => newsService.getByCategory(c.slug, 5, { signal: controller.signal })))
       .then((results) => {
         const map = {}
         NEWS_COLS.forEach((c, i) => { map[c.slug] = results[i] })
         setColData(map)
-      })
-    newsService.getVideos().then((v) => setVideos(v.slice(0, 3)))
-    newsService.getGallery().then((g) => setGallery(g.slice(0, 4)))
-    newsService.getJobs().then((j) => setJobs(j.slice(0, 4)))
-    newsService.getWeather().then(setWeather)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+      }).catch((error) => { if (error.code !== 'REQUEST_CANCELLED') setColumnError(error) })
+    return () => controller.abort()
+  }, [NEWS_COLS])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    newsService.getHome({ signal: controller.signal }).then(setHome).catch((error) => {
+      if (error.code !== 'REQUEST_CANCELLED') setHomeError(error)
+    })
+    Promise.allSettled([
+      newsService.getVideos({ signal: controller.signal }),
+      newsService.getGallery({ signal: controller.signal }),
+      newsService.getJobs({ signal: controller.signal }),
+      newsService.getWeather(undefined, { signal: controller.signal }),
+    ]).then(([videoResult, galleryResult, jobsResult, weatherResult]) => {
+      if (controller.signal.aborted) return
+      setVideos(videoResult.status === 'fulfilled' ? videoResult.value.slice(0, 3) : [])
+      setGallery(galleryResult.status === 'fulfilled' ? galleryResult.value.slice(0, 4) : [])
+      setJobs(jobsResult.status === 'fulfilled' ? jobsResult.value.slice(0, 4) : [])
+      setWeather(weatherResult.status === 'fulfilled' ? weatherResult.value : null)
+    })
+    return () => controller.abort()
+  }, [])
 
   return (
     <div className="bg-white min-h-screen">
       <div className="container-page py-5 space-y-8">
+
+        <section aria-label="Featured news">
+          {homeError ? <ApiErrorState error={homeError} /> : home ? <HeroSlider articles={home.hero} /> : <div className="aspect-[21/8] animate-pulse rounded bg-black/5" />}
+        </section>
+
+        {home && (
+          <section className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <h2 className="section-title mb-5">Latest News</h2>
+              {home.latest.items.length === 0 ? <EmptyState /> : <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {home.latest.items.slice(0, 6).map((article) => <NewsCard key={article.id} article={article} />)}
+              </div>}
+            </div>
+            <MostRead initialItems={home.trending} />
+          </section>
+        )}
 
         {/* ── ROW 1: TWO AD BANNERS ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -126,6 +171,7 @@ export default function Home() {
 
         {/* ── ROW 2: 4-COLUMN NEWS GRID ── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {columnError && <div className="sm:col-span-2 lg:col-span-4"><ApiErrorState error={columnError} compact /></div>}
           {NEWS_COLS.map((col) => (
             <NewsColumn
               key={col.slug}
@@ -157,7 +203,7 @@ export default function Home() {
                   <FiArrowRight size={10} className="shrink-0 text-primary" /> {label}
                 </Link>
               ))}
-              {weather && (
+              {weather?.available !== false && weather?.tempC !== undefined && (
                 <div className="mt-2 pt-2 border-t border-black/8 text-[11px] text-ink-soft flex items-center gap-1">
                   🌤 {weather.city} · {weather.tempC}°C · {weather.condition}
                 </div>

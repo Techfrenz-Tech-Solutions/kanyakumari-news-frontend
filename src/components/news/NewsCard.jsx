@@ -11,6 +11,8 @@ export default function NewsCard({ article, variant = 'medium' }) {
   const { slug, image, category, publishedAt, readTime, breaking, trending, premium } = article
   const title   = lang === 'TA' ? (article.titleTA   || article.title)   : article.title
   const excerpt = lang === 'TA' ? (article.excerptTA || article.excerpt) : article.excerpt
+  const imageSrc = image || '/news-placeholder.svg'
+  const handleImageError = (event) => { event.currentTarget.src = '/news-placeholder.svg' }
 
   const badge = breaking ? (
     <Badge variant="breaking" pulse>{t.breaking}</Badge>
@@ -24,7 +26,7 @@ export default function NewsCard({ article, variant = 'medium' }) {
     return (
       <Link to={`/article/${slug}`} className="group block card-surface overflow-hidden">
         <div className="relative aspect-[16/9] overflow-hidden">
-          <img src={image} alt={title} loading="lazy"
+          <img src={imageSrc} alt={title} loading="lazy" onError={handleImageError}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
           <div className="absolute top-3 left-3 flex gap-2">{badge}</div>
@@ -45,7 +47,7 @@ export default function NewsCard({ article, variant = 'medium' }) {
     return (
       <Link to={`/article/${slug}`} className="group flex gap-3 items-start">
         <div className="w-24 h-20 md:w-28 md:h-20 shrink-0 overflow-hidden rounded-sm">
-          <img src={image} alt={title} loading="lazy"
+          <img src={imageSrc} alt={title} loading="lazy" onError={handleImageError}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         </div>
         <div className="min-w-0">
@@ -61,7 +63,7 @@ export default function NewsCard({ article, variant = 'medium' }) {
     return (
       <Link to={`/article/${slug}`} className="group card-surface overflow-hidden flex flex-col">
         <div className="aspect-[16/10] overflow-hidden">
-          <img src={image} alt={title} loading="lazy"
+          <img src={imageSrc} alt={title} loading="lazy" onError={handleImageError}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         </div>
         <div className="p-3">
@@ -77,7 +79,7 @@ export default function NewsCard({ article, variant = 'medium' }) {
   return (
     <Link to={`/article/${slug}`} className="group card-surface overflow-hidden flex flex-col h-full">
       <div className="relative aspect-[16/10] overflow-hidden">
-        <img src={image} alt={title} loading="lazy"
+        <img src={imageSrc} alt={title} loading="lazy" onError={handleImageError}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
         {badge && <div className="absolute top-2 left-2">{badge}</div>}
       </div>

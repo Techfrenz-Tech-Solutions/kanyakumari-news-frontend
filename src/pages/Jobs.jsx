@@ -30,7 +30,7 @@ export default function Jobs() {
     newsService.getJobs().then((data) => { setJobs(data); setLoading(false) })
   }, [])
 
-  const filtered  = activeFilter === 'Latest' ? jobs : jobs.filter((j) => j.type === activeFilter)
+  const filtered  = activeFilter === 'Latest' ? jobs : jobs.filter((j) => j.type?.toLowerCase() === activeFilter.toLowerCase())
   const paginated = filtered.slice(0, page * PAGE_SIZE)
   const hasMore   = paginated.length < filtered.length
 
@@ -97,7 +97,7 @@ export default function Jobs() {
                     </span>
                   </div>
                   <div className="md:col-span-2 md:text-right">
-                    <a href={job.link} target="_blank" rel="noopener noreferrer"
+                    <a href={job.applyUrl || '#'} target="_blank" rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
                       {t.applyLink} <FiExternalLink size={11} />
                     </a>

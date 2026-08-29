@@ -1,15 +1,14 @@
 import { Link } from 'react-router-dom'
 import { FiFacebook, FiTwitter, FiInstagram, FiYoutube, FiMail, FiPhone, FiMapPin } from 'react-icons/fi'
 import { useLang } from '../../context/LanguageContext.jsx'
+import { usePublicContent } from '../../context/PublicContentContext.jsx'
 
 export default function Footer() {
   const { t } = useLang()
+  const { categories, site } = usePublicContent()
 
   const NAV_LINKS = [
-    { label: t.kanyakumariNews, to: '/category/kanyakumari' },
-    { label: t.navTN,           to: '/category/tamil-nadu'  },
-    { label: t.navNational,     to: '/category/national'    },
-    { label: t.navWorld,        to: '/category/world'       },
+    ...categories.map((category) => ({ label: category.label, to: `/category/${category.slug}` })),
     { label: t.navPhoto,        to: '/gallery'              },
     { label: t.navVideos,       to: '/videos'               },
     { label: t.navDistrictInfo, to: '/district-info'        },
@@ -34,17 +33,17 @@ export default function Footer() {
         <div>
           <Link to="/" className="inline-block mb-3">
             <span className="font-display text-2xl font-black text-white">
-              Kanyakumari <span className="text-primary">Today</span>
+              {site?.siteName || 'Kanyakumari Today'}
             </span>
           </Link>
           <p className="text-sm text-white/50 leading-relaxed max-w-xs mb-4">{t.footerTagline}</p>
           <div className="flex gap-3">
             {[
-              { Icon: FiFacebook,  label: 'Facebook',  href: '#' },
-              { Icon: FiTwitter,   label: 'Twitter/X', href: '#' },
-              { Icon: FiInstagram, label: 'Instagram', href: '#' },
-              { Icon: FiYoutube,   label: 'YouTube',   href: '#' },
-            ].map(({ Icon, label, href }) => (
+              { Icon: FiFacebook,  label: 'Facebook',  href: site?.social?.facebook },
+              { Icon: FiTwitter,   label: 'Twitter/X', href: site?.social?.twitter },
+              { Icon: FiInstagram, label: 'Instagram', href: site?.social?.instagram },
+              { Icon: FiYoutube,   label: 'YouTube',   href: site?.social?.youtube },
+            ].filter((item) => item.href).map(({ Icon, label, href }) => (
               <a key={label} href={href} aria-label={label}
                 className="w-9 h-9 flex items-center justify-center rounded-full border border-white/20 hover:bg-primary hover:border-primary transition-colors">
                 <Icon size={15} />
@@ -52,9 +51,9 @@ export default function Footer() {
             ))}
           </div>
           <div className="mt-5 space-y-2 text-xs text-white/40">
-            <p className="flex items-start gap-2"><FiMapPin size={12} className="shrink-0 mt-0.5" /> No. 5, Main Road, Nagercoil – 629 001</p>
-            <p className="flex items-center gap-2"><FiPhone size={12} /> 04652-232100</p>
-            <p className="flex items-center gap-2"><FiMail size={12} /> contact@kanyakumaritoday.com</p>
+            {site?.address && <p className="flex items-start gap-2"><FiMapPin size={12} className="shrink-0 mt-0.5" /> {site.address}</p>}
+            {site?.contactPhone && <p className="flex items-center gap-2"><FiPhone size={12} /> {site.contactPhone}</p>}
+            {site?.contactEmail && <p className="flex items-center gap-2"><FiMail size={12} /> {site.contactEmail}</p>}
           </div>
         </div>
 

@@ -14,7 +14,6 @@ import DistrictInfo from './pages/DistrictInfo.jsx'
 import TouristInfo from './pages/TouristInfo.jsx'
 import Jobs from './pages/Jobs.jsx'
 import EPaper from './pages/EPaper.jsx'
-import Login from './pages/Login.jsx'
 import NotFound from './pages/NotFound.jsx'
 import StaticPage from './pages/StaticPage.jsx'
 import AboutUs from './pages/AboutUs.jsx'
@@ -60,7 +59,6 @@ export default function App() {
 
           {/* E-paper & auth */}
           <Route path="/e-paper"         element={<EPaper />} />
-          <Route path="/login"           element={<Login />} />
 
           {/* About / Contact — combined per PDF wireframe */}
           <Route path="/about"           element={<AboutUs />} />

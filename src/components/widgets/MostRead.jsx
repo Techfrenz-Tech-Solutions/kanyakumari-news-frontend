@@ -1,12 +1,15 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import newsService from '../../services/newsService.js'
-import NewsCard from '../news/NewsCard.jsx'
 import { useLang } from '../../context/LanguageContext.jsx'
+import { Link } from 'react-router-dom'
 
-export default function MostRead() {
+export default function MostRead({ initialItems = null }) {
   const { t } = useLang()
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState(initialItems || [])
+  const [loading, setLoading] = useState(!initialItems)
+  const [error, setError] = useState(null)
   const [range, setRange] = useState('daily')
+  const useInitial = useRef(Boolean(initialItems))
 
   const RANGES = [
     { key: 'daily',   label: t.daily   },
@@ -15,10 +18,19 @@ export default function MostRead() {
   ]
 
   useEffect(() => {
-    let active = true
-    newsService.getTrending().then((d) => active && setItems(d.slice(0, 4)))
-    return () => { active = false }
-  }, [])
+    if (range === 'daily' && useInitial.current) {
+      useInitial.current = false
+      setLoading(false)
+      return undefined
+    }
+    const controller = new AbortController()
+    setLoading(true); setError(null)
+    newsService.getTrending({ period: range, limit: 4, signal: controller.signal })
+      .then((data) => setItems(data)).catch((requestError) => {
+        if (requestError.code !== 'REQUEST_CANCELLED') setError(requestError)
+      }).finally(() => { if (!controller.signal.aborted) setLoading(false) })
+    return () => controller.abort()
+  }, [range])
 
   return (
     <div className="card-surface p-4">
@@ -35,9 +47,16 @@ export default function MostRead() {
           ))}
         </div>
       </div>
-      <div className="space-y-4">
-        {items.map((a) => <NewsCard key={a.id} article={a} variant="horizontal" />)}
-      </div>
+      {loading ? <div className="h-24 animate-pulse rounded bg-black/5" /> : error ? <p role="alert" className="text-xs text-red-700">{error.message}</p> : items.length === 0 ? <p className="text-xs text-ink-soft">No view activity for this period.</p> : (
+        <ol className="space-y-3">
+          {items.map((item, index) => <li key={item.slug}>
+            <Link to={`/article/${item.slug}`} className="flex gap-3 text-sm font-semibold hover:text-primary">
+              <span className="text-primary/50">{index + 1}</span><span>{item.title}</span>
+              <span className="ml-auto shrink-0 text-xs font-normal text-ink-soft">{item.viewCount} views</span>
+            </Link>
+          </li>)}
+        </ol>
+      )}
     </div>
   )
 }

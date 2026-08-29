@@ -2,17 +2,16 @@ import { useEffect, useState } from 'react'
 import newsService from '../../services/newsService.js'
 import Badge from '../ui/Badge.jsx'
 import { useLang } from '../../context/LanguageContext.jsx'
+import { Link } from 'react-router-dom'
 
 export default function BreakingTicker() {
   const { t } = useLang()
   const [headlines, setHeadlines] = useState([])
 
   useEffect(() => {
-    let active = true
-    newsService.getBreakingHeadlines().then((data) => {
-      if (active) setHeadlines(data)
-    })
-    return () => { active = false }
+    const controller = new AbortController()
+    newsService.getBreakingHeadlines({ signal: controller.signal }).then(setHeadlines).catch(() => {})
+    return () => controller.abort()
   }, [])
 
   if (headlines.length === 0) return null
@@ -26,9 +25,10 @@ export default function BreakingTicker() {
         </div>
         <div className="relative flex-1 overflow-hidden">
           <div className="flex whitespace-nowrap animate-marquee">
-            {loop.map((h, i) => (
-              <span key={i} className="mx-8 text-sm font-medium">{h}</span>
-            ))}
+            {loop.map((h, i) => h.slug
+              ? <Link key={`${h.id}-${i}`} to={`/article/${h.slug}`} className="mx-8 text-sm font-medium hover:underline">{h.title}</Link>
+              : <span key={`${h.id}-${i}`} className="mx-8 text-sm font-medium">{h.title}</span>
+            )}
           </div>
         </div>
       </div>

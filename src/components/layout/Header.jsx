@@ -3,15 +3,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import { FiSearch, FiMenu, FiX } from 'react-icons/fi'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useLang } from '../../context/LanguageContext.jsx'
+import { usePublicContent } from '../../context/PublicContentContext.jsx'
 
 // Primary nav — labels come from translations
-function buildNav(t) {
+function buildNav(t, categories) {
   return [
-    { key: 'home',         label: t.home,           to: '/'                     },
-    { key: 'kanyakumari',  label: t.navKanyakumari, to: '/category/kanyakumari' },
-    { key: 'tn',           label: t.navTN,           to: '/category/tamil-nadu'  },
-    { key: 'national',     label: t.navNational,     to: '/category/national'    },
-    { key: 'world',        label: t.navWorld,        to: '/category/world'       },
+    { key: 'home', label: t.home, to: '/' },
+    ...categories.map((category) => ({ key: category.slug, label: category.label, to: `/category/${category.slug}` })),
     { key: 'photo',        label: t.navPhoto,        to: '/gallery'              },
     { key: 'videos',       label: t.navVideos,       to: '/videos'               },
     { key: 'districtInfo', label: t.navDistrictInfo, to: '/district-info'        },
@@ -21,16 +19,13 @@ function buildNav(t) {
   ]
 }
 
-function buildMobileGroups(t) {
+function buildMobileGroups(t, categories) {
   return [
     {
       title: t.navKanyakumari,
       links: [
         { label: t.home,           to: '/'                     },
-        { label: t.navKanyakumari, to: '/category/kanyakumari' },
-        { label: t.navTN,          to: '/category/tamil-nadu'  },
-        { label: t.navNational,    to: '/category/national'    },
-        { label: t.navWorld,       to: '/category/world'       },
+        ...categories.map((category) => ({ label: category.label, to: `/category/${category.slug}` })),
       ],
     },
     {
@@ -62,8 +57,9 @@ function buildMobileGroups(t) {
 
 export default function Header() {
   const { t } = useLang()
-  const PRIMARY_NAV   = buildNav(t)
-  const MOBILE_GROUPS = buildMobileGroups(t)
+  const { categories, site, errors } = usePublicContent()
+  const PRIMARY_NAV   = buildNav(t, categories)
+  const MOBILE_GROUPS = buildMobileGroups(t, categories)
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -92,7 +88,7 @@ export default function Header() {
 
         <Link to="/" className="flex flex-col items-start">
           <span className="font-display text-2xl md:text-3xl font-black tracking-tight text-ink dark:text-white leading-none">
-            Kanyakumari <span className="text-primary">Today</span>
+            {site?.siteName || 'Kanyakumari Today'}
           </span>
           <span className="text-[10px] font-mono tracking-widest uppercase text-ink-soft dark:text-white/50 mt-0.5 hidden sm:block">
             {t.tagline}
@@ -163,6 +159,11 @@ export default function Header() {
           </button>
         </div>
       </nav>
+      {errors.categories && (
+        <p role="status" className="bg-red-50 px-4 py-1 text-center text-xs text-red-700">
+          Categories are temporarily unavailable.
+        </p>
+      )}
 
       {/* Mobile slide-out drawer */}
       <AnimatePresence>
@@ -184,7 +185,7 @@ export default function Header() {
             >
               <div className="flex items-center justify-between mb-6">
                 <span className="font-display text-lg font-bold">
-                  Kanyakumari <span className="text-primary">Today</span>
+                  {site?.siteName || 'Kanyakumari Today'}
                 </span>
                 <button onClick={() => setMenuOpen(false)} aria-label="Close menu">
                   <FiX size={22} />

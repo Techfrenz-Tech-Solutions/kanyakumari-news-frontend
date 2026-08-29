@@ -1,11 +1,30 @@
 import { useState } from 'react'
 import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi'
 import { useLang } from '../context/LanguageContext.jsx'
+import { usePublicContent } from '../context/PublicContentContext.jsx'
+import newsService from '../services/newsService.js'
+import { ApiErrorState } from '../components/ui/ApiState.jsx'
 
 export default function Contact() {
   const { t } = useLang()
+  const { site } = usePublicContent()
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+
+  async function submit(event) {
+    event.preventDefault()
+    setLoading(true); setError(null)
+    try {
+      await newsService.submitContact(form)
+      setSent(true)
+    } catch (requestError) {
+      setError(requestError)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="container-page py-12 max-w-5xl">
@@ -15,10 +34,10 @@ export default function Contact() {
       <div className="grid md:grid-cols-2 gap-12">
         <div className="space-y-8">
           {[
-            { Icon: FiMail,   label: t.emailAddress, value: 'contact@kanyakumaritoday.com' },
-            { Icon: FiPhone,  label: t.login,        value: '04652-232100'                  },
-            { Icon: FiMapPin, label: t.tabTaluks,    value: 'No. 5, Main Road, Nagercoil – 629 001' },
-          ].map(({ Icon, label, value }) => (
+            { Icon: FiMail,   label: t.emailAddress, value: site?.contactEmail },
+            { Icon: FiPhone,  label: t.login,        value: site?.contactPhone },
+            { Icon: FiMapPin, label: t.tabTaluks,    value: site?.address },
+          ].filter((item) => item.value).map(({ Icon, label, value }) => (
             <div key={label} className="flex items-start gap-4">
               <span className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
                 <Icon size={18} />
@@ -48,7 +67,8 @@ export default function Contact() {
             <button onClick={() => setSent(false)} className="btn-primary mt-4 text-sm">{t.sendAnother}</button>
           </div>
         ) : (
-          <form onSubmit={(e) => { e.preventDefault(); setSent(true) }} className="space-y-4">
+          <form onSubmit={submit} className="space-y-4">
+            {error && <ApiErrorState error={error} compact />}
             {[
               { name: 'name',    label: t.yourName,     type: 'text',  ph: 'Rajesh Kumar'       },
               { name: 'email',   label: t.emailAddress, type: 'email', ph: 'you@example.com'    },
@@ -67,7 +87,7 @@ export default function Contact() {
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 className="w-full bg-transparent border border-black/15 rounded-sm px-4 py-2 text-sm focus:border-primary outline-none resize-none" />
             </div>
-            <button type="submit" className="btn-primary w-full">{t.sendMessage}</button>
+            <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">{loading ? 'Sending…' : t.sendMessage}</button>
           </form>
         )}
       </div>

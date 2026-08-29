@@ -11,16 +11,20 @@ import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 
-export default function HeroSlider() {
+export default function HeroSlider({ articles }) {
   const { lang, t } = useLang()
-  const [slides,     setSlides]     = useState([])
+  const [slides,     setSlides]     = useState(articles || [])
+  const [error, setError] = useState(null)
   const [bookmarked, setBookmarked] = useState({})
 
   useEffect(() => {
-    let active = true
-    newsService.getHero().then((data) => { if (active) setSlides(data) })
-    return () => { active = false }
-  }, [])
+    if (articles) { setSlides(articles); return undefined }
+    const controller = new AbortController()
+    newsService.getHero({ signal: controller.signal }).then(setSlides).catch((requestError) => {
+      if (requestError.code !== 'REQUEST_CANCELLED') setError(requestError)
+    })
+    return () => controller.abort()
+  }, [articles])
 
   function toggleBookmark(id, e) {
     e.preventDefault(); e.stopPropagation()
@@ -30,7 +34,8 @@ export default function HeroSlider() {
   const titleOf = (a) => lang === 'TA' ? (a.titleTA || a.title) : a.title
   const excOf   = (a) => lang === 'TA' ? (a.excerptTA || a.excerpt) : a.excerpt
 
-  if (slides.length === 0) {
+  if (error) return <div role="alert" className="rounded border border-red-200 bg-red-50 p-5 text-sm text-red-700">{error.message}</div>
+  if (slides.length === 0 && !articles) {
     return <div className="aspect-[16/8] md:aspect-[21/8] bg-black/5 animate-pulse rounded-md" />
   }
 
@@ -42,8 +47,8 @@ export default function HeroSlider() {
       {slides.map((a) => (
         <SwiperSlide key={a.id}>
           <Link to={`/article/${a.slug}`} className="relative block aspect-[16/9] md:aspect-[21/9]">
-            <img src={a.image} alt={titleOf(a)} className="w-full h-full object-cover"
-              onError={(e) => { e.target.src = 'https://picsum.photos/id/0/800/500' }} />
+            <img src={a.image || '/news-placeholder.svg'} alt={titleOf(a)} className="w-full h-full object-cover"
+              onError={(e) => { e.currentTarget.src = '/news-placeholder.svg' }} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
             <div className="absolute top-4 left-4 flex gap-2">
               {a.breaking && <Badge variant="breaking" pulse>{t.breaking}</Badge>}
@@ -63,7 +68,7 @@ export default function HeroSlider() {
               <h2 className="font-display text-2xl md:text-4xl font-bold text-white leading-tight">{titleOf(a)}</h2>
               <p className="hidden md:block text-white/70 mt-2 line-clamp-2 max-w-xl">{excOf(a)}</p>
               <div className="flex items-center gap-3 text-white/70 text-xs font-mono mt-3">
-                <span>{a.author.name}</span>
+                {a.author?.name && <span>{a.author.name}</span>}
                 <span className="flex items-center gap-1"><FiClock size={11} /> {timeAgo(a.publishedAt)}</span>
                 <span>· {a.readTime} {t.minutesRead}</span>
               </div>

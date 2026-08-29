@@ -6,6 +6,10 @@ import MostRead from '../components/widgets/MostRead.jsx'
 import Badge from '../components/ui/Badge.jsx'
 import { timeAgo, formatNumber } from '../utils/format.js'
 import { useLang } from '../context/LanguageContext.jsx'
+import { ApiErrorState, EmptyState } from '../components/ui/ApiState.jsx'
+import { applyArticleMetadata, buildArticleMetadata } from '../utils/seo.js'
+
+const IMAGE_FALLBACK = '/news-placeholder.svg'
 
 function ShareButtons({ title, url, t }) {
   const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
@@ -37,35 +41,34 @@ export default function Article() {
   const [article,  setArticle]  = useState(null)
   const [related,  setRelated]  = useState([])
   const [notFound, setNotFound] = useState(false)
-  const [comment,  setComment]  = useState('')
-  const [comments, setComments] = useState([
-    { id: 1, name: 'Vignesh S.',  text: 'Well reported, thanks for the update.',     time: '2h ago' },
-    { id: 2, name: 'Lakshmi P.', text: 'Was waiting for this news, good coverage.',  time: '5h ago' },
-  ])
+  const [error, setError] = useState(null)
+  const [comments, setComments] = useState([])
 
   useEffect(() => {
-    let active = true
-    setArticle(null); setNotFound(false)
-    newsService.getArticleBySlug(slug).then(({ article: a, related: r }) => {
-      if (!active) return
-      if (!a) setNotFound(true)
+    const controller = new AbortController()
+    setArticle(null); setNotFound(false); setError(null); setComments([])
+    newsService.getArticleBySlug(slug, { signal: controller.signal }).then(({ article: a, related: r }) => {
       setArticle(a); setRelated(r)
+      return newsService.getComments(slug, { signal: controller.signal })
+    }).then(setComments).catch((requestError) => {
+      if (requestError.code === 'REQUEST_CANCELLED') return
+      if (requestError.status === 404) setNotFound(true)
+      else setError(requestError)
     })
-    return () => { active = false }
+    return () => controller.abort()
   }, [slug])
-
-  function submitComment(e) {
-    e.preventDefault()
-    if (!comment.trim()) return
-    setComments((c) => [{ id: Date.now(), name: lang === 'TA' ? 'நீங்கள்' : 'You', text: comment.trim(), time: lang === 'TA' ? 'இப்போது' : 'just now' }, ...c])
-    setComment('')
-  }
 
   // Pick Tamil or English text
   const titleOf   = (a) => lang === 'TA' ? (a?.titleTA   || a?.title)   : a?.title
   const excerptOf = (a) => lang === 'TA' ? (a?.excerptTA || a?.excerpt) : a?.excerpt
+  const contentOf = (a) => lang === 'TA' ? (a?.contentTA || a?.content) : a?.content
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : ''
+
+  useEffect(() => {
+    if (!article) return
+    applyArticleMetadata(buildArticleMetadata(article, lang, shareUrl))
+  }, [article, lang, shareUrl])
 
   if (notFound) return (
     <div className="container-page py-20 text-center">
@@ -77,7 +80,7 @@ export default function Article() {
 
   if (!article) return (
     <div className="container-page py-10">
-      <div className="aspect-[16/9] bg-black/10 rounded-md animate-pulse" />
+      {error ? <ApiErrorState error={error} /> : <div className="aspect-[16/9] bg-black/10 rounded-md animate-pulse" />}
     </div>
   )
 
@@ -109,11 +112,11 @@ export default function Article() {
 
           {/* Author / date */}
           <div className="flex flex-wrap items-center gap-3 mt-5 py-3 border-y border-black/10">
-            <img src={article.author.avatar} alt={article.author.name} className="w-9 h-9 rounded-full object-cover" />
-            <div>
+            {article.author?.avatar && <img src={article.author.avatar} alt="" className="w-9 h-9 rounded-full object-cover" onError={(e) => { e.currentTarget.hidden = true }} />}
+            {article.author?.name && <div>
               <p className="text-sm font-semibold leading-none">{article.author.name}</p>
-              <p className="text-xs text-ink-soft mt-0.5">{article.author.role}</p>
-            </div>
+              {article.author.role && <p className="text-xs text-ink-soft mt-0.5">{article.author.role}</p>}
+            </div>}
             <div className="flex items-center gap-3 text-xs font-mono text-ink-soft ml-auto">
               <span className="flex items-center gap-1"><FiClock size={11} /> {timeAgo(article.publishedAt)}</span>
               <span className="hidden sm:inline">· {article.readTime} {t.minutesRead}</span>
@@ -127,32 +130,14 @@ export default function Article() {
           {/* Main image */}
           <figure className="mt-6">
             <div className="aspect-[16/9] rounded-md overflow-hidden">
-              <img src={article.image} alt={titleOf(article)} className="w-full h-full object-cover" />
+              <img src={article.image || IMAGE_FALLBACK} alt={titleOf(article)} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.src = IMAGE_FALLBACK }} />
             </div>
-            <figcaption className="text-xs text-ink-soft font-mono mt-1.5">
-              {t.photo}: Kanyakumari Today / {article.author.name}
-            </figcaption>
+            {article.author?.name && <figcaption className="text-xs text-ink-soft font-mono mt-1.5">{t.photo}: {article.author.name}</figcaption>}
           </figure>
 
           {/* Body text */}
-          <div className="mt-6 text-ink leading-relaxed space-y-4 text-base">
-            <p>{excerptOf(article)} {lang === 'TA'
-              ? 'அதிகாரிகள் நிகழ்வுகளின் வரிசையை செய்தியாளர்களுக்கு சுருக்கமாக கூறினர்.'
-              : 'Officials briefed reporters on the sequence of events shortly after the development came to light.'
-            }</p>
-            <p>{lang === 'TA'
-              ? 'ஆய்வாளர்கள் இந்த சூழ்நிலை எவ்வாறு வளர்கிறது என்பதை தீர்மானிக்க வரும் நாட்கள் முக்கியமானவை என்று கூறுகின்றனர்.'
-              : 'Analysts say the coming days will be crucial in determining how the situation develops further.'
-            }</p>
-            {/* In-article ad */}
-            <div className="my-6 bg-amber-50 border border-amber-200 rounded flex items-center justify-center py-5">
-              <span className="text-xs text-amber-600 font-mono tracking-widest">{t.advertisement}</span>
-            </div>
-            <p>{lang === 'TA'
-              ? 'கன்னியாகுமரி டுடே இந்த செய்தியை தொடர்ந்து கண்காணித்து கூடுதல் சரிபார்க்கப்பட்ட தகவல்கள் கிடைக்கும்போது இந்த கட்டுரையை புதுப்பிக்கும்.'
-              : 'Kanyakumari Today will continue to track this story and update as more verified information becomes available.'
-            }</p>
-          </div>
+          {/* Content is trusted only after the backend's Admin -> sanitizer -> DB -> public API boundary. */}
+          <div className="article-content mt-6 text-ink leading-relaxed text-base" dangerouslySetInnerHTML={{ __html: contentOf(article) || '' }} />
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mt-6">
@@ -168,23 +153,18 @@ export default function Article() {
             <h3 className="font-display text-xl font-bold mb-4 flex items-center gap-2">
               <FiMessageSquare /> {t.comments} ({comments.length})
             </h3>
-            <form onSubmit={submitComment} className="flex gap-2 mb-6">
-              <input value={comment} onChange={(e) => setComment(e.target.value)}
-                placeholder={t.commentPlaceholder}
-                className="flex-1 bg-transparent border border-black/15 rounded-sm px-4 py-2 text-sm focus:border-primary outline-none" />
-              <button type="submit" className="btn-primary text-sm">{t.postComment}</button>
-            </form>
-            <ul className="space-y-4">
+            <p className="text-xs text-ink-soft mb-5">Comment submission is unavailable until reader sign-in is production-ready.</p>
+            {comments.length === 0 ? <EmptyState>No approved comments yet.</EmptyState> : <ul className="space-y-4">
               {comments.map((c) => (
                 <li key={c.id} className="card-surface p-4">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm font-semibold">{c.name}</span>
-                    <span className="text-xs text-ink-soft">{c.time}</span>
+                    <span className="text-xs text-ink-soft">{timeAgo(c.createdAt)}</span>
                   </div>
-                  <p className="text-sm text-ink-soft">{c.text}</p>
+                  <p className="text-sm text-ink-soft">{c.body}</p>
                 </li>
               ))}
-            </ul>
+            </ul>}
           </section>
         </article>
 
@@ -201,7 +181,7 @@ export default function Article() {
                 {related.slice(0, 4).map((a) => (
                   <li key={a.id}>
                     <Link to={`/article/${a.slug}`} className="flex gap-2 items-start group">
-                      <img src={a.image} alt={titleOf(a)} className="w-16 h-11 object-cover rounded shrink-0" />
+                      <img src={a.image || IMAGE_FALLBACK} alt={titleOf(a)} className="w-16 h-11 object-cover rounded shrink-0" onError={(e) => { e.currentTarget.src = IMAGE_FALLBACK }} />
                       <p className="text-xs font-medium leading-snug group-hover:text-primary transition-colors line-clamp-3">
                         {titleOf(a)}
                       </p>

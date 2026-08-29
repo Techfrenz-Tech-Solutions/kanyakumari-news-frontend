@@ -2,12 +2,15 @@ import { useEffect, useState } from 'react'
 import { FiX, FiDownload, FiShare2 } from 'react-icons/fi'
 import newsService from '../services/newsService.js'
 import { useLang } from '../context/LanguageContext.jsx'
+import { ApiErrorState, EmptyState } from '../components/ui/ApiState.jsx'
 
 export default function Gallery() {
   const { t } = useLang()
   const [items, setItems] = useState([])
   const [active, setActive] = useState(null)
   const [filter, setFilter] = useState('All')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   const ALBUM_FILTERS = [
     { key: 'All',       label: t.albumAll       },
@@ -17,7 +20,13 @@ export default function Gallery() {
     { key: 'News',      label: t.albumNews      },
   ]
 
-  useEffect(() => { newsService.getGallery().then(setItems) }, [])
+  useEffect(() => {
+    const controller = new AbortController()
+    newsService.getGallery({ signal: controller.signal }).then(setItems)
+      .catch((requestError) => { if (requestError.code !== 'REQUEST_CANCELLED') setError(requestError) })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false) })
+    return () => controller.abort()
+  }, [])
 
   const filtered = filter === 'All'
     ? items
@@ -45,7 +54,7 @@ export default function Gallery() {
           ))}
         </div>
 
-        <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 [column-fill:_balance]">
+        {error ? <ApiErrorState error={error} /> : loading ? <div className="h-52 animate-pulse rounded bg-black/5" /> : items.length === 0 ? <EmptyState /> : <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 [column-fill:_balance]">
           {(filtered.length > 0 ? filtered : items).map((g) => (
             <button key={g.id} onClick={() => setActive(g)}
               className="mb-3 block w-full break-inside-avoid rounded-md overflow-hidden group relative">
@@ -56,7 +65,7 @@ export default function Gallery() {
               </div>
             </button>
           ))}
-        </div>
+        </div>}
 
         {filtered.length === 0 && items.length > 0 && (
           <p className="text-center text-ink-soft dark:text-white/50 py-12">

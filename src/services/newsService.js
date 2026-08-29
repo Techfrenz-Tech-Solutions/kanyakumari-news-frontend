@@ -1,103 +1,39 @@
-import {
-  articles,
-  categories,
-  heroArticles,
-  breakingHeadlines,
-  trending,
-  gallery,
-  videos,
-  stockData,
-  weather,
-  rates,
-  jobListings,
-  touristAttractions,
-  districtInfo,
-  kanyakumariAreas
-} from '../data/newsData.js'
+import { apiClient } from '../api/client.js'
 
-const LATENCY = 250
+const cleanParams = (params) => Object.fromEntries(
+  Object.entries(params).filter(([, value]) => value !== null && value !== undefined && value !== '')
+)
 
-function delay(data, ms = LATENCY) {
-  return new Promise((resolve) => setTimeout(() => resolve(data), ms))
-}
-
-export const newsService = {
-  getHero: () => delay(heroArticles),
-
-  getBreakingHeadlines: () => delay(breakingHeadlines, 100),
-
-  getLatest: ({ page = 1, pageSize = 9, category = null, area = null } = {}) => {
-    let filtered = category ? articles.filter((a) => a.category === category) : articles
-    if (area) filtered = filtered.filter((a) => a.area === area)
-    const sorted = [...filtered].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
-    const start = (page - 1) * pageSize
-    const items = sorted.slice(start, start + pageSize)
-    return delay({ items, hasMore: start + pageSize < sorted.length, total: sorted.length })
-  },
-
-  getTrending: () => delay(trending),
-
-  getByCategory: (slug, limit = 6) =>
-    delay(articles.filter((a) => a.category === slug).slice(0, limit)),
-
-  getCategories: () => delay(categories, 80),
-
-  getKanyakumariAreas: () => delay(kanyakumariAreas, 80),
-
-  getArticleBySlug: (slug) => {
-    const found = articles.find((a) => a.slug === slug)
-    const related = found
-      ? articles.filter((a) => a.category === found.category && a.id !== found.id).slice(0, 4)
-      : []
-    return delay({ article: found || null, related })
-  },
-
-  search: (query, { category = null } = {}) => {
-    const q = query.trim().toLowerCase()
-    let results = !q
-      ? []
-      : articles.filter(
-          (a) =>
-            a.title.toLowerCase().includes(q) ||
-            a.excerpt.toLowerCase().includes(q) ||
-            a.tags.some((t) => t.toLowerCase().includes(q))
-        )
-    if (category) results = results.filter((a) => a.category === category)
-    return delay(results)
-  },
-
-  getGallery: () => delay(gallery),
-
-  getVideos: () => delay(videos),
-
-  getStockData: () => delay(stockData, 150),
-
-  getWeather: (_city) => delay(weather, 150),
-
-  getRates: () => delay(rates, 120),
-
-  getJobs: ({ type = null } = {}) => {
-    const filtered = type ? jobListings.filter((j) => j.type === type) : jobListings
-    return delay(filtered)
-  },
-
-  getTouristAttractions: () => delay(touristAttractions),
-
-  getDistrictInfo: () => delay(districtInfo),
-
-  login: ({ email, password }) => {
-    if (!email || !password) {
-      return Promise.reject(new Error('Email and password are required'))
-    }
-    return delay({ user: { email, name: email.split('@')[0], token: 'mock-jwt-token' } }, 400)
-  },
-
-  requestOtp: (phone) => delay({ sent: true, phone }, 400),
-
-  verifyOtp: (phone, otp) => {
-    if (otp !== '123456') return Promise.reject(new Error('Invalid OTP. Use 123456 in this demo.'))
-    return delay({ user: { phone, token: 'mock-jwt-token' } }, 400)
+export function createNewsService(client = apiClient) {
+  return {
+  getHome: ({ signal } = {}) => client.get('/home', { signal }),
+  getHero: ({ signal } = {}) => client.get('/hero', { signal }),
+  getBreakingHeadlines: ({ signal } = {}) => client.get('/breaking', { signal }),
+  getLatest: ({ page = 1, pageSize = 9, category = null, area = null, signal } = {}) =>
+    client.get('/news', { params: cleanParams({ page, pageSize, category, area }), signal }),
+  getTrending: ({ period = 'daily', limit = 5, signal } = {}) =>
+    client.get('/trending', { params: { period, limit }, signal }),
+  getByCategory: (slug, limit = 6, { signal } = {}) =>
+    client.get(`/news/category/${encodeURIComponent(slug)}`, { params: { limit }, signal }),
+  getCategories: ({ signal } = {}) => client.get('/categories', { signal }),
+  getKanyakumariAreas: ({ signal } = {}) => client.get('/areas', { signal }),
+  getArticleBySlug: (slug, { signal } = {}) => client.get(`/news/${encodeURIComponent(slug)}`, { signal }),
+  search: (query, { category = null, sort = 'relevance', limit = 20, signal } = {}) =>
+    client.get('/search', { params: cleanParams({ q: query.trim(), category, sort, limit }), signal }),
+  getSiteSettings: ({ signal } = {}) => client.get('/settings/site', { signal }),
+  getGallery: ({ signal } = {}) => client.get('/gallery', { signal }),
+  getVideos: ({ signal } = {}) => client.get('/videos', { signal }),
+  getStockData: ({ signal } = {}) => client.get('/market/stocks', { signal }),
+  getWeather: (city, { signal } = {}) => client.get('/weather', { params: cleanParams({ city }), signal }),
+  getRates: ({ signal } = {}) => client.get('/market/rates', { signal }),
+  getJobs: ({ type = null, signal } = {}) => client.get('/jobs', { params: cleanParams({ type }), signal }),
+  getTouristAttractions: ({ signal } = {}) => client.get('/tourist-attractions', { signal }),
+  getDistrictInfo: ({ signal } = {}) => client.get('/district-info', { signal }),
+  getComments: (slug, { signal } = {}) => client.get(`/news/${encodeURIComponent(slug)}/comments`, { signal }),
+  submitContact: (form, { signal } = {}) => client.post('/contact', form, { signal }),
   }
 }
+
+export const newsService = createNewsService()
 
 export default newsService

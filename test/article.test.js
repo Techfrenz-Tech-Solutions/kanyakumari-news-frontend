@@ -1,0 +1,40 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import { articleImage, contentState, localizedField } from '../src/utils/article.js'
+import { buildArticleMetadata } from '../src/utils/seo.js'
+
+const article = {
+  title: 'English title', titleTA: 'தமிழ் தலைப்பு', excerpt: 'English excerpt', excerptTA: null,
+  content: '<p>English body</p>', contentTA: '<p>தமிழ் உடல்</p>', image: null,
+  publishedAt: '2026-08-29T10:00:00.000Z', updatedAt: '2026-08-29T11:00:00.000Z',
+  author: { name: 'Reporter One' }, publisherName: 'Kanyakumari Today',
+  seo: { seoTitle: 'SEO title', canonicalUrl: 'https://news.test/article/story' },
+}
+
+test('Tamil fields are selected with an English fallback', () => {
+  assert.equal(localizedField(article, 'title', 'titleTA', 'TA'), 'தமிழ் தலைப்பு')
+  assert.equal(localizedField(article, 'excerpt', 'excerptTA', 'TA'), 'English excerpt')
+  assert.equal(localizedField(article, 'content', 'contentTA', 'TA'), '<p>தமிழ் உடல்</p>')
+})
+
+test('null media uses one intentional local fallback', () => {
+  assert.equal(articleImage(article), '/news-placeholder.svg')
+  assert.equal(articleImage({ image: 'https://media.test/photo.jpg' }), 'https://media.test/photo.jpg')
+})
+
+test('loading, error, empty and loaded states remain distinct', () => {
+  assert.equal(contentState({ loading: true }), 'loading')
+  assert.equal(contentState({ loading: false, error: new Error('offline') }), 'error')
+  assert.equal(contentState({ loading: false, items: [] }), 'empty')
+  assert.equal(contentState({ loading: false, items: [{}] }), 'loaded')
+})
+
+test('article SEO includes canonical social data and valid NewsArticle JSON-LD', () => {
+  const metadata = buildArticleMetadata(article, 'TA', 'https://fallback.test/article/story')
+  assert.equal(metadata.title, 'SEO title')
+  assert.equal(metadata.description, 'English excerpt')
+  assert.equal(metadata.canonical, 'https://news.test/article/story')
+  assert.equal(metadata.jsonLd['@type'], 'NewsArticle')
+  assert.deepEqual(metadata.jsonLd.author, [{ '@type': 'Person', name: 'Reporter One' }])
+  assert.equal(metadata.jsonLd.publisher.name, 'Kanyakumari Today')
+})

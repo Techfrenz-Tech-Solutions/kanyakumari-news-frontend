@@ -1,26 +1,30 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import newsService from '../services/newsService.js'
-import { categories, kanyakumariAreas } from '../data/newsData.js'
 import NewsCard from '../components/news/NewsCard.jsx'
 import MostRead from '../components/widgets/MostRead.jsx'
 import AdBanner from '../components/ui/AdBanner.jsx'
 import { CardSkeleton } from '../components/ui/Skeleton.jsx'
 import { useLang } from '../context/LanguageContext.jsx'
+import { usePublicContent } from '../context/PublicContentContext.jsx'
+import { ApiErrorState } from '../components/ui/ApiState.jsx'
 
 const PAGE_SIZE = 6
 
 // fallback image for broken img tags
-const FALLBACK = 'https://picsum.photos/id/0/400/250'
+const FALLBACK = '/news-placeholder.svg'
 
 export default function Category() {
   const { lang, t } = useLang()
+  const { categories, areas: kanyakumariAreas, errors: taxonomyErrors } = usePublicContent()
   const { slug } = useParams()
   const [page,       setPage]       = useState(1)
   const [items,      setItems]      = useState([])
   const [hasMore,    setHasMore]    = useState(false)
   const [loading,    setLoading]    = useState(true)
   const [activeArea, setActiveArea] = useState(null)
+  const [error, setError] = useState(null)
+  const [loadingMore, setLoadingMore] = useState(false)
 
   const titleOf   = (a) => lang === 'TA' ? (a.titleTA   || a.title)   : a.title
   const excerptOf = (a) => lang === 'TA' ? (a.excerptTA || a.excerpt) : a.excerpt
@@ -32,6 +36,7 @@ export default function Category() {
     setItems([])
     setPage(1)
     setLoading(true)
+    setError(null)
     setActiveArea(null)
   }, [slug])
 
@@ -39,24 +44,29 @@ export default function Category() {
     setItems([])
     setPage(1)
     setLoading(true)
+    const controller = new AbortController()
     newsService
-      .getLatest({ page: 1, pageSize: PAGE_SIZE, category: slug, area: activeArea })
+      .getLatest({ page: 1, pageSize: PAGE_SIZE, category: slug, area: activeArea, signal: controller.signal })
       .then(({ items: fetched, hasMore: more }) => {
         setItems(fetched)
         setHasMore(more)
         setLoading(false)
+      }).catch((requestError) => {
+        if (requestError.code !== 'REQUEST_CANCELLED') { setError(requestError); setLoading(false) }
       })
+    return () => controller.abort()
   }, [slug, activeArea])
 
   function loadMore() {
     const next = page + 1
+    setLoadingMore(true)
     newsService
       .getLatest({ page: next, pageSize: PAGE_SIZE, category: slug, area: activeArea })
       .then(({ items: more, hasMore: moreFlag }) => {
         setItems((prev) => [...prev, ...more])
         setHasMore(moreFlag)
         setPage(next)
-      })
+      }).catch(setError).finally(() => setLoadingMore(false))
   }
 
   return (
@@ -78,7 +88,7 @@ export default function Category() {
 
       <div className="container-page py-6">
         {/* Sub-filters for Kanyakumari */}
-        {isKanyakumari && (
+        {isKanyakumari && !taxonomyErrors.areas && (
           <div className="flex flex-wrap gap-2 mb-6 pb-4 border-b border-black/10 dark:border-white/10">
             <button
               onClick={() => setActiveArea(null)}
@@ -109,7 +119,7 @@ export default function Category() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* ── Main content ── */}
           <div className="lg:col-span-2">
-            {loading ? (
+            {error ? <ApiErrorState error={error} /> : loading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {Array.from({ length: 4 }).map((_, i) => <CardSkeleton key={i} />)}
               </div>
@@ -151,7 +161,7 @@ export default function Category() {
                 </div>
                 {hasMore && (
                   <div className="mt-6 pt-4 border-t border-black/10">
-                    <button onClick={loadMore} className="btn-outline text-sm">{t.loadMore}</button>
+                    <button onClick={loadMore} disabled={loadingMore} className="btn-outline text-sm disabled:opacity-50">{loadingMore ? 'Loading…' : t.loadMore}</button>
                   </div>
                 )}
               </>
@@ -169,7 +179,7 @@ export default function Category() {
             <div className="card-surface p-4">
               <h3 className="font-bold text-sm mb-3 text-ink dark:text-white">{t.photoGallery}</h3>
               <Link to="/gallery" className="group relative aspect-video block rounded overflow-hidden">
-                <img src="https://picsum.photos/id/80/400/225" alt="Gallery"
+                <img src="/news-placeholder.svg" alt="Gallery"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   onError={(e) => { e.target.src = FALLBACK }} />
                 <div className="absolute inset-0 bg-black/30 flex items-center justify-center">

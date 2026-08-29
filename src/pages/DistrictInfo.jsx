@@ -1,7 +1,8 @@
-import { useState } from 'react'
-import { districtInfo } from '../data/newsData.js'
+import { useEffect, useState } from 'react'
 import WeatherWidget from '../components/widgets/WeatherWidget.jsx'
 import { useLang } from '../context/LanguageContext.jsx'
+import newsService from '../services/newsService.js'
+import { ApiErrorState } from '../components/ui/ApiState.jsx'
 
 export default function DistrictInfo() {
   const { t } = useLang()
@@ -13,6 +14,16 @@ export default function DistrictInfo() {
     { key: 'Transport',    label: t.tabTransport    },
   ]
   const [activeTab, setActiveTab] = useState('Taluks')
+  const [districtInfo, setDistrictInfo] = useState({ taluks: [], govtOffices: [], helplines: [], transport: [] })
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    newsService.getDistrictInfo({ signal: controller.signal }).then(setDistrictInfo).catch((requestError) => {
+      if (requestError.code !== 'REQUEST_CANCELLED') setError(requestError)
+    })
+    return () => controller.abort()
+  }, [])
 
   return (
     <div>
@@ -24,6 +35,7 @@ export default function DistrictInfo() {
       </div>
 
       <div className="container-page py-8">
+        {error && <div className="mb-6"><ApiErrorState error={error} /></div>}
         <div className="flex flex-wrap gap-0 border-b border-black/10 dark:border-white/10 mb-8">
           {TABS.map((tab) => (
             <button key={tab.key} onClick={() => setActiveTab(tab.key)}
