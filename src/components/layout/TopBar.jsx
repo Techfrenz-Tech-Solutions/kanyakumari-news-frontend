@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom'
-import { LuNewspaper } from 'react-icons/lu'
 import { todayLong } from '../../utils/format.js'
 import { useLang } from '../../context/LanguageContext.jsx'
 
@@ -16,9 +14,6 @@ export default function TopBar() {
 
         {/* RIGHT: static controls */}
         <div className="flex items-center gap-4 shrink-0">
-          <Link to="/e-paper" className="flex items-center gap-1 hover:text-accent transition-colors">
-            <LuNewspaper size={13} /> {t.ePaper}
-          </Link>
           <button
             onClick={toggleLang}
             className="hover:text-accent transition-colors border border-white/30 px-2 py-0.5 rounded-sm hover:border-accent"
