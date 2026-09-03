@@ -55,7 +55,7 @@ export default function DistrictInfo() {
           <div className="grid md:grid-cols-2 gap-8">
             <div>
               <h2 className="font-bold text-lg mb-4 text-ink dark:text-white">{t.taluks}</h2>
-              <div className="card-surface overflow-hidden">
+              <div className="card-surface max-w-full overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-primary/10 dark:bg-primary/20">

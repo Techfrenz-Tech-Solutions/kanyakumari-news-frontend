@@ -30,8 +30,8 @@ export default function VideoPage() {
     </div>
   )
 
-  if (state === 'error') return <div className="container-page py-8"><ApiErrorState error={error} /></div>
-  if (state === 'empty') return <div className="container-page py-8"><EmptyState /></div>
+  if (state === 'error') return <div className="container-page py-8"><h1 className="sr-only">{t.videosTitle}</h1><ApiErrorState error={error} /></div>
+  if (state === 'empty') return <div className="container-page py-8"><h1 className="sr-only">{t.videosTitle}</h1><EmptyState /></div>
 
   const otherVideos = videos.filter((v) => v.id !== active.id)
 
