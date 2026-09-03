@@ -6,16 +6,26 @@ const LABELS = { sensex: 'SENSEX', nifty: 'NIFTY 50', nasdaq: 'NASDAQ', dow: 'DO
 
 export default function StockWidget() {
   const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let active = true
     newsService.getStockData().then((d) => active && setData(d))
+      .catch((requestError) => { if (active) setError(requestError) })
+      .finally(() => { if (active) setLoading(false) })
     return () => {
       active = false
     }
   }, [])
 
-  if (!data) return <div className="card-surface p-4 h-56 animate-pulse" />
+  if (loading) return <div className="card-surface p-4 h-56 animate-pulse" />
+  if (error || !data || data.available === false) return (
+    <div className="card-surface p-4" role="status">
+      <h3 className="font-display text-lg font-bold">Markets</h3>
+      <p className="mt-2 text-sm text-ink-soft">Market data is currently unavailable.</p>
+    </div>
+  )
 
   return (
     <div className="card-surface p-4">

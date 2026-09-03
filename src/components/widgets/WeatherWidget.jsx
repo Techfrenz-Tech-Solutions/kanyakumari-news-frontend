@@ -15,14 +15,24 @@ const DAYS_TA = { Mon:'திங்கள்', Tue:'செவ்வாய்', W
 export default function WeatherWidget() {
   const { lang } = useLang()
   const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     let active = true
     newsService.getWeather().then((d) => active && setData(d))
+      .catch((requestError) => { if (active) setError(requestError) })
+      .finally(() => { if (active) setLoading(false) })
     return () => { active = false }
   }, [])
 
-  if (!data) return <div className="card-surface p-4 h-48 animate-pulse" />
+  if (loading) return <div className="card-surface p-4 h-48 animate-pulse" />
+  if (error || !data || data.available === false) return (
+    <div className="card-surface p-4" role="status">
+      <p className="font-display text-lg font-bold">{lang === 'TA' ? 'வானிலை' : 'Weather'}</p>
+      <p className="mt-2 text-sm text-ink-soft">{lang === 'TA' ? 'வானிலைத் தகவல் தற்போது கிடைக்கவில்லை.' : 'Weather data is currently unavailable.'}</p>
+    </div>
+  )
 
   const Icon      = ICONS[data.condition] || FiSun
   const condition = lang === 'TA' ? (CONDITIONS_TA[data.condition] || data.condition) : data.condition

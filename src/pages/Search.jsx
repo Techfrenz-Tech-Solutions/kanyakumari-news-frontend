@@ -44,6 +44,7 @@ export default function Search() {
         <div className="relative flex-1">
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-soft" />
           <input value={input} onChange={(e) => setInput(e.target.value)}
+            aria-label={t.searchInputPlaceholder}
             placeholder={t.searchInputPlaceholder}
             className="w-full bg-transparent border border-black/15 rounded-sm pl-10 pr-4 py-2.5 text-sm focus:border-primary outline-none" />
         </div>
@@ -51,12 +52,12 @@ export default function Search() {
       </form>
 
       <div className="flex flex-wrap gap-3 mb-6 text-sm">
-        <select value={category} onChange={(e) => setCategory(e.target.value)} disabled={Boolean(taxonomyErrors.categories)}
+        <select aria-label={t.allCategories} value={category} onChange={(e) => setCategory(e.target.value)} disabled={Boolean(taxonomyErrors.categories)}
           className="bg-transparent border border-black/15 rounded-sm px-3 py-2">
           <option value="">{t.allCategories}</option>
           {categories.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
         </select>
-        <select value={sort} onChange={(e) => setSort(e.target.value)}
+        <select aria-label={t.sortRelevance} value={sort} onChange={(e) => setSort(e.target.value)}
           className="bg-transparent border border-black/15 rounded-sm px-3 py-2">
           <option value="relevance">{t.sortRelevance}</option>
           <option value="newest">{t.sortNewest}</option>

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { FiX, FiDownload, FiShare2 } from 'react-icons/fi'
+import { FiX, FiShare2 } from 'react-icons/fi'
 import newsService from '../services/newsService.js'
 import { useLang } from '../context/LanguageContext.jsx'
 import { ApiErrorState, EmptyState } from '../components/ui/ApiState.jsx'
+import { shareContent } from '../utils/share.js'
 
 export default function Gallery() {
   const { t } = useLang()
@@ -31,6 +32,12 @@ export default function Gallery() {
   const filtered = filter === 'All'
     ? items
     : items.filter((g) => g.category?.toLowerCase() === filter.toLowerCase())
+
+  function shareActive() {
+    if (!active) return undefined
+    const imageUrl = new URL(active.image, window.location.origin).href
+    return shareContent({ title: active.title, text: active.title, url: imageUrl })
+  }
 
   return (
     <div>
@@ -76,6 +83,7 @@ export default function Gallery() {
 
       {active && (
         <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          role="dialog" aria-modal="true" aria-label={active.title}
           onClick={() => setActive(null)}>
           <div className="relative max-w-3xl w-full" onClick={(e) => e.stopPropagation()}>
             <img src={active.image} alt={active.title}
@@ -86,13 +94,11 @@ export default function Gallery() {
                 <p className="text-white/50 text-xs">{active.category}</p>
               </div>
               <div className="flex gap-2">
-                <button className="w-9 h-9 rounded-full bg-white/10 hover:bg-primary text-white flex items-center justify-center transition-colors">
-                  <FiDownload size={15} />
-                </button>
-                <button className="w-9 h-9 rounded-full bg-white/10 hover:bg-primary text-white flex items-center justify-center transition-colors">
+                <button onClick={shareActive} aria-label={`Share ${active.title}`}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-primary text-white flex items-center justify-center transition-colors">
                   <FiShare2 size={15} />
                 </button>
-                <button onClick={() => setActive(null)} aria-label="Close"
+                <button onClick={() => setActive(null)} aria-label="Close gallery dialog"
                   className="w-9 h-9 rounded-full bg-white/10 hover:bg-primary text-white flex items-center justify-center transition-colors">
                   <FiX size={15} />
                 </button>

@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { articleImage, contentState, localizedField } from '../src/utils/article.js'
 import { buildArticleMetadata } from '../src/utils/seo.js'
+import { shareContent } from '../src/utils/share.js'
 
 const article = {
   title: 'English title', titleTA: 'தமிழ் தலைப்பு', excerpt: 'English excerpt', excerptTA: null,
@@ -29,6 +30,10 @@ test('loading, error, empty and loaded states remain distinct', () => {
   assert.equal(contentState({ loading: false, items: [{}] }), 'loaded')
 })
 
+test('an empty videos response resolves to the empty state, not loading', () => {
+  assert.equal(contentState({ loading: false, error: null, items: [] }), 'empty')
+})
+
 test('article SEO includes canonical social data and valid NewsArticle JSON-LD', () => {
   const metadata = buildArticleMetadata(article, 'TA', 'https://fallback.test/article/story')
   assert.equal(metadata.title, 'SEO title')
@@ -37,4 +42,15 @@ test('article SEO includes canonical social data and valid NewsArticle JSON-LD',
   assert.equal(metadata.jsonLd['@type'], 'NewsArticle')
   assert.deepEqual(metadata.jsonLd.author, [{ '@type': 'Person', name: 'Reporter One' }])
   assert.equal(metadata.jsonLd.publisher.name, 'Kanyakumari Today')
+})
+
+test('share uses Web Share API and falls back to clipboard', async () => {
+  const payload = { title: 'QA', text: 'QA story', url: 'https://news.test/article/qa' }
+  let shared
+  assert.equal(await shareContent(payload, { share: async (value) => { shared = value } }), 'shared')
+  assert.deepEqual(shared, payload)
+  let copied
+  assert.equal(await shareContent(payload, { clipboard: { writeText: async (value) => { copied = value } } }), 'copied')
+  assert.equal(copied, payload.url)
+  assert.equal(await shareContent(payload, {}), 'unavailable')
 })

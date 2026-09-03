@@ -3,21 +3,35 @@ import { FiEye, FiPlay } from 'react-icons/fi'
 import newsService from '../services/newsService.js'
 import { formatNumber } from '../utils/format.js'
 import { useLang } from '../context/LanguageContext.jsx'
+import { ApiErrorState, EmptyState } from '../components/ui/ApiState.jsx'
+import { contentState } from '../utils/article.js'
 
 export default function VideoPage() {
   const { t } = useLang()
   const [videos, setVideos] = useState([])
   const [active, setActive] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    newsService.getVideos().then((v) => { setVideos(v); setActive(v[0] || null) })
+    const controller = new AbortController()
+    newsService.getVideos({ signal: controller.signal })
+      .then((v) => { setVideos(v); setActive(v[0] || null) })
+      .catch((requestError) => { if (requestError.code !== 'REQUEST_CANCELLED') setError(requestError) })
+      .finally(() => { if (!controller.signal.aborted) setLoading(false) })
+    return () => controller.abort()
   }, [])
 
-  if (!active) return (
+  const state = contentState({ loading, error, items: videos })
+
+  if (state === 'loading') return (
     <div className="container-page py-8">
       <div className="aspect-video bg-black/10 dark:bg-white/10 animate-pulse rounded-md" />
     </div>
   )
+
+  if (state === 'error') return <div className="container-page py-8"><ApiErrorState error={error} /></div>
+  if (state === 'empty') return <div className="container-page py-8"><EmptyState /></div>
 
   const otherVideos = videos.filter((v) => v.id !== active.id)
 
