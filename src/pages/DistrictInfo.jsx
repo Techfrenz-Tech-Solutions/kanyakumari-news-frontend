@@ -52,8 +52,8 @@ export default function DistrictInfo() {
         </div>
 
         {activeTab === 'Taluks' && (
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
+          <div className="grid min-w-0 md:grid-cols-2 gap-8">
+            <div className="min-w-0">
               <h2 className="font-bold text-lg mb-4 text-ink dark:text-white">{t.taluks}</h2>
               <div className="card-surface max-w-full overflow-x-auto">
                 <table className="w-full text-sm">
