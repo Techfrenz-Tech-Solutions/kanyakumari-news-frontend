@@ -7,6 +7,7 @@ import newsService from '../../services/newsService.js'
 import Badge from '../ui/Badge.jsx'
 import { timeAgo } from '../../utils/format.js'
 import { useLang } from '../../context/LanguageContext.jsx'
+import { shareContent } from '../../utils/share.js'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -29,6 +30,12 @@ export default function HeroSlider({ articles }) {
   function toggleBookmark(id, e) {
     e.preventDefault(); e.stopPropagation()
     setBookmarked((b) => ({ ...b, [id]: !b[id] }))
+  }
+
+  async function shareArticle(article, e) {
+    e.preventDefault(); e.stopPropagation()
+    const url = new URL(`/article/${article.slug}`, window.location.origin).href
+    await shareContent({ title: titleOf(article), text: excOf(article), url })
   }
 
   const titleOf = (a) => lang === 'TA' ? (a.titleTA || a.title) : a.title
@@ -59,7 +66,7 @@ export default function HeroSlider({ articles }) {
                 className={`w-8 h-8 rounded-full flex items-center justify-center backdrop-blur bg-black/40 hover:bg-primary transition-colors ${bookmarked[a.id] ? 'text-accent' : 'text-white'}`}>
                 <FiBookmark size={14} />
               </button>
-              <button onClick={(e) => e.preventDefault()} aria-label="Share"
+              <button onClick={(e) => shareArticle(a, e)} aria-label={`Share ${titleOf(a)}`}
                 className="w-8 h-8 rounded-full flex items-center justify-center backdrop-blur bg-black/40 text-white hover:bg-primary transition-colors">
                 <FiShare2 size={14} />
               </button>

@@ -145,6 +145,7 @@ export default function Home() {
 
   return (
     <div className="bg-white min-h-screen">
+      <h1 className="sr-only">{home?.site?.siteName || 'Kanyakumari News'}</h1>
       <div className="container-page py-5 space-y-8">
 
         <section aria-label="Featured news">

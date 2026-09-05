@@ -36,9 +36,11 @@ export default function DistrictInfo() {
 
       <div className="container-page py-8">
         {error && <div className="mb-6"><ApiErrorState error={error} /></div>}
-        <div className="flex flex-wrap gap-0 border-b border-black/10 dark:border-white/10 mb-8">
+        <div role="tablist" aria-label={t.districtInfoTitle} className="flex flex-wrap gap-0 border-b border-black/10 dark:border-white/10 mb-8">
           {TABS.map((tab) => (
-            <button key={tab.key} onClick={() => setActiveTab(tab.key)}
+            <button key={tab.key} role="tab" aria-selected={activeTab === tab.key}
+              aria-controls={`district-panel-${tab.key.replaceAll(' ', '-').toLowerCase()}`}
+              onClick={() => setActiveTab(tab.key)}
               className={`px-5 py-3 text-sm font-semibold transition-colors border-b-2 -mb-px ${
                 activeTab === tab.key
                   ? 'border-primary text-primary'
@@ -50,10 +52,10 @@ export default function DistrictInfo() {
         </div>
 
         {activeTab === 'Taluks' && (
-          <div className="grid md:grid-cols-2 gap-8">
-            <div>
+          <div className="grid min-w-0 md:grid-cols-2 gap-8">
+            <div className="min-w-0">
               <h2 className="font-bold text-lg mb-4 text-ink dark:text-white">{t.taluks}</h2>
-              <div className="card-surface overflow-hidden">
+              <div className="card-surface max-w-full overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-primary/10 dark:bg-primary/20">
