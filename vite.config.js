@@ -8,6 +8,16 @@ export default defineConfig({
     strictPort: true,  // keep the configured URL stable for backend CORS
     open: false,
     host: true,        // expose on local network (useful for testing on phone/tablet)
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:28112',
+        changeOrigin: true,
+      },
+      '/uploads': {
+        target: 'http://127.0.0.1:28112',
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
     port: 4173,
