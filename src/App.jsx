@@ -13,6 +13,7 @@ import VideoPage from './pages/VideoPage.jsx'
 import DistrictInfo from './pages/DistrictInfo.jsx'
 import TouristInfo from './pages/TouristInfo.jsx'
 import Jobs from './pages/Jobs.jsx'
+import Weather from './pages/Weather.jsx'
 import EPaper from './pages/EPaper.jsx'
 import NotFound from './pages/NotFound.jsx'
 import StaticPage from './pages/StaticPage.jsx'
@@ -55,6 +56,7 @@ export default function App() {
           <Route path="/district-info"   element={<DistrictInfo />} />
           <Route path="/tourist-info"    element={<TouristInfo />} />
           <Route path="/jobs"            element={<Jobs />} />
+          <Route path="/weather"         element={<Weather />} />
           <Route path="/links"           element={<StaticPage title="Useful Links" />} />
 
           {/* E-paper & auth */}

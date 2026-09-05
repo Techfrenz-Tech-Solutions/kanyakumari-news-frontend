@@ -26,7 +26,7 @@ export default {
           darkcard: '#161F32'
         },
         ink: {
-          DEFAULT: '#111827',
+          DEFAULT: '#0F172A',
           soft: '#4B5563',
           invert: '#E5E7EB'
         }
