@@ -1,6 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+const devProxyTarget = process.env.VITE_DEV_API_PROXY_TARGET || 'http://106.51.20.225'
+const devProxy = {
+  target: devProxyTarget,
+  changeOrigin: true,
+  configure(proxy) {
+    proxy.on('proxyReq', (proxyReq) => {
+      proxyReq.setHeader('Origin', devProxyTarget)
+    })
+  },
+}
+
 export default defineConfig({
   plugins: [react()],
   server: {
@@ -9,14 +20,8 @@ export default defineConfig({
     open: false,
     host: true,        // expose on local network (useful for testing on phone/tablet)
     proxy: {
-      '/api': {
-        target: 'http://127.0.0.1:28112',
-        changeOrigin: true,
-      },
-      '/uploads': {
-        target: 'http://127.0.0.1:28112',
-        changeOrigin: true,
-      },
+      '/api': devProxy,
+      '/uploads': devProxy,
     },
   },
   preview: {
