@@ -6,10 +6,14 @@ import { useLang } from '../../context/LanguageContext.jsx'
 import { usePublicContent } from '../../context/PublicContentContext.jsx'
 
 // Primary nav — labels come from translations
-function buildNav(t, categories) {
+function buildNav(t, categories, lang) {
   return [
     { key: 'home', label: t.home, to: '/' },
-    ...categories.map((category) => ({ key: category.slug, label: category.label, to: `/category/${category.slug}` })),
+    ...categories.map((category) => ({
+      key: category.slug,
+      label: lang === 'TA' ? (category.labelTA || category.label) : category.label,
+      to: `/category/${category.slug}`,
+    })),
     { key: 'photo',        label: t.navPhoto,        to: '/gallery'              },
     { key: 'videos',       label: t.navVideos,       to: '/videos'               },
     { key: 'districtInfo', label: t.navDistrictInfo, to: '/district-info'        },
@@ -19,13 +23,16 @@ function buildNav(t, categories) {
   ]
 }
 
-function buildMobileGroups(t, categories) {
+function buildMobileGroups(t, categories, lang) {
   return [
     {
       title: t.navKanyakumari,
       links: [
-        { label: t.home,           to: '/'                     },
-        ...categories.map((category) => ({ label: category.label, to: `/category/${category.slug}` })),
+        { label: t.home, to: '/' },
+        ...categories.map((category) => ({
+          label: lang === 'TA' ? (category.labelTA || category.label) : category.label,
+          to: `/category/${category.slug}`,
+        })),
       ],
     },
     {
@@ -56,10 +63,10 @@ function buildMobileGroups(t, categories) {
 }
 
 export default function Header() {
-  const { t } = useLang()
+  const { lang, t } = useLang()
   const { categories, site, errors } = usePublicContent()
-  const PRIMARY_NAV   = buildNav(t, categories)
-  const MOBILE_GROUPS = buildMobileGroups(t, categories)
+  const PRIMARY_NAV   = buildNav(t, categories, lang)
+  const MOBILE_GROUPS = buildMobileGroups(t, categories, lang)
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -109,7 +116,7 @@ export default function Header() {
             to="/search"
             className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono bg-black/5 dark:bg-white/10 px-3 py-1.5 rounded-sm hover:bg-primary hover:text-white transition-colors"
           >
-            <FiSearch size={12} /> Search
+            <FiSearch size={12} /> {t.search}
           </Link>
         </div>
       </div>
@@ -163,7 +170,7 @@ export default function Header() {
       </nav>
       {errors.categories && (
         <p role="status" className="bg-red-50 px-4 py-1 text-center text-xs text-red-700">
-          Categories are temporarily unavailable.
+          {t.categoriesUnavailable}
         </p>
       )}
 

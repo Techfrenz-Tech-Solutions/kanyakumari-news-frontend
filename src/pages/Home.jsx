@@ -152,15 +152,65 @@ export default function Home() {
           {homeError ? <ApiErrorState error={homeError} /> : home ? <HeroSlider articles={home.hero} /> : <div className="aspect-[21/8] animate-pulse rounded bg-black/5" />}
         </section>
 
+        {/* ── LIVE SCROLLER ── */}
+        <div className="overflow-hidden rounded-md shadow-md">
+          <div className="bg-red-700 text-white flex items-center h-11">
+            {/* Label badge */}
+            <div className="shrink-0 flex items-center gap-2 bg-red-900 px-4 h-full border-r border-white/20">
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              <span className="text-xs font-black uppercase tracking-widest whitespace-nowrap">{t.liveUpdates}</span>
+            </div>
+            {/* Scrolling news */}
+            <div className="flex-1 overflow-hidden">
+              {home?.latest?.items?.length ? (
+                <div className="flex whitespace-nowrap animate-marquee">
+                  {[...home.latest.items, ...home.latest.items].map((item, i) => (
+                    item.slug
+                      ? <Link
+                          key={`live-${item.id}-${i}`}
+                          to={`/article/${item.slug}`}
+                          className="inline-flex items-center gap-2 mx-10 text-sm font-medium hover:underline"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0" />
+                          {item.title || item.titleTA}
+                        </Link>
+                      : <span
+                          key={`live-${item.id}-${i}`}
+                          className="inline-flex items-center gap-2 mx-10 text-sm font-medium"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-yellow-400 shrink-0" />
+                          {item.title || item.titleTA}
+                        </span>
+                  ))}
+                </div>
+              ) : (
+                <span className="px-6 text-sm text-white/60">{t.loadingLiveUpdates}</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* ── AD BANNERS BELOW LIVE UPDATES ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Ad slot 1 */}
+          <div className="flex items-center justify-center h-24 rounded-md border-2 border-dashed border-black/15 bg-black/[0.03] text-ink-soft text-xs font-medium tracking-wide select-none">
+            {t.advertisementSlot}
+          </div>
+          {/* Ad slot 2 */}
+          <div className="flex items-center justify-center h-24 rounded-md border-2 border-dashed border-black/15 bg-black/[0.03] text-ink-soft text-xs font-medium tracking-wide select-none">
+            {t.advertisementSlot}
+          </div>
+        </div>
+
         {home && (
-          <section className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-            <div className="lg:col-span-2">
-              <h2 className="section-title mb-5">Latest News</h2>
+          <section className="grid grid-cols-1 gap-8">
+            <div>
+              <h2 className="section-title mb-5">{t.latestNews}</h2>
               {home.latest.items.length === 0 ? <EmptyState /> : <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {home.latest.items.slice(0, 6).map((article) => <NewsCard key={article.id} article={article} />)}
               </div>}
             </div>
-            <MostRead initialItems={home.trending} />
+            {/* <MostRead initialItems={home.trending} /> */}
           </section>
         )}
 

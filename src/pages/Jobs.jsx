@@ -26,6 +26,13 @@ export default function Jobs() {
     { key: 'Bank',     label: t.filterBank     },
   ]
 
+  const TYPE_LABEL = {
+    Govt:     t.jobTypeGovt,
+    Private:  t.jobTypePrivate,
+    Teaching: t.jobTypeTeaching,
+    Bank:     t.jobTypeBank,
+  }
+
   useEffect(() => {
     newsService.getJobs().then((data) => { setJobs(data); setLoading(false) })
   }, [])
@@ -38,7 +45,7 @@ export default function Jobs() {
     <div>
       <div className="bg-ink dark:bg-black text-white py-8">
         <div className="container-page">
-          <p className="eyebrow text-accent mb-1">Kanyakumari</p>
+          <p className="eyebrow text-accent mb-1">{t.navKanyakumari}</p>
           <h1 className="font-display text-3xl md:text-4xl font-bold">{t.jobsTitle}</h1>
         </div>
       </div>
@@ -66,9 +73,9 @@ export default function Jobs() {
         ) : (
           <>
             <div className="hidden md:grid grid-cols-12 gap-4 px-4 py-2 text-xs font-semibold text-ink-soft dark:text-white/40 uppercase tracking-widest border-b border-black/10 dark:border-white/10 mb-2">
-              <span className="col-span-4">Job Title / Organisation</span>
-              <span className="col-span-2">Type</span>
-              <span className="col-span-2">Location</span>
+              <span className="col-span-4">{t.jobTitleOrg}</span>
+              <span className="col-span-2">{t.typeCol}</span>
+              <span className="col-span-2">{t.locationCol}</span>
               <span className="col-span-2">{t.lastDate}</span>
               <span className="col-span-2 text-right">{t.applyLink}</span>
             </div>
@@ -84,7 +91,7 @@ export default function Jobs() {
                   </div>
                   <div className="md:col-span-2">
                     <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${TYPE_COLOURS[job.type] || 'bg-black/8 text-ink-soft'}`}>
-                      {job.type}
+                      {TYPE_LABEL[job.type] || job.type}
                     </span>
                   </div>
                   <div className="md:col-span-2 flex items-center gap-1 text-xs text-ink-soft dark:text-white/50">

@@ -91,7 +91,7 @@ export default function Article() {
         <Link to="/" className="hover:text-primary">{t.breadcrumbHome}</Link>
         <span>›</span>
         <Link to={`/category/${article.category}`} className="hover:text-primary capitalize">
-          {article.category.replace(/-/g, ' ')} {lang === 'TA' ? 'செய்திகள்' : 'News'}
+          {article.category.replace(/-/g, ' ')} {lang === 'TA' ? t.newsWord : t.newsWord}
         </Link>
         <span>›</span>
         <span className="text-ink line-clamp-1 max-w-xs">{titleOf(article)}</span>
@@ -153,8 +153,8 @@ export default function Article() {
             <h3 className="font-display text-xl font-bold mb-4 flex items-center gap-2">
               <FiMessageSquare /> {t.comments} ({comments.length})
             </h3>
-            <p className="text-xs text-ink-soft mb-5">Comment submission is unavailable until reader sign-in is production-ready.</p>
-            {comments.length === 0 ? <EmptyState>No approved comments yet.</EmptyState> : <ul className="space-y-4">
+            <p className="text-xs text-ink-soft mb-5">{t.commentSubmissionNote}</p>
+            {comments.length === 0 ? <EmptyState>{t.noCommentsYet}</EmptyState> : <ul className="space-y-4">
               {comments.map((c) => (
                 <li key={c.id} className="card-surface p-4">
                   <div className="flex items-center justify-between mb-1">

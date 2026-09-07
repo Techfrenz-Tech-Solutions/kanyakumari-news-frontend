@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
     <div className="container-page py-12 max-w-3xl">
       <h1 className="section-title mb-2">{t.privacyTitle}</h1>
       <span className="h-1 w-16 bg-primary block mb-3" />
-      <p className="text-xs text-ink-soft mb-8">{t.lastUpdated}: January 1, 2025</p>
+      <p className="text-xs text-ink-soft mb-8">{t.lastUpdated}: {t.legalDate}</p>
       <div className="space-y-8">
         {sections.map((s) => (
           <div key={s.title}>

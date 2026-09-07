@@ -1,13 +1,11 @@
 import { useLang } from '../context/LanguageContext.jsx'
 
 export default function StaticPage({ title, children }) {
-  const { lang } = useLang()
-  const isTA = lang === 'TA'
+  const { t } = useLang()
 
-  // Tamil translations for known static page titles
   const titleMap = {
-    'RSS Feed':      isTA ? 'RSS ஊட்டம்'         : 'RSS Feed',
-    'Useful Links':  isTA ? 'பயனுள்ள இணைப்புகள்' : 'Useful Links',
+    'RSS Feed':     t.rssFeed,
+    'Useful Links': t.usefulLinks,
   }
 
   const displayTitle = titleMap[title] || title
@@ -19,12 +17,7 @@ export default function StaticPage({ title, children }) {
       {children ? (
         <div className="text-ink-soft leading-relaxed">{children}</div>
       ) : (
-        <p className="text-ink-soft">
-          {isTA
-            ? 'இந்த பக்கம் விரைவில் கிடைக்கும்.'
-            : 'This page is coming soon.'
-          }
-        </p>
+        <p className="text-ink-soft">{t.comingSoon}</p>
       )}
     </div>
   )

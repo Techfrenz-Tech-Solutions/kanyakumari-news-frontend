@@ -47,12 +47,12 @@ export default function MostRead({ initialItems = null }) {
           ))}
         </div>
       </div>
-      {loading ? <div className="h-24 animate-pulse rounded bg-black/5" /> : error ? <p role="alert" className="text-xs text-red-700">{error.message}</p> : items.length === 0 ? <p className="text-xs text-ink-soft">No view activity for this period.</p> : (
+      {loading ? <div className="h-24 animate-pulse rounded bg-black/5" /> : error ? <p role="alert" className="text-xs text-red-700">{error.message}</p> : items.length === 0 ? <p className="text-xs text-ink-soft">{t.noViewActivity}</p> : (
         <ol className="space-y-3">
           {items.map((item, index) => <li key={item.slug}>
             <Link to={`/article/${item.slug}`} className="flex gap-3 text-sm font-semibold hover:text-primary">
               <span className="text-primary/50">{index + 1}</span><span>{item.title}</span>
-              <span className="ml-auto shrink-0 text-xs font-normal text-ink-soft">{item.viewCount} views</span>
+              <span className="ml-auto shrink-0 text-xs font-normal text-ink-soft">{item.viewCount} {t.viewsCount}</span>
             </Link>
           </li>)}
         </ol>

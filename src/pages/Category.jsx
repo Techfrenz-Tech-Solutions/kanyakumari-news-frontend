@@ -29,7 +29,8 @@ export default function Category() {
   const titleOf   = (a) => lang === 'TA' ? (a.titleTA   || a.title)   : a.title
   const excerptOf = (a) => lang === 'TA' ? (a.excerptTA || a.excerpt) : a.excerpt
 
-  const label         = categories.find((c) => c.slug === slug)?.label || slug
+  const label = categories.find((c) => c.slug === slug)
+  const displayLabel = label ? (lang === 'TA' ? (label.labelTA || label.label) : label.label) : slug
   const isKanyakumari = slug === 'kanyakumari'
 
   useEffect(() => {
@@ -75,9 +76,9 @@ export default function Category() {
       <div className="bg-ink dark:bg-black text-white py-8">
         <div className="container-page">
           <p className="eyebrow text-accent mb-1">
-            <Link to="/" className="hover:underline">{t.breadcrumbHome}</Link> › {label}
+            <Link to="/" className="hover:underline">{t.breadcrumbHome}</Link> › {displayLabel}
           </p>
-          <h1 className="font-display text-3xl md:text-4xl font-bold">{label} {lang === 'TA' ? 'செய்திகள்' : 'News'}</h1>
+          <h1 className="font-display text-3xl md:text-4xl font-bold">{displayLabel} {t.newsWord}</h1>
         </div>
       </div>
 
@@ -161,7 +162,7 @@ export default function Category() {
                 </div>
                 {hasMore && (
                   <div className="mt-6 pt-4 border-t border-black/10">
-                    <button onClick={loadMore} disabled={loadingMore} className="btn-outline text-sm disabled:opacity-50">{loadingMore ? 'Loading…' : t.loadMore}</button>
+                    <button onClick={loadMore} disabled={loadingMore} className="btn-outline text-sm disabled:opacity-50">{loadingMore ? t.loadingText : t.loadMore}</button>
                   </div>
                 )}
               </>

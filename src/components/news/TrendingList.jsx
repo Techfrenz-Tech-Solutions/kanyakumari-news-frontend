@@ -3,16 +3,18 @@ import { Link } from 'react-router-dom'
 import newsService from '../../services/newsService.js'
 import { RowSkeleton } from '../ui/Skeleton.jsx'
 import { formatNumber } from '../../utils/format.js'
-
-const TABS = [
-  { key: 'views', label: 'Most Viewed' },
-  { key: 'comments', label: 'Most Discussed' }
-]
+import { useLang } from '../../context/LanguageContext.jsx'
 
 export default function TrendingList() {
+  const { t } = useLang()
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
   const [tab, setTab] = useState('views')
+
+  const TABS = [
+    { key: 'views',    label: t.mostViewed    },
+    { key: 'comments', label: t.mostDiscussed },
+  ]
 
   useEffect(() => {
     let active = true
@@ -32,18 +34,18 @@ export default function TrendingList() {
   return (
     <div className="card-surface p-4">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-display text-lg font-bold">Trending Now</h3>
+        <h3 className="font-display text-lg font-bold">{t.trendingNow}</h3>
       </div>
       <div className="flex gap-2 mb-4 text-xs font-semibold">
-        {TABS.map((t) => (
+        {TABS.map((tabItem) => (
           <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
+            key={tabItem.key}
+            onClick={() => setTab(tabItem.key)}
             className={`px-3 py-1.5 rounded-sm transition-colors ${
-              tab === t.key ? 'bg-primary text-white' : 'bg-black/5 dark:bg-white/10 text-ink-soft dark:text-white/60'
+              tab === tabItem.key ? 'bg-primary text-white' : 'bg-black/5 dark:bg-white/10 text-ink-soft dark:text-white/60'
             }`}
           >
-            {t.label}
+            {tabItem.label}
           </button>
         ))}
       </div>
@@ -67,7 +69,7 @@ export default function TrendingList() {
                     {a.title}
                   </h4>
                   <span className="text-xs text-ink-soft dark:text-white/40 font-mono">
-                    {formatNumber(a[tab])} {tab === 'views' ? 'views' : 'comments'}
+                    {formatNumber(a[tab])} {tab === 'views' ? t.viewsSuffix : t.commentsSuffix}
                   </span>
                 </div>
               </Link>

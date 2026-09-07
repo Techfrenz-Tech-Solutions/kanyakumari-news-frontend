@@ -29,7 +29,7 @@ export default function DistrictInfo() {
     <div>
       <div className="bg-ink dark:bg-black text-white py-8">
         <div className="container-page">
-          <p className="eyebrow text-accent mb-1">Kanyakumari</p>
+          <p className="eyebrow text-accent mb-1">{t.navKanyakumari}</p>
           <h1 className="font-display text-3xl md:text-4xl font-bold">{t.districtInfoTitle}</h1>
         </div>
       </div>
@@ -59,9 +59,9 @@ export default function DistrictInfo() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-primary/10 dark:bg-primary/20">
-                      <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">Taluk</th>
-                      <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">HQ</th>
-                      <th className="text-right px-4 py-3 font-semibold text-ink dark:text-white">Panchayats</th>
+                      <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">{t.talukCol}</th>
+                      <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">{t.hqCol}</th>
+                      <th className="text-right px-4 py-3 font-semibold text-ink dark:text-white">{t.panchayatsCol}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -77,11 +77,11 @@ export default function DistrictInfo() {
               </div>
             </div>
             <div className="card-surface p-5 space-y-3 text-sm text-ink-soft dark:text-white/70 leading-relaxed">
-              <p>Kanyakumari is the southernmost district of Tamil Nadu, at the confluence of three seas.</p>
+              <p>{t.districtDesc}</p>
               <div className="flex gap-6 pt-2 border-t border-black/8 dark:border-white/8">
-                <div><p className="eyebrow">HQ</p><p className="font-semibold text-ink dark:text-white">Nagercoil</p></div>
-                <div><p className="eyebrow">Area</p><p className="font-semibold text-ink dark:text-white">1,672 km²</p></div>
-                <div><p className="eyebrow">Pop.</p><p className="font-semibold text-ink dark:text-white">~19 Lakh</p></div>
+                <div><p className="eyebrow">{t.hqLabel}</p><p className="font-semibold text-ink dark:text-white">{t.districtHQ}</p></div>
+                <div><p className="eyebrow">{t.areaLabel}</p><p className="font-semibold text-ink dark:text-white">{t.districtArea}</p></div>
+                <div><p className="eyebrow">{t.popLabel}</p><p className="font-semibold text-ink dark:text-white">{t.districtPop}</p></div>
               </div>
             </div>
           </div>
@@ -118,9 +118,9 @@ export default function DistrictInfo() {
               </div>
             </div>
             <div className="card-surface p-5 bg-red-50 dark:bg-red-900/10 border-red-200 dark:border-red-700/30">
-              <h3 className="font-bold text-red-700 dark:text-red-400 mb-3">⚠ Emergency</h3>
+              <h3 className="font-bold text-red-700 dark:text-red-400 mb-3">{t.emergencyTitle}</h3>
               <p className="text-sm text-ink-soft dark:text-white/70 leading-relaxed">
-                Call <strong>100</strong> (Police), <strong>101</strong> (Fire), <strong>108</strong> (Ambulance), <strong>181</strong> (Women).
+                {t.emergencyDesc}
               </p>
             </div>
           </div>
@@ -140,10 +140,10 @@ export default function DistrictInfo() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-primary/10 dark:bg-primary/20">
-                    <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">Route</th>
-                    <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">Type</th>
-                    <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">Duration</th>
-                    <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">Operator</th>
+                    <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">{t.routeCol}</th>
+                    <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">{t.typeCol}</th>
+                    <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">{t.durationCol}</th>
+                    <th className="text-left px-4 py-3 font-semibold text-ink dark:text-white">{t.operatorCol}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -155,7 +155,7 @@ export default function DistrictInfo() {
                           row.type === 'Train'
                             ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'
                             : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-                        }`}>{row.type}</span>
+                        }`}>{row.type === 'Train' ? t.transportTrain : t.transportBus}</span>
                       </td>
                       <td className="px-4 py-3 font-mono text-ink-soft dark:text-white/60">{row.duration}</td>
                       <td className="px-4 py-3 text-ink-soft dark:text-white/60">{row.operator}</td>

@@ -7,13 +7,16 @@ const ICONS = { Sunny: FiSun, Cloudy: FiCloud, Rain: FiCloudRain, 'Partly Cloudy
 
 const CONDITIONS_TA = {
   'Sunny': 'வெயில்', 'Cloudy': 'மேகமூட்டம்',
-  'Rain': 'மழை', 'Partly Cloudy': 'பகுதி மேகமூட்டம்'
+  'Rain': 'மழை', 'Partly Cloudy': 'பகுதி மேகமூட்டம்',
 }
 
-const DAYS_TA = { Mon:'திங்கள்', Tue:'செவ்வாய்', Wed:'புதன்', Thu:'வியாழன்', Fri:'வெள்ளி', Sat:'சனி', Sun:'ஞாயிறு' }
+const DAYS_TA = {
+  Mon: 'திங்கள்', Tue: 'செவ்வாய்', Wed: 'புதன்',
+  Thu: 'வியாழன்', Fri: 'வெள்ளி',  Sat: 'சனி', Sun: 'ஞாயிறு',
+}
 
 export default function WeatherWidget() {
-  const { lang } = useLang()
+  const { lang, t } = useLang()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -29,15 +32,13 @@ export default function WeatherWidget() {
   if (loading) return <div className="card-surface p-4 h-48 animate-pulse" />
   if (error || !data || data.available === false) return (
     <div className="card-surface p-4" role="status">
-      <p className="font-display text-lg font-bold">{lang === 'TA' ? 'வானிலை' : 'Weather'}</p>
-      <p className="mt-2 text-sm text-ink-soft">{lang === 'TA' ? 'வானிலைத் தகவல் தற்போது கிடைக்கவில்லை.' : 'Weather data is currently unavailable.'}</p>
+      <p className="font-display text-lg font-bold">{t.weatherTitle}</p>
+      <p className="mt-2 text-sm text-ink-soft">{t.weatherUnavailable}</p>
     </div>
   )
 
   const Icon      = ICONS[data.condition] || FiSun
   const condition = lang === 'TA' ? (CONDITIONS_TA[data.condition] || data.condition) : data.condition
-  const humidity  = lang === 'TA' ? 'ஈரப்பதம்' : 'Humidity'
-  const wind      = lang === 'TA' ? 'காற்று வேகம்' : 'Wind'
 
   return (
     <div className="card-surface p-4">
@@ -50,8 +51,12 @@ export default function WeatherWidget() {
         <Icon size={44} className="text-accent" />
       </div>
       <div className="flex gap-4 mt-4 text-xs text-ink-soft">
-        <span className="flex items-center gap-1"><FiDroplet size={12} /> {data.humidity}% {lang === 'TA' ? 'ஈரம்' : ''}</span>
-        <span className="flex items-center gap-1"><FiWind size={12} /> {data.windKmh} km/h</span>
+        <span className="flex items-center gap-1">
+          <FiDroplet size={12} /> {data.humidity}% {t.weatherHumidity}
+        </span>
+        <span className="flex items-center gap-1">
+          <FiWind size={12} /> {data.windKmh} km/h {t.weatherWind}
+        </span>
       </div>
       <div className="grid grid-cols-5 gap-1 mt-4 pt-4 border-t border-black/5">
         {data.forecast.map((f) => {
