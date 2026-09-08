@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import newsService from '../services/newsService.js'
 import NewsCard from '../components/news/NewsCard.jsx'
-import MostRead from '../components/widgets/MostRead.jsx'
 import AdBanner from '../components/ui/AdBanner.jsx'
 import { CardSkeleton } from '../components/ui/Skeleton.jsx'
 import { useLang } from '../context/LanguageContext.jsx'
@@ -16,13 +15,13 @@ const FALLBACK = '/news-placeholder.svg'
 
 export default function Category() {
   const { lang, t } = useLang()
-  const { categories, areas: kanyakumariAreas, errors: taxonomyErrors } = usePublicContent()
+  const { categories } = usePublicContent()
   const { slug } = useParams()
   const [page,       setPage]       = useState(1)
   const [items,      setItems]      = useState([])
   const [hasMore,    setHasMore]    = useState(false)
   const [loading,    setLoading]    = useState(true)
-  const [activeArea, setActiveArea] = useState(null)
+  const [activeSubcategory, setActiveSubcategory] = useState(null)
   const [error, setError] = useState(null)
   const [loadingMore, setLoadingMore] = useState(false)
 
@@ -31,14 +30,14 @@ export default function Category() {
 
   const label = categories.find((c) => c.slug === slug)
   const displayLabel = label ? (lang === 'TA' ? (label.labelTA || label.label) : label.label) : slug
-  const isKanyakumari = slug === 'kanyakumari'
+  const subcategories = label?.subcategories || []
 
   useEffect(() => {
     setItems([])
     setPage(1)
     setLoading(true)
     setError(null)
-    setActiveArea(null)
+    setActiveSubcategory(null)
   }, [slug])
 
   useEffect(() => {
@@ -47,7 +46,7 @@ export default function Category() {
     setLoading(true)
     const controller = new AbortController()
     newsService
-      .getLatest({ page: 1, pageSize: PAGE_SIZE, category: slug, area: activeArea, signal: controller.signal })
+      .getLatest({ page: 1, pageSize: PAGE_SIZE, category: slug, subcategory: activeSubcategory, signal: controller.signal })
       .then(({ items: fetched, hasMore: more }) => {
         setItems(fetched)
         setHasMore(more)
@@ -56,13 +55,13 @@ export default function Category() {
         if (requestError.code !== 'REQUEST_CANCELLED') { setError(requestError); setLoading(false) }
       })
     return () => controller.abort()
-  }, [slug, activeArea])
+  }, [slug, activeSubcategory])
 
   function loadMore() {
     const next = page + 1
     setLoadingMore(true)
     newsService
-      .getLatest({ page: next, pageSize: PAGE_SIZE, category: slug, area: activeArea })
+      .getLatest({ page: next, pageSize: PAGE_SIZE, category: slug, subcategory: activeSubcategory })
       .then(({ items: more, hasMore: moreFlag }) => {
         setItems((prev) => [...prev, ...more])
         setHasMore(moreFlag)
@@ -88,30 +87,29 @@ export default function Category() {
       </div>
 
       <div className="container-page py-6">
-        {/* Sub-filters for Kanyakumari */}
-        {isKanyakumari && !taxonomyErrors.areas && (
+        {subcategories.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6 pb-4 border-b border-black/10 dark:border-white/10">
             <button
-              onClick={() => setActiveArea(null)}
+              onClick={() => setActiveSubcategory(null)}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors border ${
-                activeArea === null
+                activeSubcategory === null
                   ? 'bg-primary text-white border-primary'
                   : 'border-black/20 dark:border-white/20 hover:border-primary hover:text-primary'
               }`}
             >
               {t.allAreas}
             </button>
-            {kanyakumariAreas.map((area) => (
+            {subcategories.map((subcategory) => (
               <button
-                key={area.slug}
-                onClick={() => setActiveArea(area.slug)}
+                key={subcategory.slug}
+                onClick={() => setActiveSubcategory(subcategory.slug)}
                 className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors border ${
-                  activeArea === area.slug
+                  activeSubcategory === subcategory.slug
                     ? 'bg-primary text-white border-primary'
                     : 'border-black/20 dark:border-white/20 hover:border-primary hover:text-primary'
                 }`}
               >
-                {area.label}
+                {subcategory.label}
               </button>
             ))}
           </div>
@@ -126,7 +124,7 @@ export default function Category() {
               </div>
             ) : items.length === 0 ? (
               <p className="text-ink-soft dark:text-white/60 py-12 text-center">
-                {t.noArticles}{activeArea ? ` — ${kanyakumariAreas.find((a) => a.slug === activeArea)?.label}` : ''}
+                {t.noArticles}{activeSubcategory ? ` - ${subcategories.find((item) => item.slug === activeSubcategory)?.label}` : ''}
               </p>
             ) : (
               <>
@@ -173,35 +171,6 @@ export default function Category() {
           <aside className="space-y-6">
             {/* AD 300×250 */}
             <AdBanner size="rectangle" index={0} />
-
-            <MostRead />
-
-            {/* Photo Gallery Widget */}
-            <div className="card-surface p-4">
-              <h3 className="font-bold text-sm mb-3 text-ink dark:text-white">{t.photoGallery}</h3>
-              <Link to="/gallery" className="group relative aspect-video block rounded overflow-hidden">
-                <img src="/news-placeholder.svg" alt="Gallery"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  onError={(e) => { e.target.src = FALLBACK }} />
-                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <span className="text-white text-xs font-semibold">{t.viewGallery}</span>
-                </div>
-              </Link>
-            </div>
-
-            {/* District Info Quick Links */}
-            <div className="card-surface p-4">
-              <h3 className="font-bold text-sm mb-3 text-ink dark:text-white">{t.districtInfo}</h3>
-              <ul className="space-y-2 text-sm">
-                {[t.taluks, t.govtOffices, t.emergencyHelplines, t.tabTransport].map((item) => (
-                  <li key={item}>
-                    <Link to="/district-info" className="text-ink-soft dark:text-white/60 hover:text-primary transition-colors">
-                      → {item}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
 
             {/* AD 300×250 bottom */}
             <AdBanner size="rectangle" index={2} />

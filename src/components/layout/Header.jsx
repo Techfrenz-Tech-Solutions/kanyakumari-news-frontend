@@ -14,9 +14,6 @@ function buildNav(t, categories, lang) {
       label: lang === 'TA' ? (category.labelTA || category.label) : category.label,
       to: `/category/${category.slug}`,
     })),
-    { key: 'photo',        label: t.navPhoto,        to: '/gallery'              },
-    { key: 'videos',       label: t.navVideos,       to: '/videos'               },
-    { key: 'districtInfo', label: t.navDistrictInfo, to: '/district-info'        },
     { key: 'tourist',      label: t.navTourist,      to: '/tourist-info'         },
     { key: 'jobs',         label: t.navJobs,         to: '/jobs'                 },
     { key: 'links',        label: t.navLinks,        to: '/links'                },
@@ -35,22 +32,11 @@ function buildMobileGroups(t, categories, lang) {
         })),
       ],
     },
-    {
-      title: t.navPhoto,
-      links: [
-        { label: t.navPhoto,   to: '/gallery' },
-        { label: t.navVideos,  to: '/videos'  },
-      ],
-    },
-    {
-      title: t.navDistrictInfo,
-      links: [
-        { label: t.navDistrictInfo, to: '/district-info' },
-        { label: t.navTourist,      to: '/tourist-info'  },
-        { label: t.navJobs,         to: '/jobs'          },
-        { label: t.navLinks,        to: '/links'         },
-      ],
-    },
+    { title: t.navLinks, links: [
+      { label: t.navTourist, to: '/tourist-info' },
+      { label: t.navJobs, to: '/jobs' },
+      { label: t.navLinks, to: '/links' },
+    ] },
     {
       title: t.footerCompany,
       links: [

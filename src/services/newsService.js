@@ -9,8 +9,8 @@ export function createNewsService(client = apiClient) {
   getHome: ({ signal } = {}) => client.get('/home', { signal }),
   getHero: ({ signal } = {}) => client.get('/hero', { signal }),
   getBreakingHeadlines: ({ signal } = {}) => client.get('/breaking', { signal }),
-  getLatest: ({ page = 1, pageSize = 9, category = null, area = null, signal } = {}) =>
-    client.get('/news', { params: cleanParams({ page, pageSize, category, area }), signal }),
+  getLatest: ({ page = 1, pageSize = 9, category = null, area = null, subcategory = null, signal } = {}) =>
+    client.get('/news', { params: cleanParams({ page, pageSize, category, area, subcategory }), signal }),
   getTrending: ({ period = 'daily', limit = 5, signal } = {}) =>
     client.get('/trending', { params: { period, limit }, signal }),
   getByCategory: (slug, limit = 6, { signal } = {}) =>
@@ -21,15 +21,12 @@ export function createNewsService(client = apiClient) {
   search: (query, { category = null, sort = 'relevance', limit = 20, signal } = {}) =>
     client.get('/search', { params: cleanParams({ q: query.trim(), category, sort, limit }), signal }),
   getSiteSettings: ({ signal } = {}) => client.get('/settings/site', { signal }),
-  getGallery: ({ signal } = {}) => client.get('/gallery', { signal }),
-  getVideos: ({ signal } = {}) => client.get('/videos', { signal }),
+  getAds: ({ signal } = {}) => client.get('/ads', { signal }),
   getStockData: ({ signal } = {}) => client.get('/market/stocks', { signal }),
   getWeather: (city, { signal } = {}) => client.get('/weather', { params: cleanParams({ city }), signal }),
   getRates: ({ signal } = {}) => client.get('/market/rates', { signal }),
   getJobs: ({ type = null, signal } = {}) => client.get('/jobs', { params: cleanParams({ type }), signal }),
   getTouristAttractions: ({ signal } = {}) => client.get('/tourist-attractions', { signal }),
-  getDistrictInfo: ({ signal } = {}) => client.get('/district-info', { signal }),
-  getComments: (slug, { signal } = {}) => client.get(`/news/${encodeURIComponent(slug)}/comments`, { signal }),
   submitContact: (form, { signal } = {}) => client.post('/contact', form, { signal }),
   }
 }

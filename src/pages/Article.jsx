@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { FiClock, FiEye, FiMessageSquare } from 'react-icons/fi'
+import { FiClock, FiEye } from 'react-icons/fi'
 import newsService from '../services/newsService.js'
-import MostRead from '../components/widgets/MostRead.jsx'
 import Badge from '../components/ui/Badge.jsx'
+import AdBanner from '../components/ui/AdBanner.jsx'
 import { timeAgo, formatNumber } from '../utils/format.js'
 import { useLang } from '../context/LanguageContext.jsx'
-import { ApiErrorState, EmptyState } from '../components/ui/ApiState.jsx'
+import { ApiErrorState } from '../components/ui/ApiState.jsx'
 import { applyArticleMetadata, buildArticleMetadata } from '../utils/seo.js'
 
 const IMAGE_FALLBACK = '/news-placeholder.svg'
@@ -42,15 +42,13 @@ export default function Article() {
   const [related,  setRelated]  = useState([])
   const [notFound, setNotFound] = useState(false)
   const [error, setError] = useState(null)
-  const [comments, setComments] = useState([])
 
   useEffect(() => {
     const controller = new AbortController()
-    setArticle(null); setNotFound(false); setError(null); setComments([])
+    setArticle(null); setNotFound(false); setError(null)
     newsService.getArticleBySlug(slug, { signal: controller.signal }).then(({ article: a, related: r }) => {
       setArticle(a); setRelated(r)
-      return newsService.getComments(slug, { signal: controller.signal })
-    }).then(setComments).catch((requestError) => {
+    }).catch((requestError) => {
       if (requestError.code === 'REQUEST_CANCELLED') return
       if (requestError.status === 404) setNotFound(true)
       else setError(requestError)
@@ -148,31 +146,11 @@ export default function Article() {
             ))}
           </div>
 
-          {/* Comments */}
-          <section className="mt-10 pt-8 border-t border-black/10">
-            <h3 className="font-display text-xl font-bold mb-4 flex items-center gap-2">
-              <FiMessageSquare /> {t.comments} ({comments.length})
-            </h3>
-            <p className="text-xs text-ink-soft mb-5">{t.commentSubmissionNote}</p>
-            {comments.length === 0 ? <EmptyState>{t.noCommentsYet}</EmptyState> : <ul className="space-y-4">
-              {comments.map((c) => (
-                <li key={c.id} className="card-surface p-4">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-semibold">{c.name}</span>
-                    <span className="text-xs text-ink-soft">{timeAgo(c.createdAt)}</span>
-                  </div>
-                  <p className="text-sm text-ink-soft">{c.body}</p>
-                </li>
-              ))}
-            </ul>}
-          </section>
         </article>
 
         {/* ── Sidebar ── */}
         <aside className="space-y-6">
-          <div className="bg-amber-50 border border-amber-200 rounded flex items-center justify-center min-h-[250px]">
-            <span className="text-xs text-amber-600 font-mono tracking-widest text-center">AD<br/>300×250</span>
-          </div>
+          <AdBanner size="rectangle" index={0} />
 
           {related.length > 0 && (
             <div className="card-surface p-4">
@@ -192,11 +170,7 @@ export default function Article() {
             </div>
           )}
 
-          <MostRead />
-
-          <div className="bg-amber-50 border border-amber-200 rounded flex items-center justify-center min-h-[400px]">
-            <span className="text-xs text-amber-600 font-mono tracking-widest text-center">AD<br/>300×600</span>
-          </div>
+          <AdBanner size="rectangle" index={1} />
         </aside>
       </div>
     </div>

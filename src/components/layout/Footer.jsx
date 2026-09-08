@@ -18,9 +18,6 @@ export default function Footer() {
 
   // Quick links column
   const QUICK_LINKS = [
-    { label: t.navPhoto,        to: '/gallery'       },
-    { label: t.navVideos,       to: '/videos'        },
-    { label: t.navDistrictInfo, to: '/district-info' },
     { label: t.navTourist,      to: '/tourist-info'  },
     { label: t.navJobs,         to: '/jobs'          },
   ]
