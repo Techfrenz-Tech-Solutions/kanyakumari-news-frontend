@@ -33,7 +33,7 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-ink dark:bg-black text-white/70 mt-12">
+    <footer className="text-white/70 mt-12" style={{ background: 'linear-gradient(160deg, #111827 0%, #1E3A8A 100%)' }}>
       <div className="container-page py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
 
         {/* ── Col 1: Brand + address ── */}
@@ -66,7 +66,7 @@ export default function Footer() {
 
         {/* ── Col 2: News — first half ── */}
         <div>
-          <p className="text-white text-sm font-semibold mb-4 uppercase tracking-widest">{t.footerNews}</p>
+          <p className="text-sm font-semibold mb-4 uppercase tracking-widest" style={{ color: '#FFD700' }}>{t.footerNews}</p>
           <ul className="space-y-2">
             {CATS_LEFT.map((l) => (
               <li key={l.to}>
@@ -79,7 +79,7 @@ export default function Footer() {
         {/* ── Col 3: News — second half ── */}
         <div>
           {/* Empty heading to keep columns aligned */}
-          <p className="text-white text-sm font-semibold mb-4 uppercase tracking-widest invisible select-none">
+          <p className="text-sm font-semibold mb-4 uppercase tracking-widest invisible select-none" style={{ color: '#FFD700' }}>
             {t.footerNews}
           </p>
           <ul className="space-y-2">
@@ -93,7 +93,7 @@ export default function Footer() {
 
         {/* ── Col 4: Quick Links ── */}
         <div>
-          <p className="text-white text-sm font-semibold mb-4 uppercase tracking-widest">{t.navLinks}</p>
+          <p className="text-sm font-semibold mb-4 uppercase tracking-widest" style={{ color: '#FFD700' }}>{t.navLinks}</p>
           <ul className="space-y-2">
             {QUICK_LINKS.map((l) => (
               <li key={l.to}>
@@ -105,7 +105,7 @@ export default function Footer() {
 
         {/* ── Col 5: Company ── */}
         <div>
-          <p className="text-white text-sm font-semibold mb-4 uppercase tracking-widest">{t.footerCompany}</p>
+          <p className="text-sm font-semibold mb-4 uppercase tracking-widest" style={{ color: '#FFD700' }}>{t.footerCompany}</p>
           <ul className="space-y-2">
             {COMPANY_LINKS.map((l) => (
               <li key={l.to}>

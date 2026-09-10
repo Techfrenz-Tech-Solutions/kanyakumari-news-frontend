@@ -133,21 +133,23 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      {/* Desktop nav — matches PDF: KANYAKUMARI · TN · NATIONAL · WORLD · PHOTO · VIDEOS · DISTRICT INFO · TOURIST · JOBS · LINKS · SEARCH */}
-      <nav className="hidden lg:block bg-ink dark:bg-black">
-        <div className="container-page flex items-center h-11 text-sm text-white/90 overflow-x-auto">
-          {PRIMARY_NAV.map((item) => (
+      {/* Desktop nav — red to purple gradient */}
+      <nav className="hidden lg:block">
+        <div className="container-page flex items-center h-11 text-sm text-white/95 overflow-x-auto"
+          style={{ background: 'linear-gradient(90deg, #C8102E 0%, #7B1450 50%, #4A1060 100%)' }}>
+          {PRIMARY_NAV.map((item, idx) => (
             <Link
               key={item.to}
               to={item.to}
-              className="px-3 h-full flex items-center whitespace-nowrap hover:bg-primary hover:text-white transition-colors border-r border-white/10 last:border-r-0 font-medium"
+              className={`px-3 h-full flex items-center whitespace-nowrap transition-colors border-r border-white/15 last:border-r-0 font-medium
+                ${idx === 0 ? 'bg-white/15 text-white font-bold' : 'hover:bg-white/15 hover:text-white'}`}
             >
               {item.label}
             </Link>
           ))}
           <button
             onClick={() => setSearchOpen((s) => !s)}
-            className="ml-auto px-4 h-full flex items-center gap-1 text-white/70 hover:text-white transition-colors whitespace-nowrap"
+            className="ml-auto px-4 h-full flex items-center gap-1 text-white/80 hover:text-white transition-colors whitespace-nowrap"
             aria-label="Search"
           >
             <FiSearch size={14} /> {t.search}
