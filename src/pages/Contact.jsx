@@ -34,9 +34,9 @@ export default function Contact() {
       <div className="grid md:grid-cols-2 gap-12">
         <div className="space-y-8">
           {[
-            { Icon: FiMail,   label: t.emailAddress, value: site?.contactEmail },
-            { Icon: FiPhone,  label: t.login,        value: site?.contactPhone },
-            { Icon: FiMapPin, label: t.tabTaluks,    value: site?.address },
+            { Icon: FiMail,   label: t.emailAddress,       value: site?.contactEmail },
+            { Icon: FiPhone,  label: t.phoneLabelContact,  value: site?.contactPhone },
+            { Icon: FiMapPin, label: t.addressLabelContact, value: site?.address     },
           ].filter((item) => item.value).map(({ Icon, label, value }) => (
             <div key={label} className="flex items-start gap-4">
               <span className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
@@ -70,8 +70,8 @@ export default function Contact() {
           <form onSubmit={submit} className="space-y-4">
             {error && <ApiErrorState error={error} compact />}
             {[
-              { name: 'name',    label: t.yourName,     type: 'text',  ph: 'Rajesh Kumar'       },
-              { name: 'email',   label: t.emailAddress, type: 'email', ph: 'you@example.com'    },
+              { name: 'name',    label: t.yourName,     type: 'text',  ph: t.namePlaceholder  },
+              { name: 'email',   label: t.emailAddress, type: 'email', ph: t.emailPlaceholder },
               { name: 'subject', label: t.subject,      type: 'text',  ph: t.subjectPlaceholder },
             ].map(({ name, label, type, ph }) => (
               <div key={name}>
@@ -87,7 +87,7 @@ export default function Contact() {
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
                 className="w-full bg-transparent border border-black/15 rounded-sm px-4 py-2 text-sm focus:border-primary outline-none resize-none" />
             </div>
-            <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">{loading ? 'Sending…' : t.sendMessage}</button>
+            <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-50">{loading ? t.sendingText : t.sendMessage}</button>
           </form>
         )}
       </div>

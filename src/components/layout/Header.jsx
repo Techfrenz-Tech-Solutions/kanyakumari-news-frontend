@@ -6,44 +6,37 @@ import { useLang } from '../../context/LanguageContext.jsx'
 import { usePublicContent } from '../../context/PublicContentContext.jsx'
 
 // Primary nav — labels come from translations
-function buildNav(t, categories) {
+function buildNav(t, categories, lang) {
   return [
     { key: 'home', label: t.home, to: '/' },
-    ...categories.map((category) => ({ key: category.slug, label: category.label, to: `/category/${category.slug}` })),
-    { key: 'photo',        label: t.navPhoto,        to: '/gallery'              },
-    { key: 'videos',       label: t.navVideos,       to: '/videos'               },
-    { key: 'districtInfo', label: t.navDistrictInfo, to: '/district-info'        },
+    ...categories.map((category) => ({
+      key: category.slug,
+      label: lang === 'TA' ? (category.labelTA || category.label) : category.label,
+      to: `/category/${category.slug}`,
+    })),
     { key: 'tourist',      label: t.navTourist,      to: '/tourist-info'         },
     { key: 'jobs',         label: t.navJobs,         to: '/jobs'                 },
     { key: 'links',        label: t.navLinks,        to: '/links'                },
   ]
 }
 
-function buildMobileGroups(t, categories) {
+function buildMobileGroups(t, categories, lang) {
   return [
     {
       title: t.navKanyakumari,
       links: [
-        { label: t.home,           to: '/'                     },
-        ...categories.map((category) => ({ label: category.label, to: `/category/${category.slug}` })),
+        { label: t.home, to: '/' },
+        ...categories.map((category) => ({
+          label: lang === 'TA' ? (category.labelTA || category.label) : category.label,
+          to: `/category/${category.slug}`,
+        })),
       ],
     },
-    {
-      title: t.navPhoto,
-      links: [
-        { label: t.navPhoto,   to: '/gallery' },
-        { label: t.navVideos,  to: '/videos'  },
-      ],
-    },
-    {
-      title: t.navDistrictInfo,
-      links: [
-        { label: t.navDistrictInfo, to: '/district-info' },
-        { label: t.navTourist,      to: '/tourist-info'  },
-        { label: t.navJobs,         to: '/jobs'          },
-        { label: t.navLinks,        to: '/links'         },
-      ],
-    },
+    { title: t.navLinks, links: [
+      { label: t.navTourist, to: '/tourist-info' },
+      { label: t.navJobs, to: '/jobs' },
+      { label: t.navLinks, to: '/links' },
+    ] },
     {
       title: t.footerCompany,
       links: [
@@ -56,10 +49,10 @@ function buildMobileGroups(t, categories) {
 }
 
 export default function Header() {
-  const { t } = useLang()
+  const { lang, t } = useLang()
   const { categories, site, errors } = usePublicContent()
-  const PRIMARY_NAV   = buildNav(t, categories)
-  const MOBILE_GROUPS = buildMobileGroups(t, categories)
+  const PRIMARY_NAV   = buildNav(t, categories, lang)
+  const MOBILE_GROUPS = buildMobileGroups(t, categories, lang)
   const [menuOpen, setMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -109,7 +102,7 @@ export default function Header() {
             to="/search"
             className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono bg-black/5 dark:bg-white/10 px-3 py-1.5 rounded-sm hover:bg-primary hover:text-white transition-colors"
           >
-            <FiSearch size={12} /> Search
+            <FiSearch size={12} /> {t.search}
           </Link>
         </div>
       </div>
@@ -140,21 +133,23 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      {/* Desktop nav — matches PDF: KANYAKUMARI · TN · NATIONAL · WORLD · PHOTO · VIDEOS · DISTRICT INFO · TOURIST · JOBS · LINKS · SEARCH */}
-      <nav className="hidden lg:block bg-ink dark:bg-black">
-        <div className="container-page flex items-center h-11 text-sm text-white/90 overflow-x-auto">
-          {PRIMARY_NAV.map((item) => (
+      {/* Desktop nav — red to purple gradient */}
+      <nav className="hidden lg:block">
+        <div className="container-page flex items-center h-11 text-sm text-white/95 overflow-x-auto"
+          style={{ background: 'linear-gradient(90deg, #C8102E 0%, #7B1450 50%, #4A1060 100%)' }}>
+          {PRIMARY_NAV.map((item, idx) => (
             <Link
               key={item.to}
               to={item.to}
-              className="px-3 h-full flex items-center whitespace-nowrap hover:bg-primary hover:text-white transition-colors border-r border-white/10 last:border-r-0 font-medium"
+              className={`px-3 h-full flex items-center whitespace-nowrap transition-colors border-r border-white/15 last:border-r-0 font-medium
+                ${idx === 0 ? 'bg-white/15 text-white font-bold' : 'hover:bg-white/15 hover:text-white'}`}
             >
               {item.label}
             </Link>
           ))}
           <button
             onClick={() => setSearchOpen((s) => !s)}
-            className="ml-auto px-4 h-full flex items-center gap-1 text-white/70 hover:text-white transition-colors whitespace-nowrap"
+            className="ml-auto px-4 h-full flex items-center gap-1 text-white/80 hover:text-white transition-colors whitespace-nowrap"
             aria-label="Search"
           >
             <FiSearch size={14} /> {t.search}
@@ -163,7 +158,7 @@ export default function Header() {
       </nav>
       {errors.categories && (
         <p role="status" className="bg-red-50 px-4 py-1 text-center text-xs text-red-700">
-          Categories are temporarily unavailable.
+          {t.categoriesUnavailable}
         </p>
       )}
 

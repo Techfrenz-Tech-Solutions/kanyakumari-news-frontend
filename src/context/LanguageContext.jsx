@@ -228,6 +228,163 @@ export const translations = {
     disclaimerTitle: 'Disclaimer',
     cookieTitle: 'Cookie Policy',
     lastUpdated: 'Last updated',
+    legalDate: 'January 1, 2025',
+    welcomeTo: 'Welcome to the',
+    welcomeTitle: 'Kanyakumari Live News Update',
+    welcomeSubtitle: 'Your trusted source for breaking news, local stories and real-time updates from Kanyakumari district.',
+    liveLabel: 'Live',
+    liveUpdates: 'Live Updates',
+    loadingLiveUpdates: 'Loading live updates…',
+    advertisementSlot: 'Advertisement · 468 × 90',
+
+    // Home
+    latestNews: 'Latest News',
+
+    // TrendingList
+    trendingNow: 'Trending Now',
+    mostViewed: 'Most Viewed',
+    mostDiscussed: 'Most Discussed',
+    viewsSuffix: 'views',
+    commentsSuffix: 'comments',
+
+    // CategorySection
+    viewAll: 'View all',
+
+    // MostRead
+    noViewActivity: 'No view activity for this period.',
+    viewsCount: 'views',
+
+    // StockWidget
+    markets: 'Markets',
+    marketsUnavailable: 'Market data is currently unavailable.',
+
+    // ApiState
+    contentUnavailable: 'Content is temporarily unavailable.',
+    noContentYet: 'No content available yet.',
+
+    // Article
+    newsWord: 'News',
+    commentSubmissionNote: 'Comment submission is unavailable until reader sign-in is production-ready.',
+    noCommentsYet: 'No approved comments yet.',
+
+    // Category / load
+    loadingText: 'Loading…',
+
+    // District Info table headers
+    talukCol: 'Taluk',
+    hqCol: 'HQ',
+    panchayatsCol: 'Panchayats',
+    districtDesc: 'Kanyakumari is the southernmost district of Tamil Nadu, at the confluence of three seas.',
+    districtHQ: 'Nagercoil',
+    districtArea: '1,672 km²',
+    districtPop: '~19 Lakh',
+    hqLabel: 'HQ',
+    areaLabel: 'Area',
+    popLabel: 'Pop.',
+    emergencyTitle: '⚠ Emergency',
+    emergencyDesc: 'Call 100 (Police), 101 (Fire), 108 (Ambulance), 181 (Women).',
+    routeCol: 'Route',
+    typeCol: 'Type',
+    durationCol: 'Duration',
+    operatorCol: 'Operator',
+    categoriesUnavailable: 'Categories are temporarily unavailable.',
+
+    // Jobs table header
+    jobTitleOrg: 'Job Title / Organisation',
+    locationCol: 'Location',
+
+    // WeatherWidget
+    weatherTitle: 'Weather',
+    weatherUnavailable: 'Weather data is currently unavailable.',
+    weatherHumidity: 'Humidity',
+    weatherWind: 'Wind',
+
+    // TouristInfo hardcoded strings
+    howToReachRoadMode: '🚗 Road',
+    howToReachRoadDetail: 'NH-44 connects Nagercoil to major cities. Kanyakumari is 88 km from Thiruvananthapuram.',
+    howToReachRailMode: '🚂 Rail',
+    howToReachRailDetail: 'Kanyakumari Railway Station (CAPE) is the southernmost railway station in India.',
+    howToReachAirMode: '✈ Air',
+    howToReachAirDetail: 'Nearest airport is Trivandrum International Airport (~90 km).',
+    hotelTypeGovt: 'Govt',
+    hotelTypePremium: 'Premium',
+    hotelTypeBudget: 'Budget',
+    hotelTypeMidRange: 'Mid-range',
+    adSlot: 'Ad slot — 300×250',
+
+    // StaticPage
+    rssFeed: 'RSS Feed',
+    usefulLinks: 'Useful Links',
+    comingSoon: 'This page is coming soon.',
+    advertiseManualDesc: 'The advertisement CMS is not yet available. Contact us to confirm current placements and pricing.',
+    aboutMissionBody: 'Empower every citizen of Kanyakumari with timely, accurate, and meaningful local news.',
+    aboutVision: 'Our Vision',
+    aboutVisionBody: 'To be the most trusted digital news source in Kanyakumari district.',
+    aboutValues: 'Our Values',
+    aboutValuesBody: 'Accuracy · Independence · Accountability · Community — guiding every story we publish.',
+    aboutIntro1: 'Kanyakumari Today delivers timely, accurate, and fair local news for readers across Kanyakumari district.',
+    aboutIntro2: 'We cover local politics, civic issues, and the stories that matter to the community.',
+    aboutContactDesc: 'For news tips, corrections, or partnership proposals, use our verified contact form.',
+    typeFreelance: 'Freelance',
+    deptEditorial: 'Editorial',
+    deptMultimedia: 'Multimedia',
+    deptDigital: 'Digital',
+    deptTechnology: 'Technology',
+    deptCreative: 'Creative',
+
+    // EPaper
+    ePaperTitle: 'E-Paper',
+    ePaperUnavailable: 'E-Paper is currently unavailable.',
+    ePaperDesc: 'PDF editions will appear here once published.',
+
+    // Contact form placeholders & labels
+    namePlaceholder: 'Rajesh Kumar',
+    emailPlaceholder: 'you@example.com',
+    phoneLabelContact: 'Phone',
+    addressLabelContact: 'Address',
+    sendingText: 'Sending…',
+
+    // Job type badges (from API values)
+    jobTypeGovt: 'Govt',
+    jobTypePrivate: 'Private',
+    jobTypeTeaching: 'Teaching',
+    jobTypeBank: 'Bank',
+
+    // Transport type badges
+    transportTrain: 'Train',
+    transportBus: 'Bus',
+
+    // Disclaimer sections
+    disclaimerS1Title: '1. General Disclaimer',
+    disclaimerS1Body: 'Content on Kanyakumari Today is for general informational purposes only.',
+    disclaimerS2Title: '2. Accuracy',
+    disclaimerS2Body: 'While we strive for accuracy, information may change. We make no warranties about completeness or reliability.',
+    disclaimerS3Title: '3. External Links',
+    disclaimerS3Body: 'We are not responsible for content on third-party websites we link to.',
+    disclaimerS4Title: '4. Professional Advice',
+    disclaimerS4Body: 'Nothing on this site constitutes legal, medical, or financial advice.',
+
+    // Terms sections
+    termsS1Title: '1. Acceptance',
+    termsS1Body: 'By using this site, you agree to these Terms of Use. If you do not agree, please do not use the site.',
+    termsS2Title: '2. Prohibited Use',
+    termsS2Body: 'Do not republish content without permission. Do not spread misinformation or misuse the platform.',
+    termsS3Title: '3. Intellectual Property',
+    termsS3Body: 'All content including articles, images, and logos is owned by Kanyakumari Today.',
+    termsS4Title: '4. Third-Party Links',
+    termsS4Body: 'We are not responsible for content on external linked sites.',
+    termsS5Title: '5. Changes',
+    termsS5Body: 'We reserve the right to modify these Terms at any time.',
+
+    // Cookie sections
+    cookieS1Title: '1. What Are Cookies?',
+    cookieS1Body: 'Cookies are small text files stored on your device that help remember your preferences and improve your experience.',
+    cookieS2Title: '2. Cookies We Use',
+    cookieS2Body: 'We use essential cookies (for site functionality), performance cookies (for analytics), and advertising cookies.',
+    cookieS3Title: '3. Managing Cookies',
+    cookieS3Body: 'You can disable cookies through your browser settings, though some site features may not work correctly.',
+    cookieS4Title: '4. Consent',
+    cookieS4Body: 'By continuing to use our site, you consent to our use of cookies as described in this policy.',
   },
 
   TA: {
@@ -449,6 +606,163 @@ export const translations = {
     disclaimerTitle: 'மறுப்பு',
     cookieTitle: 'குக்கீ கொள்கை',
     lastUpdated: 'கடைசியாக புதுப்பிக்கப்பட்டது',
+    legalDate: 'ஜனவரி 1, 2025',
+    welcomeTo: 'வரவேற்கிறோம்',
+    welcomeTitle: 'கன்னியாகுமரி நேரலை செய்தி புதுப்பிப்பு',
+    welcomeSubtitle: 'கன்னியாகுமரி மாவட்டத்திற்கான நம்பகமான உள்ளூர் செய்திகள், நேரலை புதுப்பிப்புகள்.',
+    liveLabel: 'நேரலை',
+    liveUpdates: 'நேரலை புதுப்பிப்புகள்',
+    loadingLiveUpdates: 'நேரலை புதுப்பிப்புகள் ஏற்றப்படுகின்றன…',
+    advertisementSlot: 'விளம்பரம் · 468 × 90',
+
+    // Home
+    latestNews: 'சமீபத்திய செய்திகள்',
+
+    // TrendingList
+    trendingNow: 'இப்போது பரவலாக பேசப்படுவை',
+    mostViewed: 'அதிகம் பார்க்கப்பட்டவை',
+    mostDiscussed: 'அதிகம் விவாதிக்கப்பட்டவை',
+    viewsSuffix: 'பார்வைகள்',
+    commentsSuffix: 'கருத்துகள்',
+
+    // CategorySection
+    viewAll: 'அனைத்தும் காண',
+
+    // MostRead
+    noViewActivity: 'இந்த காலகட்டத்தில் பார்வை தகவல் இல்லை.',
+    viewsCount: 'பார்வைகள்',
+
+    // StockWidget
+    markets: 'சந்தைகள்',
+    marketsUnavailable: 'சந்தை தரவு தற்போது கிடைக்கவில்லை.',
+
+    // ApiState
+    contentUnavailable: 'உள்ளடக்கம் தற்காலிகமாக கிடைக்கவில்லை.',
+    noContentYet: 'இன்னும் உள்ளடக்கம் எதுவும் இல்லை.',
+
+    // Article
+    newsWord: 'செய்திகள்',
+    commentSubmissionNote: 'வாசகர் உள்நுழைவு தயாரானதும் கருத்து சமர்ப்பிக்கலாம்.',
+    noCommentsYet: 'இன்னும் கருத்துகள் எதுவும் இல்லை.',
+
+    // Category / load
+    loadingText: 'ஏற்றப்படுகிறது…',
+
+    // District Info table headers
+    talukCol: 'தாலுகா',
+    hqCol: 'தலைமையிடம்',
+    panchayatsCol: 'பஞ்சாயத்துகள்',
+    districtDesc: 'கன்னியாகுமரி தமிழ்நாட்டின் தென்கோடி மாவட்டம், மூன்று கடல்கள் சங்கமிக்கும் இடம்.',
+    districtHQ: 'நாகர்கோவில்',
+    districtArea: '1,672 கி.மீ²',
+    districtPop: '~19 லட்சம்',
+    hqLabel: 'தலைமையிடம்',
+    areaLabel: 'பரப்பளவு',
+    popLabel: 'மக்கள்தொகை',
+    emergencyTitle: '⚠ அவசரநிலை',
+    emergencyDesc: '100 (காவல்துறை), 101 (தீயணைப்பு), 108 (ஆம்புலன்ஸ்), 181 (பெண்கள்) என்று அழைக்கவும்.',
+    routeCol: 'வழித்தடம்',
+    typeCol: 'வகை',
+    durationCol: 'கால அளவு',
+    operatorCol: 'இயக்குநர்',
+    categoriesUnavailable: 'பிரிவுகள் தற்காலிகமாக கிடைக்கவில்லை.',
+
+    // Jobs table header
+    jobTitleOrg: 'வேலை தலைப்பு / நிறுவனம்',
+    locationCol: 'இடம்',
+
+    // WeatherWidget
+    weatherTitle: 'வானிலை',
+    weatherUnavailable: 'வானிலைத் தகவல் தற்போது கிடைக்கவில்லை.',
+    weatherHumidity: 'ஈரப்பதம்',
+    weatherWind: 'காற்று வேகம்',
+
+    // TouristInfo hardcoded strings
+    howToReachRoadMode: '🚗 சாலை வழி',
+    howToReachRoadDetail: 'NH-44 நாகர்கோவிலை முக்கிய நகரங்களுடன் இணைக்கிறது. கன்னியாகுமரி திருவனந்தபுரத்திலிருந்து 88 கி.மீ.',
+    howToReachRailMode: '🚂 ரயில் வழி',
+    howToReachRailDetail: 'கன்னியாகுமரி ரயில் நிலையம் (CAPE) இந்தியாவின் தென்கோடி ரயில் நிலையம்.',
+    howToReachAirMode: '✈ விமான வழி',
+    howToReachAirDetail: 'அருகிலுள்ள விமான நிலையம் திருவனந்தபுரம் சர்வதேச விமான நிலையம் (~90 கி.மீ).',
+    hotelTypeGovt: 'அரசு',
+    hotelTypePremium: 'உயர்தர',
+    hotelTypeBudget: 'குறைந்த விலை',
+    hotelTypeMidRange: 'நடுத்தர விலை',
+    adSlot: 'விளம்பர இடம் — 300×250',
+
+    // StaticPage
+    rssFeed: 'RSS ஊட்டம்',
+    usefulLinks: 'பயனுள்ள இணைப்புகள்',
+    comingSoon: 'இந்த பக்கம் விரைவில் கிடைக்கும்.',
+    advertiseManualDesc: 'விளம்பர CMS இன்னும் கிடைக்கவில்லை. தற்போதைய இடங்கள் மற்றும் விலை விவரங்களுக்கு எங்களை தொடர்பு கொள்ளுங்கள்.',
+    aboutMissionBody: 'கன்னியாகுமரியின் ஒவ்வொரு குடிமகனையும் சரியான நேரத்தில் துல்லியமான மற்றும் அர்த்தமுள்ள உள்ளூர் செய்திகளுடன் சக்திவாய்ப்படுத்துவது.',
+    aboutVision: 'எங்கள் தரிசனம்',
+    aboutVisionBody: 'கன்னியாகுமரி மாவட்டத்தில் மிகவும் நம்பகமான டிஜிட்டல் செய்தி ஆதாரமாக இருப்பது.',
+    aboutValues: 'எங்கள் மதிப்புகள்',
+    aboutValuesBody: 'துல்லியம் · சுதந்திரம் · பொறுப்புணர்வு · சமூகம் — நாங்கள் வெளியிடும் ஒவ்வொரு கட்டுரையும் இந்த நான்கு தூண்களால் வழிநடத்தப்படுகின்றன.',
+    aboutIntro1: 'கன்னியாகுமரி டுடே கன்னியாகுமரி மாவட்ட வாசகர்களுக்கு விரைவான, துல்லியமான மற்றும் நேர்மையான உள்ளூர் செய்திகளை வழங்குகிறது.',
+    aboutIntro2: 'உள்ளூர் அரசியல், குடிமைப் பிரச்சினைகள் மற்றும் சமூகத்திற்கு முக்கியமான செய்திகளை நாங்கள் உள்ளடக்குகிறோம்.',
+    aboutContactDesc: 'செய்தி குறிப்பு, திருத்தம் அல்லது கூட்டாண்மை முன்மொழிவுக்கு எங்கள் தொடர்பு படிவத்தைப் பயன்படுத்துங்கள்.',
+    typeFreelance: 'ஃப்ரீலான்ஸ்',
+    deptEditorial: 'தலையங்கம்',
+    deptMultimedia: 'மல்டிமீடியா',
+    deptDigital: 'டிஜிட்டல்',
+    deptTechnology: 'தொழில்நுட்பம்',
+    deptCreative: 'படைப்பாற்றல்',
+
+    // EPaper
+    ePaperTitle: 'மின்-பத்திரிகை',
+    ePaperUnavailable: 'மின்-பத்திரிகை தற்போது கிடைக்கவில்லை.',
+    ePaperDesc: 'PDF பதிப்புகள் வெளியிடப்பட்டவுடன் இங்கே தோன்றும்.',
+
+    // Contact form placeholders & labels
+    namePlaceholder: 'ராஜேஷ் குமார்',
+    emailPlaceholder: 'neenga@example.com',
+    phoneLabelContact: 'தொலைபேசி',
+    addressLabelContact: 'முகவரி',
+    sendingText: 'அனுப்புகிறது…',
+
+    // Job type badges
+    jobTypeGovt: 'அரசு',
+    jobTypePrivate: 'தனியார்',
+    jobTypeTeaching: 'கல்வி',
+    jobTypeBank: 'வங்கி',
+
+    // Transport type badges
+    transportTrain: 'ரயில்',
+    transportBus: 'பேருந்து',
+
+    // Disclaimer sections
+    disclaimerS1Title: '1. பொது மறுப்பு',
+    disclaimerS1Body: 'கன்னியாகுமரி டுடே வழங்கும் செய்திகள் மற்றும் தகவல்கள் பொது தகவல் நோக்கங்களுக்காக மட்டுமே.',
+    disclaimerS2Title: '2. துல்லியம்',
+    disclaimerS2Body: 'தகவல்களை துல்லியமாக வைக்க முயற்சிக்கிறோம். ஆனால் சில நேரங்களில் தகவல்கள் மாறியிருக்கலாம்.',
+    disclaimerS3Title: '3. வெளி இணைப்புகள்',
+    disclaimerS3Body: 'வெளி தளங்களின் உள்ளடக்கத்திற்கு நாங்கள் பொறுப்பேற்க மாட்டோம்.',
+    disclaimerS4Title: '4. தொழில்முறை ஆலோசனை',
+    disclaimerS4Body: 'இந்த தளத்தின் எந்த உள்ளடக்கமும் சட்ட, மருத்துவ அல்லது நிதி ஆலோசனையாக கருதப்படக்கூடாது.',
+
+    // Terms sections
+    termsS1Title: '1. ஏற்பு',
+    termsS1Body: 'இந்த தளத்தை பயன்படுத்துவதன் மூலம், இந்த விதிமுறைகளை ஏற்கிறீர்கள். ஏற்கவில்லை என்றால் தளத்தை பயன்படுத்த வேண்டாம்.',
+    termsS2Title: '2. அனுமதிக்கப்படாத பயன்பாடு',
+    termsS2Body: 'உள்ளடக்கத்தை முன் அனுமதியின்றி மீண்டும் வெளியிட வேண்டாம். தவறான தகவல்களை பரப்பவோ தளத்தை தவறாக பயன்படுத்தவோ வேண்டாம்.',
+    termsS3Title: '3. அறிவுசார் சொத்துரிமை',
+    termsS3Body: 'கட்டுரைகள், படங்கள், லோகோக்கள் உட்பட அனைத்து உள்ளடக்கமும் கன்னியாகுமரி டுடேக்கு சொந்தமானது.',
+    termsS4Title: '4. மூன்றாம் தரப்பு இணைப்புகள்',
+    termsS4Body: 'வெளி இணைப்புகளுக்கான உள்ளடக்கத்திற்கு நாங்கள் பொறுப்பேற்க மாட்டோம்.',
+    termsS5Title: '5. மாற்றங்கள்',
+    termsS5Body: 'இந்த விதிமுறைகளை எந்த நேரத்திலும் மாற்றுவதற்கான உரிமை எங்களுக்கு உள்ளது.',
+
+    // Cookie sections
+    cookieS1Title: '1. குக்கீகள் என்றால் என்ன?',
+    cookieS1Body: 'குக்கீகள் என்பது உங்கள் சாதனத்தில் சேமிக்கப்படும் சிறிய உரை கோப்புகள். இவை உங்கள் விருப்பங்களை நினைவில் வைக்க உதவுகின்றன.',
+    cookieS2Title: '2. நாங்கள் பயன்படுத்தும் குக்கீகள்',
+    cookieS2Body: 'அத்தியாவசிய குக்கீகள் (தள செயல்பாட்டிற்கு), செயல்திறன் குக்கீகள் (பகுப்பாய்வுக்கு), மற்றும் விளம்பர குக்கீகள் ஆகியவற்றை பயன்படுத்துகிறோம்.',
+    cookieS3Title: '3. குக்கீகளை நிர்வகிக்கவும்',
+    cookieS3Body: 'உங்கள் உலாவி அமைப்புகள் மூலம் குக்கீகளை முடக்கலாம். ஆனால் சில தள அம்சங்கள் சரியாக வேலை செய்யாமல் போகலாம்.',
+    cookieS4Title: '4. ஒப்புதல்',
+    cookieS4Body: 'இந்த தளத்தை தொடர்ந்து பயன்படுத்துவதன் மூலம் குக்கீ பயன்பாட்டிற்கு ஒப்புதல் அளிக்கிறீர்கள்.',
   },
 }
 

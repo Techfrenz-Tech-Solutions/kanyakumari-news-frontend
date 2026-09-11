@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { ResponsiveContainer, LineChart, Line } from 'recharts'
 import newsService from '../../services/newsService.js'
+import { useLang } from '../../context/LanguageContext.jsx'
 
 const LABELS = { sensex: 'SENSEX', nifty: 'NIFTY 50', nasdaq: 'NASDAQ', dow: 'DOW JONES' }
 
 export default function StockWidget() {
+  const { t } = useLang()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -22,14 +24,14 @@ export default function StockWidget() {
   if (loading) return <div className="card-surface p-4 h-56 animate-pulse" />
   if (error || !data || data.available === false) return (
     <div className="card-surface p-4" role="status">
-      <h3 className="font-display text-lg font-bold">Markets</h3>
-      <p className="mt-2 text-sm text-ink-soft">Market data is currently unavailable.</p>
+      <h3 className="font-display text-lg font-bold">{t.markets}</h3>
+      <p className="mt-2 text-sm text-ink-soft">{t.marketsUnavailable}</p>
     </div>
   )
 
   return (
     <div className="card-surface p-4">
-      <h3 className="font-display text-lg font-bold mb-3">Markets</h3>
+      <h3 className="font-display text-lg font-bold mb-3">{t.markets}</h3>
       <div className="space-y-3">
         {Object.entries(data).map(([key, v]) => {
           const positive = v.change >= 0

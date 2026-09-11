@@ -1,13 +1,18 @@
 import { useLang } from '../context/LanguageContext.jsx'
 
 const OPENINGS = [
-  { titleEN: 'Senior Reporter – Politics',    titleTA: 'மூத்த நிருபர் – அரசியல்',          location: 'Chennai',      type: 'Full-time', dept: 'Editorial'   },
-  { titleEN: 'Video Editor',                  titleTA: 'வீடியோ எடிட்டர்',                   location: 'Chennai',      type: 'Full-time', dept: 'Multimedia'  },
-  { titleEN: 'Social Media Manager',          titleTA: 'சமூக ஊடக மேலாளர்',                 location: 'Remote',       type: 'Full-time', dept: 'Digital'     },
-  { titleEN: 'Frontend Developer (React)',     titleTA: 'ஃப்ரண்டெண்ட் டெவலப்பர் (React)',   location: 'Remote',       type: 'Full-time', dept: 'Technology'  },
-  { titleEN: 'Freelance District Correspondent',titleTA: 'ஃப்ரீலான்ஸ் மாவட்ட நிருபர்',     location: 'Various, TN',  type: 'Freelance', dept: 'Editorial'   },
-  { titleEN: 'Graphic Designer',              titleTA: 'கிராஃபிக் டிசைனர்',                 location: 'Chennai',      type: 'Full-time', dept: 'Creative'    },
+  { titleEN: 'Senior Reporter – Politics',      titleTA: 'மூத்த நிருபர் – அரசியல்',        locationEN: 'Chennai',     locationTA: 'சென்னை',       type: 'Full-time', dept: 'Editorial'  },
+  { titleEN: 'Video Editor',                    titleTA: 'வீடியோ எடிட்டர்',                 locationEN: 'Chennai',     locationTA: 'சென்னை',       type: 'Full-time', dept: 'Multimedia' },
+  { titleEN: 'Social Media Manager',            titleTA: 'சமூக ஊடக மேலாளர்',               locationEN: 'Remote',      locationTA: 'தொலைநிலை',    type: 'Full-time', dept: 'Digital'    },
+  { titleEN: 'Frontend Developer (React)',       titleTA: 'ஃப்ரண்டெண்ட் டெவலப்பர் (React)', locationEN: 'Remote',      locationTA: 'தொலைநிலை',    type: 'Full-time', dept: 'Technology' },
+  { titleEN: 'Freelance District Correspondent', titleTA: 'ஃப்ரீலான்ஸ் மாவட்ட நிருபர்',    locationEN: 'Various, TN', locationTA: 'பல இடங்கள்', type: 'Freelance', dept: 'Editorial'  },
+  { titleEN: 'Graphic Designer',                titleTA: 'கிராஃபிக் டிசைனர்',               locationEN: 'Chennai',     locationTA: 'சென்னை',       type: 'Full-time', dept: 'Creative'   },
 ]
+
+const DEPT_KEY = {
+  Editorial: 'deptEditorial', Multimedia: 'deptMultimedia',
+  Digital: 'deptDigital', Technology: 'deptTechnology', Creative: 'deptCreative',
+}
 
 export default function Careers() {
   const { lang, t } = useLang()
@@ -41,14 +46,16 @@ export default function Careers() {
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 rounded-lg border border-black/10 bg-gray-50 hover:border-primary transition-colors">
             <div>
               <h3 className="font-semibold text-ink">{lang === 'TA' ? job.titleTA : job.titleEN}</h3>
-              <p className="text-xs text-ink-soft mt-0.5">{job.dept} · {job.location}</p>
+              <p className="text-xs text-ink-soft mt-0.5">
+                {t[DEPT_KEY[job.dept]] || job.dept} · {lang === 'TA' ? job.locationTA : job.locationEN}
+              </p>
             </div>
             <div className="flex items-center gap-3">
               <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
                 job.type === 'Freelance'
                   ? 'bg-yellow-100 text-yellow-700'
                   : 'bg-green-100 text-green-700'
-              }`}>{job.type}</span>
+              }`}>{job.type === 'Freelance' ? t.typeFreelance : t.typeFullTime}</span>
               <a href="/contact" className="btn-primary text-xs py-1.5 px-4">{t.applyBtn}</a>
             </div>
           </div>

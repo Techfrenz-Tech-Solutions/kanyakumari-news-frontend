@@ -9,7 +9,7 @@ import { usePublicContent } from '../context/PublicContentContext.jsx'
 import { ApiErrorState } from '../components/ui/ApiState.jsx'
 
 export default function Search() {
-  const { t } = useLang()
+  const { lang, t } = useLang()
   const { categories, errors: taxonomyErrors } = usePublicContent()
   const [params, setParams] = useSearchParams()
   const q = params.get('q') || ''
@@ -55,7 +55,7 @@ export default function Search() {
         <select aria-label={t.allCategories} value={category} onChange={(e) => setCategory(e.target.value)} disabled={Boolean(taxonomyErrors.categories)}
           className="bg-transparent border border-black/15 rounded-sm px-3 py-2">
           <option value="">{t.allCategories}</option>
-          {categories.map((c) => <option key={c.slug} value={c.slug}>{c.label}</option>)}
+          {categories.map((c) => <option key={c.slug} value={c.slug}>{lang === 'TA' ? (c.labelTA || c.label) : c.label}</option>)}
         </select>
         <select aria-label={t.sortRelevance} value={sort} onChange={(e) => setSort(e.target.value)}
           className="bg-transparent border border-black/15 rounded-sm px-3 py-2">

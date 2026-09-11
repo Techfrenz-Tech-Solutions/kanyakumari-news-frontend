@@ -8,9 +8,6 @@ import Home from './pages/Home.jsx'
 import Article from './pages/Article.jsx'
 import Category from './pages/Category.jsx'
 import Search from './pages/Search.jsx'
-import Gallery from './pages/Gallery.jsx'
-import VideoPage from './pages/VideoPage.jsx'
-import DistrictInfo from './pages/DistrictInfo.jsx'
 import TouristInfo from './pages/TouristInfo.jsx'
 import Jobs from './pages/Jobs.jsx'
 import EPaper from './pages/EPaper.jsx'
@@ -47,12 +44,6 @@ export default function App() {
           <Route path="/category/:slug"  element={<Category />} />
           <Route path="/search"          element={<Search />} />
 
-          {/* Media */}
-          <Route path="/gallery"         element={<Gallery />} />
-          <Route path="/videos"          element={<VideoPage />} />
-
-          {/* District pages — PDF nav items */}
-          <Route path="/district-info"   element={<DistrictInfo />} />
           <Route path="/tourist-info"    element={<TouristInfo />} />
           <Route path="/jobs"            element={<Jobs />} />
           <Route path="/links"           element={<StaticPage title="Useful Links" />} />
