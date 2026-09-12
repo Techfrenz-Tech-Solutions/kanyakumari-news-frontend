@@ -19,11 +19,11 @@ export default function Jobs() {
   const PAGE_SIZE = 5
 
   const FILTERS = [
-    { key: 'Latest',   label: t.filterLatest   },
-    { key: 'Govt',     label: t.filterGovt     },
-    { key: 'Private',  label: t.filterPrivate  },
-    { key: 'Teaching', label: t.filterTeaching },
-    { key: 'Bank',     label: t.filterBank     },
+    // { key: 'Latest',   label: t.filterLatest   },
+    // { key: 'Govt',     label: t.filterGovt     },
+    // { key: 'Private',  label: t.filterPrivate  },
+    // { key: 'Teaching', label: t.filterTeaching },
+    // { key: 'Bank',     label: t.filterBank     },
   ]
 
   const TYPE_LABEL = {

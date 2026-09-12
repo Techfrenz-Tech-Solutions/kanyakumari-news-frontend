@@ -80,7 +80,7 @@
     @apply border border-ink/20 dark:border-white/20 hover:border-primary hover:text-primary font-medium px-5 py-2.5 rounded-sm transition-colors duration-200;
   }
   .container-page {
-    @apply max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8;
+    @apply max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8;
   }
   .line-clamp-2 {
     display: -webkit-box;

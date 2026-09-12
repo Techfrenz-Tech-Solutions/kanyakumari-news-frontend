@@ -1,130 +1,134 @@
 import { Link } from 'react-router-dom'
-import { FiFacebook, FiTwitter, FiInstagram, FiYoutube, FiMail, FiPhone, FiMapPin } from 'react-icons/fi'
+import { FiFacebook, FiTwitter, FiInstagram, FiYoutube, FiSend } from 'react-icons/fi'
 import { useLang } from '../../context/LanguageContext.jsx'
 import { usePublicContent } from '../../context/PublicContentContext.jsx'
 
+// WhatsApp SVG icon
+function WhatsAppIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-4 h-4 fill-white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  )
+}
+
+// Google News SVG icon
+function GoogleNewsIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="w-4 h-4">
+      <path fill="#4285F4" d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0z"/>
+      <path fill="white" d="M9.5 7h9v2h-9zm0 4h9v2h-9zm0 4h6v2h-6zM5.5 7h2v2h-2zm0 4h2v2h-2zm0 4h2v2h-2z"/>
+    </svg>
+  )
+}
+
 export default function Footer() {
-  const { lang, t } = useLang()
+  const { lang } = useLang()
   const { categories, site } = usePublicContent()
 
-  // Pick translated label if available
   const catLabel = (c) => (lang === 'TA' ? (c.labelTA || c.label) : c.label)
+  const ALL_CATS = categories.map((c) => ({ label: catLabel(c), to: `/category/${c.slug}` }))
 
-  // Split categories into two halves
-  const ALL_CATS   = categories.map((c) => ({ label: catLabel(c), to: `/category/${c.slug}` }))
-  const half       = Math.ceil(ALL_CATS.length / 2)
-  const CATS_LEFT  = ALL_CATS.slice(0, half)
-  const CATS_RIGHT = ALL_CATS.slice(half)
+  // Split categories across 4 columns
+  const chunkSize = Math.ceil(ALL_CATS.length / 4)
+  const COL1 = ALL_CATS.slice(0, chunkSize)
+  const COL2 = ALL_CATS.slice(chunkSize, chunkSize * 2)
+  const COL3 = ALL_CATS.slice(chunkSize * 2, chunkSize * 3)
+  const COL4 = ALL_CATS.slice(chunkSize * 3)
 
-  // Quick links column
-  const QUICK_LINKS = [
-    { label: t.navTourist,      to: '/tourist-info'  },
-    { label: t.navJobs,         to: '/jobs'          },
+  const SOCIAL = [
+    { icon: <FiFacebook size={13} />,  label: 'Facebook',    href: site?.social?.facebook  || '#', bg: '#1877F2' },
+    { icon: <FiTwitter  size={13} />,  label: 'Twitter/X',   href: site?.social?.twitter   || '#', bg: '#000000' },
+    { icon: <FiYoutube  size={13} />,  label: 'YouTube',     href: site?.social?.youtube   || '#', bg: '#FF0000' },
+    { icon: <FiInstagram size={13} />, label: 'Instagram',   href: site?.social?.instagram || '#', bg: 'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)' },
+    { icon: <FiSend     size={13} />,  label: 'Telegram',    href: site?.social?.telegram  || '#', bg: '#229ED9' },
+    { icon: <WhatsAppIcon />,          label: 'WhatsApp',    href: site?.social?.whatsapp  || '#', bg: '#25D366' },
+    { icon: <GoogleNewsIcon />,        label: 'Google News', href: site?.social?.googlenews|| '#', bg: '#4285F4' },
   ]
 
-  // Company / legal column
-  const COMPANY_LINKS = [
-    { label: t.footerAbout,      to: '/about'      },
-    { label: t.footerContact,    to: '/contact'    },
-    { label: t.footerAdvertise,  to: '/advertise'  },
-    { label: t.footerCareers,    to: '/careers'    },
-    { label: t.footerPrivacy,    to: '/privacy'    },
-    { label: t.footerDisclaimer, to: '/disclaimer' },
+  const COL_LINKS = [
+    { heading: 'News',        links: COL1 },
+    { heading: 'Special',     links: COL2 },
+    { heading: 'Cinema',      links: COL3 },
+    { heading: 'More',        links: COL4 },
+    {
+      heading: 'Videos',
+      links: [
+        { label: 'Politics',      to: '/category/politics'      },
+        { label: 'Cinema',        to: '/category/cinema'        },
+        { label: 'Sports',        to: '/category/sports'        },
+        { label: 'General',       to: '/category/general'       },
+      ],
+    },
   ]
 
   return (
-    <footer className="text-white/70 mt-12" style={{ background: 'linear-gradient(160deg, #111827 0%, #1E3A8A 100%)' }}>
-      <div className="container-page py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
+    <footer className="mt-12 text-white/80" style={{ background: '#0B1A3B' }}>
 
-        {/* ── Col 1: Brand + address ── */}
-        <div className="sm:col-span-2 lg:col-span-1">
-          <Link to="/" className="inline-block mb-3">
-            <span className="font-display text-2xl font-black text-white">
-              {site?.siteName || 'Kanyakumari Today'}
-            </span>
+      {/* ── Main grid ── */}
+      <div className="container-page pt-10 pb-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8">
+
+        {/* ── Col 0: Brand block ── */}
+        <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-4">
+          {/* Logo */}
+          <Link to="/">
+            <img src="/logo.png" alt={site?.siteName || 'Kanyakumari Today'} className="h-14 w-auto object-contain" />
           </Link>
-          <p className="text-sm text-white/50 leading-relaxed max-w-xs mb-4">{t.footerTagline}</p>
-          <div className="flex gap-3 flex-wrap">
-            {[
-              { Icon: FiFacebook,  label: 'Facebook',  href: site?.social?.facebook  },
-              { Icon: FiTwitter,   label: 'Twitter/X', href: site?.social?.twitter   },
-              { Icon: FiInstagram, label: 'Instagram', href: site?.social?.instagram },
-              { Icon: FiYoutube,   label: 'YouTube',   href: site?.social?.youtube   },
-            ].filter((item) => item.href).map(({ Icon, label, href }) => (
-              <a key={label} href={href} aria-label={label}
-                className="w-9 h-9 flex items-center justify-center rounded-full border border-white/20 hover:bg-primary hover:border-primary transition-colors">
-                <Icon size={15} />
-              </a>
-            ))}
+
+          {/* Follow us label + social icons */}
+          <div>
+            <p className="text-xs text-white/50 uppercase tracking-widest mb-3">Follow Us</p>
+            <div className="flex flex-wrap gap-2">
+              {SOCIAL.map(({ icon, label, href, bg }) => (
+                <a key={label} href={href} aria-label={label} target="_blank" rel="noreferrer"
+                  className="w-7 h-7 rounded-full flex items-center justify-center transition-opacity hover:opacity-80 overflow-hidden"
+                  style={{ background: bg }}>
+                  {icon}
+                </a>
+              ))}
+            </div>
           </div>
-          <div className="mt-5 space-y-2 text-xs text-white/40">
-            {site?.address      && <p className="flex items-start gap-2"><FiMapPin size={12} className="shrink-0 mt-0.5" /> {site.address}</p>}
-            {site?.contactPhone && <p className="flex items-center gap-2"><FiPhone size={12} /> {site.contactPhone}</p>}
-            {site?.contactEmail && <p className="flex items-center gap-2"><FiMail  size={12} /> {site.contactEmail}</p>}
+
+          {/* Subscribe button */}
+          <Link to="/subscribe"
+            className="mt-1 inline-block border border-white/40 hover:border-white text-white text-sm font-semibold px-6 py-1.5 rounded transition-colors w-fit">
+            SUBSCRIBE
+          </Link>
+        </div>
+
+        {/* ── Cols 1–5: Link columns ── */}
+        {COL_LINKS.map((col) => (
+          <div key={col.heading}>
+            <p className="text-base font-bold text-white mb-3">{col.heading}</p>
+            <ul className="space-y-2">
+              {col.links.map((l) => (
+                <li key={l.to}>
+                  <Link to={l.to} className="text-sm text-white/65 hover:text-white transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
-
-        {/* ── Col 2: News — first half ── */}
-        <div>
-          <p className="text-sm font-semibold mb-4 uppercase tracking-widest" style={{ color: '#FFD700' }}>{t.footerNews}</p>
-          <ul className="space-y-2">
-            {CATS_LEFT.map((l) => (
-              <li key={l.to}>
-                <Link to={l.to} className="text-sm hover:text-white transition-colors">{l.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* ── Col 3: News — second half ── */}
-        <div>
-          {/* Empty heading to keep columns aligned */}
-          <p className="text-sm font-semibold mb-4 uppercase tracking-widest invisible select-none" style={{ color: '#FFD700' }}>
-            {t.footerNews}
-          </p>
-          <ul className="space-y-2">
-            {CATS_RIGHT.map((l) => (
-              <li key={l.to}>
-                <Link to={l.to} className="text-sm hover:text-white transition-colors">{l.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* ── Col 4: Quick Links ── */}
-        <div>
-          <p className="text-sm font-semibold mb-4 uppercase tracking-widest" style={{ color: '#FFD700' }}>{t.navLinks}</p>
-          <ul className="space-y-2">
-            {QUICK_LINKS.map((l) => (
-              <li key={l.to}>
-                <Link to={l.to} className="text-sm hover:text-white transition-colors">{l.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* ── Col 5: Company ── */}
-        <div>
-          <p className="text-sm font-semibold mb-4 uppercase tracking-widest" style={{ color: '#FFD700' }}>{t.footerCompany}</p>
-          <ul className="space-y-2">
-            {COMPANY_LINKS.map((l) => (
-              <li key={l.to}>
-                <Link to={l.to} className="text-sm hover:text-white transition-colors">{l.label}</Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+        ))}
 
       </div>
 
       {/* ── Bottom bar ── */}
       <div className="border-t border-white/10">
-        <div className="container-page py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/35">
-          <span>© {new Date().getFullYear()} {t.footerCopyright}</span>
-          <div className="flex gap-4">
-            <Link to="/terms"   className="hover:text-white/70 transition-colors">{t.footerTerms}</Link>
-            <Link to="/cookies" className="hover:text-white/70 transition-colors">{t.footerCookies}</Link>
-          </div>
+        <div className="container-page py-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-sm text-white/50 flex-wrap">
+          <Link to="/about"      className="hover:text-white transition-colors">About us</Link>
+          <span className="hidden sm:inline text-white/20">|</span>
+          <Link to="/contact"    className="hover:text-white transition-colors">Contact Us</Link>
+          <span className="hidden sm:inline text-white/20">|</span>
+          <Link to="/advertise"  className="hover:text-white transition-colors">Advertise</Link>
+          <span className="hidden sm:inline text-white/20">|</span>
+          <Link to="/terms"      className="hover:text-white transition-colors">Terms &amp; conditions</Link>
+          <span className="hidden sm:inline text-white/20">|</span>
+          <Link to="/privacy"    className="hover:text-white transition-colors">Privacy Policy</Link>
+        </div>
+        <div className="container-page pb-4 text-center text-xs text-white/30">
+          Copyright © {new Date().getFullYear()}, {site?.siteName || 'Kanyakumari Today'}
         </div>
       </div>
     </footer>

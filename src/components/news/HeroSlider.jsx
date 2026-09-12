@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay, Navigation, Pagination } from 'swiper/modules'
+import { Autoplay, Navigation } from 'swiper/modules'
 import { FiClock, FiShare2, FiBookmark } from 'react-icons/fi'
 import newsService from '../../services/newsService.js'
 import Badge from '../ui/Badge.jsx'
@@ -10,7 +10,6 @@ import { useLang } from '../../context/LanguageContext.jsx'
 import { shareContent } from '../../utils/share.js'
 import 'swiper/css'
 import 'swiper/css/navigation'
-import 'swiper/css/pagination'
 
 export default function HeroSlider({ articles }) {
   const { lang, t } = useLang()
@@ -47,9 +46,9 @@ export default function HeroSlider({ articles }) {
   }
 
   return (
-    <Swiper modules={[Autoplay, Navigation, Pagination]}
+    <Swiper modules={[Autoplay, Navigation]}
       autoplay={{ delay: 5000, disableOnInteraction: false }}
-      navigation pagination={{ clickable: true }} loop
+      navigation loop
       className="rounded-md overflow-hidden hero-swiper">
       {slides.map((a) => (
         <SwiperSlide key={a.id}>

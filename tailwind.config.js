@@ -60,6 +60,8 @@ export default {
         'pulse-dot':     'pulse-dot 1.4s ease-in-out infinite',
         'topbar-scroll': 'topbar-scroll 18s linear infinite',
         'gold-pulse':    'gold-pulse 2s ease-in-out infinite',
+        'ticker':        'ticker 35s linear infinite',
+        'ticker-scan':   'ticker-scan 4s ease-in-out infinite',
       },
       keyframes: {
         marquee: {
@@ -77,6 +79,14 @@ export default {
         'gold-pulse': {
           '0%, 100%': { opacity: 1 },
           '50%':      { opacity: 0.6 },
+        },
+        'ticker': {
+          '0%':   { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-33.333%)' },
+        },
+        'ticker-scan': {
+          '0%':        { backgroundPosition: '-100% 0' },
+          '100%':      { backgroundPosition: '200% 0' },
         },
       },
     },

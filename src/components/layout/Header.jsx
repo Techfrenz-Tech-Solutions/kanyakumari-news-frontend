@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { FiSearch, FiMenu, FiX } from 'react-icons/fi'
+import { FiSearch, FiMenu } from 'react-icons/fi'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useLang } from '../../context/LanguageContext.jsx'
 import { usePublicContent } from '../../context/PublicContentContext.jsx'
@@ -94,16 +94,11 @@ export default function Header() {
           <button
             onClick={() => setSearchOpen((s) => !s)}
             aria-label="Search"
-            className="hover:text-primary transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm font-mono text-ink dark:text-white/80 hover:text-primary dark:hover:text-primary transition-colors"
           >
-            <FiSearch size={20} />
+            <FiSearch size={18} />
+            <span>{t.search}</span>
           </button>
-          <Link
-            to="/search"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-mono bg-black/5 dark:bg-white/10 px-3 py-1.5 rounded-sm hover:bg-primary hover:text-white transition-colors"
-          >
-            <FiSearch size={12} /> {t.search}
-          </Link>
         </div>
       </div>
 
@@ -133,27 +128,20 @@ export default function Header() {
         )}
       </AnimatePresence>
 
-      {/* Desktop nav — red to purple gradient */}
-      <nav className="hidden lg:block">
-        <div className="container-page flex items-center h-11 text-sm text-white/95 overflow-x-auto"
-          style={{ background: 'linear-gradient(90deg, #C8102E 0%, #7B1450 50%, #4A1060 100%)' }}>
+      {/* Desktop nav — red to purple gradient, static */}
+      <nav className="hidden lg:block"
+        style={{ background: 'linear-gradient(90deg, #C8102E 0%, #7B1450 50%, #4A1060 100%)' }}>
+        <div className="container-page flex items-center h-12 text-white/95 overflow-x-auto">
           {PRIMARY_NAV.map((item, idx) => (
             <Link
               key={item.to}
               to={item.to}
-              className={`px-3 h-full flex items-center whitespace-nowrap transition-colors border-r border-white/15 last:border-r-0 font-medium
-                ${idx === 0 ? 'bg-white/15 text-white font-bold' : 'hover:bg-white/15 hover:text-white'}`}
+              className={`px-4 h-full inline-flex items-center whitespace-nowrap border-r border-white/15 last:border-r-0 font-semibold text-[18px] transition-colors
+                ${idx === 0 ? 'bg-white/15 text-white' : 'hover:bg-white/20 hover:text-white'}`}
             >
               {item.label}
             </Link>
           ))}
-          <button
-            onClick={() => setSearchOpen((s) => !s)}
-            className="ml-auto px-4 h-full flex items-center gap-1 text-white/80 hover:text-white transition-colors whitespace-nowrap"
-            aria-label="Search"
-          >
-            <FiSearch size={14} /> {t.search}
-          </button>
         </div>
       </nav>
       {errors.categories && (

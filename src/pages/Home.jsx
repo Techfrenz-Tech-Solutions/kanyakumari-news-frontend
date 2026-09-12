@@ -9,60 +9,40 @@ import HeroSlider from '../components/news/HeroSlider.jsx'
 import NewsCard from '../components/news/NewsCard.jsx'
 import { ApiErrorState, EmptyState } from '../components/ui/ApiState.jsx'
 
-const FALLBACK = '/news-placeholder.svg'
-
-function ArticleRow({ article, titleFn }) {
-  if (!article) return (
-    <div className="flex gap-2 animate-pulse py-2 border-b border-black/5 last:border-0">
-      <div className="w-14 h-10 bg-black/10 rounded shrink-0" />
-      <div className="flex-1 space-y-1.5 py-0.5">
-        <div className="h-2.5 bg-black/10 rounded" />
-        <div className="h-2.5 w-4/5 bg-black/10 rounded" />
-      </div>
-    </div>
-  )
-  return (
-    <Link to={`/article/${article.slug}`} className="flex gap-2 items-start py-2 border-b border-black/5 last:border-0 group">
-      <img src={article.image || FALLBACK} alt={titleFn(article)} className="w-14 h-10 object-cover rounded shrink-0" onError={(e) => { e.target.src = FALLBACK }} />
-      <div className="min-w-0">
-        <p className="text-xs font-semibold leading-snug line-clamp-2 group-hover:text-primary transition-colors text-ink">{titleFn(article)}</p>
-        <p className="text-[10px] text-ink-soft font-mono mt-0.5">
-          {new Date(article.publishedAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
-        </p>
-      </div>
-    </Link>
-  )
-}
-
-function NewsColumn({ col, articles, loading, titleFn, excerptFn, moreLabel }) {
+function NewsColumn({ col, articles, loading, titleFn, moreLabel }) {
   return (
     <div className="bg-white rounded-md shadow-sm overflow-hidden border border-black/10 flex flex-col">
-      <div className={`${col.headerBg} px-3 py-2 flex items-center justify-between`}>
-        <h2 className="text-xs font-black uppercase tracking-wider text-white">{col.label}</h2>
-        <Link to={`/category/${col.slug}`} className={`text-[10px] ${col.accent} hover:underline font-semibold`}>{moreLabel}</Link>
-      </div>
-
-      {loading ? (
-        <div className="p-3 space-y-2 animate-pulse">
-          <div className="aspect-video bg-black/10 rounded" />
-          <div className="h-3 bg-black/10 rounded" />
-          <div className="h-3 w-3/4 bg-black/10 rounded" />
-        </div>
-      ) : articles[0] ? (
-        <Link to={`/article/${articles[0].slug}`} className="group block p-3 border-b border-black/8">
-          <div className="aspect-video rounded overflow-hidden mb-2 bg-black/5">
-            <img src={articles[0].image || FALLBACK} alt={titleFn(articles[0])} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.target.src = FALLBACK }} />
-          </div>
-          <p className="text-sm font-bold leading-snug line-clamp-2 group-hover:text-primary transition-colors text-ink">{titleFn(articles[0])}</p>
-          <p className="text-[11px] text-ink-soft mt-1 line-clamp-2 hidden sm:block">{excerptFn(articles[0])}</p>
+      {/* Header */}
+      <div className={`${col.headerBg} px-4 py-2.5 flex items-center justify-between`}>
+        <h2 className="text-sm font-black uppercase tracking-wider text-white">{col.label}</h2>
+        <Link to={`/category/${col.slug}`} className="text-[11px] text-white/80 hover:text-white font-semibold hover:underline">
+          {moreLabel} →
         </Link>
-      ) : null}
-
-      <div className="px-3 pb-3 flex-1">
-        {loading
-          ? Array.from({ length: 4 }).map((_, i) => <ArticleRow key={i} article={null} titleFn={titleFn} />)
-          : articles.slice(1, 5).map((article) => <ArticleRow key={article.id} article={article} titleFn={titleFn} />)}
       </div>
+
+      {/* Article list — arrow link style, no images */}
+      <ul className="flex-1 divide-y divide-black/5 px-4 py-2">
+        {loading
+          ? Array.from({ length: 6 }).map((_, i) => (
+              <li key={i} className="py-3 animate-pulse">
+                <div className="h-3 bg-black/10 rounded w-full mb-1.5" />
+                <div className="h-3 bg-black/10 rounded w-3/4" />
+              </li>
+            ))
+          : articles.slice(0, 6).map((article) => (
+              <li key={article.id}>
+                <Link
+                  to={`/article/${article.slug}`}
+                  className="flex items-start gap-2.5 py-3 group"
+                >
+                  <span className="shrink-0 mt-0.5 text-primary text-base leading-none">→</span>
+                  <span className="text-[15px] font-medium text-ink leading-snug group-hover:text-primary transition-colors">
+                    {titleFn(article)}
+                  </span>
+                </Link>
+              </li>
+            ))}
+      </ul>
     </div>
   )
 }
@@ -72,16 +52,20 @@ export default function Home() {
   const { categories } = usePublicContent()
 
   const titleFn = (article) => lang === 'TA' ? (article.titleTA || article.title) : article.title
-  const excerptFn = (article) => lang === 'TA' ? (article.excerptTA || article.excerpt) : article.excerpt
 
   const NEWS_COLS = useMemo(() => {
-    const styles = [
-      ['bg-primary', 'text-yellow-200'],
-      ['bg-secondary', 'text-blue-200'],
-      ['bg-green-700', 'text-green-200'],
-      ['bg-amber-600', 'text-amber-100'],
+    const WANTED = [
+      { match: ['kanyakumari'],                         headerBg: 'bg-primary'   },
+      { match: ['tamilnadu', 'tamil-nadu', 'tamil_nadu', 'tamil nadu'], headerBg: 'bg-secondary' },
+      { match: ['national'],                            headerBg: 'bg-green-700' },
+      { match: ['world'],                               headerBg: 'bg-amber-600' },
     ]
-    return categories.slice(0, 4).map((category, index) => ({ ...category, headerBg: styles[index][0], accent: styles[index][1] }))
+    return WANTED.flatMap(({ match, headerBg }) => {
+      const found = categories.find((c) =>
+        match.includes(c.slug?.toLowerCase().trim())
+      )
+      return found ? [{ ...found, headerBg }] : []
+    })
   }, [categories])
 
   const [colData, setColData] = useState({})
@@ -147,7 +131,6 @@ export default function Home() {
               articles={colData[col.slug] || []}
               loading={!colData[col.slug]}
               titleFn={titleFn}
-              excerptFn={excerptFn}
               moreLabel={t.moreLink}
             />
           ))}
