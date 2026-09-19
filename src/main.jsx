@@ -8,6 +8,8 @@ import { PublicContentProvider } from './context/PublicContentContext.jsx'
 import './index.css'
 
 // ── Auto-refresh every 5 minutes when tab is visible and user is idle ──
+// ── Auto-refresh every 5 minutes when tab is visible and user is idle ──
+// ── Auto-refresh every 5 minutes when tab is visible and user is idle ──
 const REFRESH_INTERVAL = 5 * 60 * 1000   // 5 minutes
 const IDLE_THRESHOLD   = 2 * 60 * 1000   // user must be idle 2+ minutes
 
