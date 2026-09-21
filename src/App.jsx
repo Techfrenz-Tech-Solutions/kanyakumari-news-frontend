@@ -32,9 +32,11 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
-      <TopBar />
-      <Header />
-      <BreakingTicker />
+      <div className="sticky top-0 z-50">
+        <TopBar />
+        <Header />
+        <BreakingTicker />
+      </div>
 
       <main className="flex-1">
         <Routes>

@@ -23,7 +23,7 @@ function GoogleNewsIcon() {
 }
 
 export default function Footer() {
-  const { lang } = useLang()
+  const { lang, t } = useLang()
   const { categories, site } = usePublicContent()
 
   const catLabel = (c) => (lang === 'TA' ? (c.labelTA || c.label) : c.label)
@@ -47,17 +47,17 @@ export default function Footer() {
   ]
 
   const COL_LINKS = [
-    { heading: 'News',        links: COL1 },
-    { heading: 'Special',     links: COL2 },
-    { heading: 'Cinema',      links: COL3 },
-    { heading: 'More',        links: COL4 },
+    { heading: t.footerColNews,    links: COL1 },
+    { heading: t.footerColSpecial, links: COL2 },
+    { heading: t.footerColCinema,  links: COL3 },
+    { heading: t.footerColMore,    links: COL4 },
     {
-      heading: 'Videos',
+      heading: t.footerColVideos,
       links: [
-        { label: 'Politics',      to: '/category/politics'      },
-        { label: 'Cinema',        to: '/category/cinema'        },
-        { label: 'Sports',        to: '/category/sports'        },
-        { label: 'General',       to: '/category/general'       },
+        { label: lang === 'TA' ? 'அரசியல்'  : 'Politics',     to: '/category/politics'  },
+        { label: lang === 'TA' ? 'சினிமா'   : 'Cinema',       to: '/category/cinema'    },
+        { label: lang === 'TA' ? 'விளையாட்டு': 'Sports',      to: '/category/sports'    },
+        { label: lang === 'TA' ? 'பொது'     : 'General',      to: '/category/general'   },
       ],
     },
   ]
@@ -77,7 +77,7 @@ export default function Footer() {
 
           {/* Follow us label + social icons */}
           <div>
-            <p className="text-xs text-white/50 uppercase tracking-widest mb-3">Follow Us</p>
+            <p className="text-xs text-white/50 uppercase tracking-widest mb-3">{t.footerFollowUs}</p>
             <div className="flex flex-wrap gap-2">
               {SOCIAL.map(({ icon, label, href, bg }) => (
                 <a key={label} href={href} aria-label={label} target="_blank" rel="noreferrer"
@@ -88,12 +88,6 @@ export default function Footer() {
               ))}
             </div>
           </div>
-
-          {/* Subscribe button */}
-          <Link to="/subscribe"
-            className="mt-1 inline-block border border-white/40 hover:border-white text-white text-sm font-semibold px-6 py-1.5 rounded transition-colors w-fit">
-            SUBSCRIBE
-          </Link>
         </div>
 
         {/* ── Cols 1–5: Link columns ── */}
@@ -117,18 +111,24 @@ export default function Footer() {
       {/* ── Bottom bar ── */}
       <div className="border-t border-white/10">
         <div className="container-page py-4 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 text-sm text-white/50 flex-wrap">
-          <Link to="/about"      className="hover:text-white transition-colors">About us</Link>
+          <Link to="/about"      className="hover:text-white transition-colors">{t.footerAboutUs}</Link>
           <span className="hidden sm:inline text-white/20">|</span>
-          <Link to="/contact"    className="hover:text-white transition-colors">Contact Us</Link>
+          <Link to="/contact"    className="hover:text-white transition-colors">{t.footerContactUs}</Link>
           <span className="hidden sm:inline text-white/20">|</span>
-          <Link to="/advertise"  className="hover:text-white transition-colors">Advertise</Link>
+          <Link to="/advertise"  className="hover:text-white transition-colors">{t.footerAdvertiseLink}</Link>
           <span className="hidden sm:inline text-white/20">|</span>
-          <Link to="/terms"      className="hover:text-white transition-colors">Terms &amp; conditions</Link>
+          <Link to="/terms"      className="hover:text-white transition-colors">{t.footerTermsLink}</Link>
           <span className="hidden sm:inline text-white/20">|</span>
-          <Link to="/privacy"    className="hover:text-white transition-colors">Privacy Policy</Link>
+          <Link to="/privacy"    className="hover:text-white transition-colors">{t.footerPrivacyLink}</Link>
         </div>
-        <div className="container-page pb-4 text-center text-xs text-white/30">
-          Copyright © {new Date().getFullYear()}, {site?.siteName || 'Kanyakumari Today'}
+        <div className="container-page pb-4 flex flex-col sm:flex-row items-center justify-between gap-1 text-xs text-white/30">
+          <span>{t.footerCopyrightLabel} © {new Date().getFullYear()}, {site?.siteName || 'Kanyakumari Today'}</span>
+          <span>
+            {t.footerDevelopedBy}{' '}
+            <a href="https://techfrenz.com" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+              TechFrenz
+            </a>
+          </span>
         </div>
       </div>
     </footer>
