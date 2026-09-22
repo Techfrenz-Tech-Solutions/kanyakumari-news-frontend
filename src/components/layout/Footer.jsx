@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FiFacebook, FiTwitter, FiInstagram, FiYoutube, FiSend } from 'react-icons/fi'
+import { FiFacebook, FiTwitter, FiInstagram, FiYoutube, FiSend, FiMail, FiPhone } from 'react-icons/fi'
 import { useLang } from '../../context/LanguageContext.jsx'
 import { usePublicContent } from '../../context/PublicContentContext.jsx'
 
@@ -38,12 +38,12 @@ export default function Footer() {
 
   const SOCIAL = [
     { icon: <FiFacebook size={13} />,  label: 'Facebook',    href: site?.social?.facebook  || '#', bg: '#1877F2' },
-    { icon: <FiTwitter  size={13} />,  label: 'Twitter/X',   href: site?.social?.twitter   || '#', bg: '#000000' },
-    { icon: <FiYoutube  size={13} />,  label: 'YouTube',     href: site?.social?.youtube   || '#', bg: '#FF0000' },
+    // { icon: <FiTwitter  size={13} />,  label: 'Twitter/X',   href: site?.social?.twitter   || '#', bg: '#000000' },
+    // { icon: <FiYoutube  size={13} />,  label: 'YouTube',     href: site?.social?.youtube   || '#', bg: '#FF0000' },
     { icon: <FiInstagram size={13} />, label: 'Instagram',   href: site?.social?.instagram || '#', bg: 'linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)' },
-    { icon: <FiSend     size={13} />,  label: 'Telegram',    href: site?.social?.telegram  || '#', bg: '#229ED9' },
-    { icon: <WhatsAppIcon />,          label: 'WhatsApp',    href: site?.social?.whatsapp  || '#', bg: '#25D366' },
-    { icon: <GoogleNewsIcon />,        label: 'Google News', href: site?.social?.googlenews|| '#', bg: '#4285F4' },
+    // { icon: <FiSend     size={13} />,  label: 'Telegram',    href: site?.social?.telegram  || '#', bg: '#229ED9' },
+    { icon: <WhatsAppIcon />,          label: 'WhatsApp',    href: 'https://wa.me/918870005541', bg: '#25D366' },
+    // { icon: <GoogleNewsIcon />,        label: 'Google News', href: site?.social?.googlenews|| '#', bg: '#4285F4' },
   ]
 
   const COL_LINKS = [
@@ -74,6 +74,20 @@ export default function Footer() {
           <Link to="/">
             <img src="/logo.png" alt={site?.siteName || 'Kanyakumari Today'} className="h-14 w-auto object-contain" />
           </Link>
+
+          {/* Contact info */}
+          <div className="space-y-2">
+            <a href="mailto:kanyakumaritoday2026@gmail.com"
+              className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors">
+              <FiMail size={13} className="shrink-0" />
+              <span>kanyakumaritoday2026@gmail.com</span>
+            </a>
+            <a href="tel:+918870005541"
+              className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors">
+              <FiPhone size={13} className="shrink-0" />
+              <span>88700 05541</span>
+            </a>
+          </div>
 
           {/* Follow us label + social icons */}
           <div>

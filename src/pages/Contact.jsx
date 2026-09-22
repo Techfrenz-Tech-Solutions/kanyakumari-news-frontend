@@ -34,9 +34,9 @@ export default function Contact() {
       <div className="grid md:grid-cols-2 gap-12">
         <div className="space-y-8">
           {[
-            { Icon: FiMail,   label: t.emailAddress,       value: site?.contactEmail },
-            { Icon: FiPhone,  label: t.phoneLabelContact,  value: site?.contactPhone },
-            { Icon: FiMapPin, label: t.addressLabelContact, value: site?.address     },
+            { Icon: FiMail,   label: t.emailAddress,        value: 'kanyakumaritoday2026@gmail.com' },
+            { Icon: FiPhone,  label: t.phoneLabelContact,   value: '88700 05541' },
+            { Icon: FiMapPin, label: t.addressLabelContact, value: site?.address },
           ].filter((item) => item.value).map(({ Icon, label, value }) => (
             <div key={label} className="flex items-start gap-4">
               <span className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
@@ -50,12 +50,12 @@ export default function Contact() {
           ))}
           <div>
             <p className="text-xs eyebrow mb-2">{t.deptEmails}</p>
-            <ul className="space-y-1 text-sm text-ink-soft">
+            {/* <ul className="space-y-1 text-sm text-ink-soft">
               <li>{t.newsTips} — <span className="text-primary">tips@kanyakumaritoday.com</span></li>
               <li>{t.advertising} — <span className="text-primary">ads@kanyakumaritoday.com</span></li>
               <li>{t.careers} — <span className="text-primary">hr@kanyakumaritoday.com</span></li>
               <li>{t.legal} — <span className="text-primary">legal@kanyakumaritoday.com</span></li>
-            </ul>
+            </ul> */}
           </div>
         </div>
 
