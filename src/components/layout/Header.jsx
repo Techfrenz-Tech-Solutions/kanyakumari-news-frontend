@@ -49,7 +49,7 @@ function buildMobileGroups(t, categories, lang) {
 }
 
 export default function Header() {
-  const { lang, t } = useLang()
+  const { lang, toggleLang, t } = useLang()
   const { categories, site, errors } = usePublicContent()
   const PRIMARY_NAV   = buildNav(t, categories, lang)
   const MOBILE_GROUPS = buildMobileGroups(t, categories, lang)
@@ -91,6 +91,13 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center gap-3 ml-auto">
+          <button
+            onClick={toggleLang}
+            title={lang === 'EN' ? 'Switch to Tamil' : 'Switch to English'}
+            className="md:hidden inline-flex h-9 items-center rounded-sm border border-black/15 px-2 text-xs font-semibold text-primary dark:border-white/20 dark:text-gold"
+          >
+            {t.switchLang}
+          </button>
           <button
             onClick={() => setSearchOpen((s) => !s)}
             aria-label="Search"

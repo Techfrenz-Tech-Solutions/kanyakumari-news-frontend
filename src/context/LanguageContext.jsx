@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 const LanguageContext = createContext(null)
 
@@ -795,12 +795,14 @@ export const translations = {
 export function LanguageProvider({ children }) {
   const [lang, setLang] = useState(() => localStorage.getItem('kk-lang') || 'EN')
 
+  useEffect(() => {
+    document.documentElement.setAttribute('lang', lang === 'TA' ? 'ta' : 'en')
+  }, [lang])
+
   function toggleLang() {
     setLang((l) => {
       const next = l === 'EN' ? 'TA' : 'EN'
       localStorage.setItem('kk-lang', next)
-      // Switch Tamil/English font on <html> for proper rendering
-      document.documentElement.setAttribute('lang', next === 'TA' ? 'ta' : 'en')
       return next
     })
   }
