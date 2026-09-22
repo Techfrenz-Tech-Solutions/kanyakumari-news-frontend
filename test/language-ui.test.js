@@ -15,3 +15,9 @@ test('language provider syncs document language from current state', () => {
   assert.match(provider, /document\.documentElement\.setAttribute\('lang', lang === 'TA' \? 'ta' : 'en'\)/)
   assert.match(provider, /\}, \[lang\]\)/)
 })
+
+test('category refetch clears stale errors before loading subcategory articles', () => {
+  const categoryPage = readFileSync(new URL('../src/pages/Category.jsx', import.meta.url), 'utf8')
+  assert.match(categoryPage, /setLoading\(true\)\s+setError\(null\)\s+const controller = new AbortController\(\)/)
+  assert.match(categoryPage, /setLoadingMore\(true\)\s+setError\(null\)/)
+})

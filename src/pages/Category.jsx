@@ -44,6 +44,7 @@ export default function Category() {
     setItems([])
     setPage(1)
     setLoading(true)
+    setError(null)
     const controller = new AbortController()
     newsService
       .getLatest({ page: 1, pageSize: PAGE_SIZE, category: slug, subcategory: activeSubcategory, signal: controller.signal })
@@ -60,6 +61,7 @@ export default function Category() {
   function loadMore() {
     const next = page + 1
     setLoadingMore(true)
+    setError(null)
     newsService
       .getLatest({ page: next, pageSize: PAGE_SIZE, category: slug, subcategory: activeSubcategory })
       .then(({ items: more, hasMore: moreFlag }) => {
