@@ -14,7 +14,7 @@ export default function TopBar() {
           <span className="shrink-0 text-white/80">{todayLong()}</span>
         </div>
         {/* Language toggle */}
-        <div className="flex items-center gap-4 shrink-0">
+        {/* <div className="flex items-center gap-4 shrink-0">
           <button
             onClick={toggleLang}
             className="transition-colors border border-white/30 px-2 py-0.5 rounded-sm"
@@ -23,7 +23,7 @@ export default function TopBar() {
           >
             {t.switchLang}
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   )

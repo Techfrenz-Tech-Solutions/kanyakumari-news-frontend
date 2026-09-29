@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { FiSearch, FiMenu, FiX } from 'react-icons/fi'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -54,86 +54,83 @@ export default function Header() {
   const PRIMARY_NAV   = buildNav(t, categories, lang)
   const MOBILE_GROUPS = buildMobileGroups(t, categories, lang)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
   const searchRef = useRef(null)
-
-  useEffect(() => {
-    if (searchOpen) searchRef.current?.focus()
-  }, [searchOpen])
 
   function submitSearch(e) {
     e.preventDefault()
     if (!query.trim()) return
     navigate(`/search?q=${encodeURIComponent(query.trim())}`)
-    setSearchOpen(false)
     setQuery('')
   }
 
   return (
     <header className="sticky top-0 z-40 bg-white dark:bg-surface-dark border-b border-black/10 dark:border-white/10">
       {/* Masthead */}
-      <div className="container-page flex items-center justify-between py-3 gap-4">
+      <div className="container-page flex items-center justify-between py-5 gap-4">
+        {/* Hamburger — mobile only */}
         <button className="lg:hidden shrink-0" onClick={() => setMenuOpen(true)} aria-label="Open menu">
           <FiMenu size={24} />
         </button>
 
-        <Link to="/" className="flex flex-col items-center gap-1">
+        {/* Logo + tagline stacked — left */}
+        <Link to="/" className="shrink-0 flex flex-col items-start">
           <img
             src="/logo.png"
             alt={site?.siteName || 'Kanyakumari Today'}
-            className="h-15 md:h-20 w-auto object-contain"
+            className="h-18 md:h-20 w-auto object-contain"
           />
-          <span className="text-[12px] font-mono tracking-widest uppercase text-ink-soft dark:text-white/50 hidden sm:block text-center whitespace-nowrap">
+          <span className="text-[11px] font-mono tracking-widest uppercase text-ink-soft dark:text-white/50 whitespace-nowrap hidden sm:block">
             {t.tagline}
           </span>
         </Link>
 
-        <div className="flex items-center gap-3 ml-auto">
+        {/* Search box — center */}
+        <form onSubmit={submitSearch} className="hidden sm:flex flex-1 max-w-md mx-auto items-center border border-black/20 dark:border-white/20 rounded-full overflow-hidden bg-white dark:bg-surface-dark shadow-sm">
+          <input
+            ref={searchRef}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            type="text"
+            placeholder={t.searchPlaceholder}
+            className="flex-1 bg-transparent px-4 py-2 text-sm focus:outline-none"
+          />
+          <button
+            type="submit"
+            aria-label="Search"
+            className="m-1 w-8 h-8 flex items-center justify-center text-white bg-primary hover:bg-primary/90 transition-colors rounded-full shrink-0"
+          >
+            <FiSearch size={15} />
+          </button>
+        </form>
+
+        {/* Language toggle + mobile search — right */}
+        <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={toggleLang}
             title={lang === 'EN' ? 'Switch to Tamil' : 'Switch to English'}
-            className="md:hidden inline-flex h-9 items-center rounded-sm border border-black/15 px-2 text-xs font-semibold text-primary dark:border-white/20 dark:text-gold"
+            className="inline-flex h-9 items-center rounded-full border-2 border-primary px-4 text-xs font-bold tracking-wide text-white bg-primary hover:bg-primary/80 hover:border-primary/80 transition-all shadow-md"
           >
             {t.switchLang}
           </button>
-          <button
-            onClick={() => setSearchOpen((s) => !s)}
-            aria-label="Search"
-            className="inline-flex items-center gap-1.5 text-sm font-mono text-ink dark:text-white/80 hover:text-primary dark:hover:text-primary transition-colors"
-          >
-            <FiSearch size={18} />
-            <span>{t.search}</span>
-          </button>
+          {/* Mobile-only search */}
+          <form onSubmit={submitSearch} className="flex sm:hidden items-center border border-black/20 dark:border-white/20 rounded-full overflow-hidden bg-white dark:bg-surface-dark">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              type="text"
+              placeholder={t.searchPlaceholder}
+              className="w-28 bg-transparent px-3 py-1.5 text-sm focus:outline-none"
+            />
+            <button type="submit" aria-label="Search" className="px-2 py-1.5 text-white bg-primary rounded-full">
+              <FiSearch size={14} />
+            </button>
+          </form>
         </div>
       </div>
 
-      {/* Search bar */}
-      <AnimatePresence>
-        {searchOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="border-t border-black/10 dark:border-white/10 overflow-hidden"
-          >
-            <form onSubmit={submitSearch} className="container-page py-3 flex gap-2">
-              <input
-                ref={searchRef}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                type="text"
-                placeholder={t.searchPlaceholder}
-                className="flex-1 bg-transparent border border-black/15 dark:border-white/20 rounded-sm px-4 py-2 text-sm focus:border-primary outline-none"
-              />
-              <button type="submit" className="btn-primary text-sm">
-                {t.searchBtn}
-              </button>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Search bar (static inline above) */}
 
       {/* Desktop nav — red to purple gradient, static */}
       <nav className="hidden lg:block"
