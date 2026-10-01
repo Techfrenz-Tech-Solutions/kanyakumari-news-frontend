@@ -67,70 +67,55 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white dark:bg-surface-dark border-b border-black/10 dark:border-white/10">
-      {/* Masthead */}
-      <div className="container-page flex items-center justify-between py-5 gap-4">
-        {/* Hamburger — mobile only */}
-        <button className="lg:hidden shrink-0" onClick={() => setMenuOpen(true)} aria-label="Open menu">
-          <FiMenu size={24} />
+
+      {/* ── Masthead ── */}
+      <div className="container-page flex items-center py-3 gap-3">
+
+        {/* Hamburger — mobile/tablet only */}
+        <button className="lg:hidden shrink-0 p-1" onClick={() => setMenuOpen(true)} aria-label="Open menu">
+          <FiMenu size={26} />
         </button>
 
-        {/* Logo + tagline stacked — left */}
-        <Link to="/" className="shrink-0 flex flex-col items-start">
+        {/* Logo + tagline — left on desktop, fills space on mobile */}
+        <Link to="/" className="flex flex-col items-start shrink-0">
           <img
             src="/logo.png"
             alt={site?.siteName || 'Kanyakumari Today'}
-            className="h-18 md:h-20 w-auto object-contain"
+            className="h-12 sm:h-16 lg:h-20 w-auto object-contain"
           />
-          <span className="text-[11px] font-mono tracking-widest uppercase text-ink-soft dark:text-white/50 whitespace-nowrap hidden sm:block">
+          <span className="hidden sm:block text-[10px] lg:text-[11px] font-mono tracking-widest uppercase text-ink-soft dark:text-white/50 whitespace-nowrap mt-0.5">
             {t.tagline}
           </span>
         </Link>
 
-        {/* Search box — center */}
-        <form onSubmit={submitSearch} className="hidden sm:flex flex-1 max-w-md mx-auto items-center border border-black/20 dark:border-white/20 rounded-full overflow-hidden bg-white dark:bg-surface-dark shadow-sm">
+        {/* Search — fills center space, visible on all sizes */}
+        <form onSubmit={submitSearch} className="flex flex-1 min-w-0 items-center border border-black/20 dark:border-white/20 rounded-full overflow-hidden bg-white dark:bg-surface-dark shadow-sm">
           <input
             ref={searchRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             type="text"
             placeholder={t.searchPlaceholder}
-            className="flex-1 bg-transparent px-4 py-2 text-sm focus:outline-none"
+            className="flex-1 min-w-0 bg-transparent px-3 sm:px-4 py-2 text-xs sm:text-sm focus:outline-none"
           />
           <button
             type="submit"
             aria-label="Search"
-            className="m-1 w-8 h-8 flex items-center justify-center text-white bg-primary hover:bg-primary/90 transition-colors rounded-full shrink-0"
+            className="m-1 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-white bg-primary hover:bg-primary/90 transition-colors rounded-full shrink-0"
           >
-            <FiSearch size={15} />
+            <FiSearch size={13} />
           </button>
         </form>
 
-        {/* Language toggle + mobile search — right */}
-        <div className="flex items-center gap-3 shrink-0">
-          <button
-            onClick={toggleLang}
-            title={lang === 'EN' ? 'Switch to Tamil' : 'Switch to English'}
-            className="inline-flex h-9 items-center rounded-full border-2 border-primary px-4 text-xs font-bold tracking-wide text-white bg-primary hover:bg-primary/80 hover:border-primary/80 transition-all shadow-md"
-          >
-            {t.switchLang}
-          </button>
-          {/* Mobile-only search */}
-          <form onSubmit={submitSearch} className="flex sm:hidden items-center border border-black/20 dark:border-white/20 rounded-full overflow-hidden bg-white dark:bg-surface-dark">
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              type="text"
-              placeholder={t.searchPlaceholder}
-              className="w-28 bg-transparent px-3 py-1.5 text-sm focus:outline-none"
-            />
-            <button type="submit" aria-label="Search" className="px-2 py-1.5 text-white bg-primary rounded-full">
-              <FiSearch size={14} />
-            </button>
-          </form>
-        </div>
+        {/* Language toggle — always visible */}
+        <button
+          onClick={toggleLang}
+          title={lang === 'EN' ? 'Switch to Tamil' : 'Switch to English'}
+          className="shrink-0 inline-flex items-center rounded-full border-2 border-primary px-3 py-1.5 text-[11px] sm:text-xs font-bold text-white bg-primary hover:bg-primary/80 transition-all shadow-md whitespace-nowrap"
+        >
+          {t.switchLang}
+        </button>
       </div>
-
-      {/* Search bar (static inline above) */}
 
       {/* Desktop nav — red to purple gradient, static */}
       <nav className="hidden lg:block"
@@ -142,7 +127,7 @@ export default function Header() {
               to={item.to}
               end={item.to === '/'}
               className={({ isActive }) =>
-                `px-4 h-full inline-flex items-center whitespace-nowrap border-r border-white/15 last:border-r-0 font-semibold text-[18px] transition-colors
+                `px-3 lg:px-4 h-full inline-flex items-center whitespace-nowrap border-r border-white/15 last:border-r-0 font-semibold text-[15px] lg:text-[17px] transition-colors
                 ${isActive ? 'bg-white/25 text-white underline underline-offset-4 decoration-2' : 'hover:bg-white/20 hover:text-white'}`
               }
             >
@@ -173,7 +158,7 @@ export default function Header() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.25 }}
-              className="fixed top-0 left-0 bottom-0 w-72 bg-white dark:bg-surface-darkcard z-50 p-5 overflow-y-auto lg:hidden"
+              className="fixed top-0 left-0 bottom-0 w-[85vw] max-w-xs bg-white dark:bg-surface-darkcard z-50 p-5 overflow-y-auto lg:hidden"
             >
               <div className="flex items-center justify-between mb-6">
                 <img src="/logo.png" alt="Kanyakumari Today" className="h-9 w-auto object-contain" />

@@ -5,7 +5,13 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-size: 18px;
+    font-size: 15px; /* 16px on sm+ for better mobile readability */
+  }
+  @media (min-width: 640px) {
+    html { font-size: 16px; }
+  }
+  @media (min-width: 1024px) {
+    html { font-size: 17px; }
   }
   body {
     @apply bg-surface text-ink font-body antialiased transition-colors duration-300;
@@ -31,11 +37,10 @@
   img, video {
     -webkit-user-drag: none;
     user-drag: none;
-    pointer-events: none;
   }
-  /* Re-enable pointer events on links/buttons that contain images */
-  a img, button img {
-    pointer-events: none;
+  /* Restore pointer events so image-links are tappable on mobile */
+  a, button, a img, button img {
+    pointer-events: auto;
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -71,7 +76,7 @@
   /* Section titles get a red left border with a gold shimmer underline */
   /* Section title: red left border + gold bottom accent */
   .section-title {
-    @apply font-display text-3xl md:text-4xl font-bold text-ink dark:text-white relative pl-4;
+    @apply font-display text-xl sm:text-2xl lg:text-3xl font-bold text-ink dark:text-white relative pl-4;
     border-left: 4px solid #C8102E;
     padding-bottom: 4px;
     background: linear-gradient(90deg, #FFD70022 0%, transparent 60%) no-repeat bottom left;

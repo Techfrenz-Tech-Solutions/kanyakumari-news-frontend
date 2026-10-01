@@ -32,12 +32,12 @@ export default function BreakingTicker() {
           {h.slug ? (
             <Link
               to={`/article/${h.slug}`}
-              className="text-base font-semibold text-white/90 hover:text-white transition-colors whitespace-nowrap"
+              className="text-sm sm:text-base font-semibold text-white/90 hover:text-white transition-colors whitespace-nowrap"
             >
               {h.title}
             </Link>
           ) : (
-            <span className="text-base font-medium text-white/85 whitespace-nowrap">
+            <span className="text-sm sm:text-base font-medium text-white/85 whitespace-nowrap">
               {h.title}
             </span>
           )}

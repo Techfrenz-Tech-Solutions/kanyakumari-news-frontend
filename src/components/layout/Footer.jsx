@@ -66,10 +66,10 @@ export default function Footer() {
     <footer className="mt-12 text-white/80" style={{ background: '#0B1A3B' }}>
 
       {/* ── Main grid ── */}
-      <div className="container-page pt-10 pb-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8">
+      <div className="container-page pt-10 pb-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8">
 
         {/* ── Col 0: Brand block ── */}
-        <div className="col-span-2 sm:col-span-3 lg:col-span-1 flex flex-col gap-4">
+        <div className="col-span-2 md:col-span-3 lg:col-span-1 flex flex-col gap-4">
           {/* Logo */}
           <Link to="/">
             <img src="/logo.png" alt={site?.siteName || 'Kanyakumari Today'} className="h-14 w-auto object-contain" />
@@ -80,7 +80,7 @@ export default function Footer() {
             <a href="mailto:kanyakumaritoday2026@gmail.com"
               className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors">
               <FiMail size={13} className="shrink-0" />
-              <span>kanyakumaritoday2026@gmail.com</span>
+              <span className="break-all">kanyakumaritoday2026@gmail.com</span>
             </a>
             <a href="tel:+918870005541"
               className="flex items-center gap-2 text-xs text-white/60 hover:text-white transition-colors">
