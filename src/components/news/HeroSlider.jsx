@@ -42,7 +42,7 @@ export default function HeroSlider({ articles }) {
 
   if (error) return <div role="alert" className="rounded border border-red-200 bg-red-50 p-5 text-sm text-red-700">{error.message}</div>
   if (slides.length === 0 && !articles) {
-    return <div className="aspect-[5/3] bg-black/5 animate-pulse rounded-md" />
+    return <div className="bg-black/5 animate-pulse rounded-md" style={{ aspectRatio: '1000/600' }} />
   }
 
   return (
@@ -52,7 +52,7 @@ export default function HeroSlider({ articles }) {
       className="rounded-md overflow-hidden hero-swiper">
       {slides.map((a) => (
         <SwiperSlide key={a.id}>
-          <Link to={`/article/${a.slug}`} className="relative block aspect-[5/3]">
+          <Link to={`/article/${a.slug}`} className="relative block" style={{ aspectRatio: '1000/600' }}>
             <img src={a.image || '/news-placeholder.svg'} alt={titleOf(a)} className="w-full h-full object-cover"
               onError={(e) => { e.currentTarget.src = '/news-placeholder.svg' }} />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
