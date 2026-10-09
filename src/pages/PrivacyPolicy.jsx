@@ -103,19 +103,19 @@ export default function PrivacyPolicy() {
           <div key={s.title} className="bg-gray-50 rounded-lg p-6 border border-black/5">
             <h2 className="font-bold text-base text-ink mb-3 border-l-4 border-primary pl-3">{s.title}</h2>
             <p className="text-sm text-ink-soft leading-relaxed mb-4">{s.body}</p>
-            <ul className="space-y-2">
+            {s.points?.length > 0 && <ul className="space-y-2">
               {s.points.map((pt, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-ink-soft">
                   <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
                   {pt}
                 </li>
               ))}
-            </ul>
+            </ul>}
           </div>
         ))}
       </div>
       <div className="mt-10 p-5 bg-primary/5 border border-primary/20 rounded-lg text-sm text-ink-soft">
-        Questions? Contact us at{' '}
+        {t.legalQuestions}{' '}
         <a href="mailto:legal@kanyakumaritoday.com" className="text-primary hover:underline">legal@kanyakumaritoday.com</a>
       </div>
     </div>

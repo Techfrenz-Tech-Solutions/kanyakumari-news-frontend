@@ -70,6 +70,7 @@ export default function Home() {
 
   const [colData, setColData] = useState({})
   const [jobs, setJobs] = useState(null)
+  const [touristAttractions, setTouristAttractions] = useState(null)
   const [home, setHome] = useState(null)
   const [homeError, setHomeError] = useState(null)
   const [columnError, setColumnError] = useState(null)
@@ -94,6 +95,9 @@ export default function Home() {
     newsService.getJobs({ signal: controller.signal })
       .then((items) => setJobs(items.slice(0, 4)))
       .catch(() => setJobs([]))
+    newsService.getTouristAttractions({ signal: controller.signal })
+      .then((items) => setTouristAttractions(items.slice(0, 4)))
+      .catch(() => setTouristAttractions([]))
     return () => controller.abort()
   }, [])
 
@@ -170,11 +174,19 @@ export default function Home() {
               <Link to="/tourist-info" className="text-[10px] text-accent hover:underline">{t.moreLink}</Link>
             </div>
             <div className="p-3">
-              {[t.vivekanandaRock, t.thiruvalluvarStatue, t.kumariAmmanTemple, t.kanyakumariBeach].map((name) => (
-                <Link key={name} to="/tourist-info" className="flex items-center gap-1.5 text-xs text-ink-soft hover:text-primary transition-colors py-1.5 border-b border-black/5 last:border-0">
-                  <FiArrowRight size={10} className="shrink-0 text-primary" /> {name}
-                </Link>
-              ))}
+              {touristAttractions === null
+                ? Array.from({ length: 4 }).map((_, i) => <div key={i} className="py-2 animate-pulse border-b border-black/5 last:border-0"><div className="h-2.5 bg-black/10 rounded" /></div>)
+                : touristAttractions.length
+                  ? touristAttractions.map((place) => (
+                      <Link key={place.id} to="/tourist-info" className="flex items-center gap-1.5 text-xs text-ink-soft hover:text-primary transition-colors py-1.5 border-b border-black/5 last:border-0">
+                        <FiArrowRight size={10} className="shrink-0 text-primary" /> {place.name}
+                      </Link>
+                    ))
+                  : [t.vivekanandaRock, t.thiruvalluvarStatue, t.kumariAmmanTemple, t.kanyakumariBeach].map((name) => (
+                      <Link key={name} to="/tourist-info" className="flex items-center gap-1.5 text-xs text-ink-soft hover:text-primary transition-colors py-1.5 border-b border-black/5 last:border-0">
+                        <FiArrowRight size={10} className="shrink-0 text-primary" /> {name}
+                      </Link>
+                    ))}
             </div>
           </div>
         </div>

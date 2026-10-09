@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { FiFacebook, FiTwitter, FiInstagram, FiYoutube, FiSend, FiMail, FiPhone } from 'react-icons/fi'
 import { useLang } from '../../context/LanguageContext.jsx'
 import { usePublicContent } from '../../context/PublicContentContext.jsx'
+import { localizedTaxonomyLabel } from '../../utils/localization.js'
 
 // WhatsApp SVG icon
 function WhatsAppIcon() {
@@ -26,7 +27,7 @@ export default function Footer() {
   const { lang, t } = useLang()
   const { categories, site } = usePublicContent()
 
-  const catLabel = (c) => (lang === 'TA' ? (c.labelTA || c.label) : c.label)
+  const catLabel = (c) => localizedTaxonomyLabel(c, lang)
   const ALL_CATS = categories.map((c) => ({ label: catLabel(c), to: `/category/${c.slug}` }))
 
   // Split categories across 4 columns

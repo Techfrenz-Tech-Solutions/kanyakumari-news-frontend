@@ -7,6 +7,7 @@ import { CardSkeleton } from '../components/ui/Skeleton.jsx'
 import { useLang } from '../context/LanguageContext.jsx'
 import { usePublicContent } from '../context/PublicContentContext.jsx'
 import { ApiErrorState } from '../components/ui/ApiState.jsx'
+import { localizedTaxonomyLabel } from '../utils/localization.js'
 
 const PAGE_SIZE = 6
 
@@ -29,7 +30,7 @@ export default function Category() {
   const excerptOf = (a) => lang === 'TA' ? (a.excerptTA || a.excerpt) : a.excerpt
 
   const label = categories.find((c) => c.slug === slug)
-  const displayLabel = label ? (lang === 'TA' ? (label.labelTA || label.label) : label.label) : slug
+  const displayLabel = label ? localizedTaxonomyLabel(label, lang) : slug
   const subcategories = label?.subcategories || []
 
   useEffect(() => {
@@ -111,7 +112,7 @@ export default function Category() {
                     : 'border-black/20 dark:border-white/20 hover:border-primary hover:text-primary'
                 }`}
               >
-                {subcategory.label}
+                {localizedTaxonomyLabel(subcategory, lang)}
               </button>
             ))}
           </div>
@@ -126,7 +127,7 @@ export default function Category() {
               </div>
             ) : items.length === 0 ? (
               <p className="text-ink-soft dark:text-white/60 py-12 text-center">
-                {t.noArticles}{activeSubcategory ? ` - ${subcategories.find((item) => item.slug === activeSubcategory)?.label}` : ''}
+                {t.noArticles}{activeSubcategory ? ` - ${localizedTaxonomyLabel(subcategories.find((item) => item.slug === activeSubcategory), lang)}` : ''}
               </p>
             ) : (
               <>

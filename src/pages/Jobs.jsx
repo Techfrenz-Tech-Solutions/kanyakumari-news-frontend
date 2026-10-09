@@ -4,6 +4,10 @@ import newsService from '../services/newsService.js'
 import { useLang } from '../context/LanguageContext.jsx'
 
 const TYPE_COLOURS = {
+  govt:     'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
+  private:  'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
+  teaching: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
+  bank:     'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',
   Govt:     'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300',
   Private:  'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',
   Teaching: 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300',
@@ -27,6 +31,10 @@ export default function Jobs() {
   ]
 
   const TYPE_LABEL = {
+    govt:     t.jobTypeGovt,
+    private:  t.jobTypePrivate,
+    teaching: t.jobTypeTeaching,
+    bank:     t.jobTypeBank,
     Govt:     t.jobTypeGovt,
     Private:  t.jobTypePrivate,
     Teaching: t.jobTypeTeaching,
@@ -40,6 +48,10 @@ export default function Jobs() {
   const filtered  = activeFilter === 'Latest' ? jobs : jobs.filter((j) => j.type?.toLowerCase() === activeFilter.toLowerCase())
   const paginated = filtered.slice(0, page * PAGE_SIZE)
   const hasMore   = paginated.length < filtered.length
+  const openApplication = (url) => {
+    if (!url) return
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }
 
   return (
     <div>
@@ -82,7 +94,19 @@ export default function Jobs() {
 
             <div className="space-y-3">
               {paginated.map((job) => (
-                <div key={job.id} className="card-surface p-4 grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center">
+                <div
+                  key={job.id}
+                  className={`card-surface p-4 grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 items-center ${job.applyUrl ? 'cursor-pointer hover:border-primary/40 transition-colors' : ''}`}
+                  role={job.applyUrl ? 'link' : undefined}
+                  tabIndex={job.applyUrl ? 0 : undefined}
+                  onClick={() => openApplication(job.applyUrl)}
+                  onKeyDown={(event) => {
+                    if (!job.applyUrl || !['Enter', ' '].includes(event.key)) return
+                    event.preventDefault()
+                    openApplication(job.applyUrl)
+                  }}
+                  title={job.applyUrl ? `${t.applyLink}: ${job.applyUrl}` : undefined}
+                >
                   <div className="md:col-span-4">
                     <p className="font-semibold text-sm text-ink dark:text-white leading-snug">{job.title}</p>
                     <p className="text-xs text-ink-soft dark:text-white/50 mt-0.5 flex items-center gap-1">
@@ -104,10 +128,19 @@ export default function Jobs() {
                     </span>
                   </div>
                   <div className="md:col-span-2 md:text-right">
-                    <a href={job.applyUrl || '#'} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline">
-                      {t.applyLink} <FiExternalLink size={11} />
-                    </a>
+                    {job.applyUrl ? (
+                      <a
+                        href={job.applyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(event) => event.stopPropagation()}
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
+                      >
+                        {t.applyLink} <FiExternalLink size={11} />
+                      </a>
+                    ) : (
+                      <span className="text-xs text-ink-soft dark:text-white/40">-</span>
+                    )}
                   </div>
                 </div>
               ))}

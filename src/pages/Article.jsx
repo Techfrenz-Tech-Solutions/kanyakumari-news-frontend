@@ -10,6 +10,17 @@ import { ApiErrorState } from '../components/ui/ApiState.jsx'
 import { applyArticleMetadata, buildArticleMetadata } from '../utils/seo.js'
 
 const IMAGE_FALLBACK = '/news-placeholder.svg'
+const VIDEO_EXT_RE = /\.(mp4|webm|mov)(\?|#|$)/i
+
+function isDirectVideoUrl(url) {
+  if (!url) return false
+  try {
+    const parsed = new URL(url, window.location.origin)
+    return parsed.pathname.startsWith('/uploads/') || VIDEO_EXT_RE.test(parsed.pathname)
+  } catch {
+    return VIDEO_EXT_RE.test(String(url))
+  }
+}
 
 function ShareButtons({ title, url, t }) {
   const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`
@@ -132,6 +143,12 @@ export default function Article() {
             </div>
             {article.author?.name && <figcaption className="text-xs text-ink-soft font-mono mt-1.5">{t.photo}: {article.author.name}</figcaption>}
           </figure>
+
+          {isDirectVideoUrl(article.videoUrl) && (
+            <div className="mt-6 rounded-md overflow-hidden bg-black">
+              <video src={article.videoUrl} controls preload="metadata" className="w-full aspect-video" />
+            </div>
+          )}
 
           {/* Body text */}
           {/* Content is trusted only after the backend's Admin -> sanitizer -> DB -> public API boundary. */}

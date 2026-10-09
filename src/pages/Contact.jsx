@@ -8,7 +8,7 @@ import { ApiErrorState } from '../components/ui/ApiState.jsx'
 export default function Contact() {
   const { t } = useLang()
   const { site } = usePublicContent()
-  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
+  const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -72,6 +72,7 @@ export default function Contact() {
             {[
               { name: 'name',    label: t.yourName,     type: 'text',  ph: t.namePlaceholder  },
               { name: 'email',   label: t.emailAddress, type: 'email', ph: t.emailPlaceholder },
+              { name: 'phone',   label: t.phoneLabelContact, type: 'tel', ph: 'Your phone number' },
               { name: 'subject', label: t.subject,      type: 'text',  ph: t.subjectPlaceholder },
             ].map(({ name, label, type, ph }) => (
               <div key={name}>

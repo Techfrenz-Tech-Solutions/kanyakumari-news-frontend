@@ -4,6 +4,7 @@ import { FiSearch, FiMenu, FiX } from 'react-icons/fi'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useLang } from '../../context/LanguageContext.jsx'
 import { usePublicContent } from '../../context/PublicContentContext.jsx'
+import { localizedTaxonomyLabel } from '../../utils/localization.js'
 
 // Primary nav — labels come from translations
 function buildNav(t, categories, lang) {
@@ -11,7 +12,7 @@ function buildNav(t, categories, lang) {
     { key: 'home', label: t.home, to: '/' },
     ...categories.map((category) => ({
       key: category.slug,
-      label: lang === 'TA' ? (category.labelTA || category.label) : category.label,
+      label: localizedTaxonomyLabel(category, lang),
       to: `/category/${category.slug}`,
     })),
     { key: 'tourist',      label: t.navTourist,      to: '/tourist-info'         },
@@ -27,7 +28,7 @@ function buildMobileGroups(t, categories, lang) {
       links: [
         { label: t.home, to: '/' },
         ...categories.map((category) => ({
-          label: lang === 'TA' ? (category.labelTA || category.label) : category.label,
+          label: localizedTaxonomyLabel(category, lang),
           to: `/category/${category.slug}`,
         })),
       ],
