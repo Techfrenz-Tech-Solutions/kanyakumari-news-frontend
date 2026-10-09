@@ -5,8 +5,10 @@ import { readFileSync } from 'node:fs'
 test('language toggle is available outside the desktop-only top bar', () => {
   const header = readFileSync(new URL('../src/components/layout/Header.jsx', import.meta.url), 'utf8')
   assert.match(header, /const \{ lang, toggleLang, t \} = useLang\(\)/)
-  assert.match(header, /onClick=\{toggleLang\}/)
-  assert.match(header, /md:hidden/)
+  const toggle = header.match(/<button\s+onClick=\{toggleLang\}[\s\S]*?<\/button>/)?.[0]
+  assert.ok(toggle, 'language toggle button must be rendered in the masthead')
+  assert.match(toggle, /inline-flex/)
+  assert.doesNotMatch(toggle, /(?:^|\s)(?:hidden|sm:hidden|md:hidden|lg:hidden)(?:\s|$)/)
 })
 
 test('language provider syncs document language from current state', () => {
