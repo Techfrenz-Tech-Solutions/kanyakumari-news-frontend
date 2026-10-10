@@ -1,0 +1,14 @@
+{
+  "name": "Kanyakumari Today",
+  "short_name": "KK Today",
+  "description": "Latest Kanyakumari news, Nagercoil news and Tamil Nadu headlines.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#C8102E",
+  "background_color": "#ffffff",
+  "lang": "en-IN",
+  "icons": [
+    { "src": "/logo.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

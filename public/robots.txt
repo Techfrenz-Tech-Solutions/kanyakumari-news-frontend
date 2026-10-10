@@ -1,54 +1,11 @@
-# robots.txt — Kanyakumari News (https://www.kanyakumarinews.com)
-# Generated for the Kiro IDE project at kanyakumari-news-frontend
-# Last updated: 2026-10-09
-
-# -----------------------------------------------------------------
-# Allow all well-behaved crawlers
-# -----------------------------------------------------------------
 User-agent: *
 Allow: /
-
-# Block admin / API paths that should never be indexed
+Disallow: /admin/
 Disallow: /api/
-Disallow: /admin/
-Disallow: /dashboard/
-
-# Block raw search result pages (duplicate-content risk)
 Disallow: /search?
+Disallow: /*?utm_
 
-# Block internal utility paths
-Disallow: /src/
-Disallow: /.env
-Disallow: /node_modules/
-
-# -----------------------------------------------------------------
-# Google News — allow everything (already covered by * above,
-# but explicit is better for News-specific crawl)
-# -----------------------------------------------------------------
-User-agent: Googlebot-News
-Allow: /
-Allow: /article/
-Allow: /category/
-
-# -----------------------------------------------------------------
-# Googlebot Image — allow article images
-# -----------------------------------------------------------------
-User-agent: Googlebot-Image
-Allow: /
-Disallow: /admin/
-
-# -----------------------------------------------------------------
-# Common SEO tools / ad-quality bots
-# -----------------------------------------------------------------
-User-agent: AdsBot-Google
-Allow: /
-
-User-agent: Mediapartners-Google
-Allow: /
-
-# -----------------------------------------------------------------
-# Block AI training crawlers that don't respect content licensing
-# -----------------------------------------------------------------
+# Block AI training crawlers
 User-agent: GPTBot
 Disallow: /
 
@@ -64,24 +21,17 @@ Disallow: /
 User-agent: Claude-Web
 Disallow: /
 
-User-agent: Omgilibot
-Disallow: /
+# Allow Google crawlers explicitly
+User-agent: Googlebot
+Allow: /
 
-User-agent: FacebookBot
-Disallow: /
+User-agent: Googlebot-News
+Allow: /
 
-# -----------------------------------------------------------------
-# Crawl-delay for generic bots (be polite)
-# -----------------------------------------------------------------
-User-agent: *
-Crawl-delay: 10
+User-agent: Googlebot-Image
+Allow: /
 
-# -----------------------------------------------------------------
-# Sitemap locations
-# -----------------------------------------------------------------
-Sitemap: https://www.kanyakumarinews.com/sitemap.xml
+Crawl-delay: 5
 
-# NOTE: Add a server-generated news sitemap below once the backend
-# exposes it. Google News requires article URLs to be submitted
-# within 48 hours of publication.
-# Sitemap: https://www.kanyakumarinews.com/sitemap-news.xml
+Sitemap: https://www.kanyakumaritoday.com/sitemap.xml
+Sitemap: https://www.kanyakumaritoday.com/news-sitemap.xml

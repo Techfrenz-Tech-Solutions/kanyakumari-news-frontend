@@ -1,1 +1,22 @@
+# ---------------------------------------------------------------
+# API & uploads proxy — backend URL is set as an env var in the
+# Netlify dashboard (API_PROXY_TARGET). Never committed to git.
+# These rules forward /api/* and /uploads/* to the backend server
+# so the real backend URL is never exposed in client-side code.
+# ---------------------------------------------------------------
+/api/*       :API_PROXY_TARGET/api/:splat       200
+/uploads/*   :API_PROXY_TARGET/uploads/:splat   200
+
+# Force https and www
+http://kanyakumaritoday.com/*   https://www.kanyakumaritoday.com/:splat  301!
+http://www.kanyakumaritoday.com/*  https://www.kanyakumaritoday.com/:splat  301!
+https://kanyakumaritoday.com/*  https://www.kanyakumaritoday.com/:splat  301!
+
+# Serve static SEO files -- must come BEFORE the SPA catch-all
+/sitemap.xml   /sitemap.xml   200
+/news-sitemap.xml  /news-sitemap.xml  200
+/robots.txt    /robots.txt    200
+/site.webmanifest  /site.webmanifest  200
+
+# SPA catch-all (must be last)
 /*    /index.html   200

@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-const configuredBase = import.meta.env?.VITE_API_BASE_URL?.trim()
-
-export const API_BASE_URL = configuredBase
-  ? `${configuredBase.replace(/\/$/, '').replace(/\/api$/, '')}/api`
-  : '/api'
+// Always use a same-origin relative path.
+// The backend URL is NEVER exposed to the browser bundle.
+// In dev: Vite proxies /api → backend (set VITE_DEV_API_PROXY_TARGET in .env)
+// In prod: Netlify rewrites /api → backend (set API_PROXY_TARGET in Netlify env vars)
+export const API_BASE_URL = '/api'
 
 export class PublicApiError extends Error {
   constructor({ status = 0, code = 'NETWORK_ERROR', message = 'Unable to reach the news service.', details = null } = {}) {

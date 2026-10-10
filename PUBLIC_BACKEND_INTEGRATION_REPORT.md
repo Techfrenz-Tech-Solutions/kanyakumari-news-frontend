@@ -10,17 +10,13 @@ The public frontend has been moved from local mock news data to the hardened Kan
 
 ## Baselines
 
-- Public frontend starting SHA: `b8b78eede9e01f9e516c99db6c918678fb0d3b50`
-- Public branch: `feat/public-backend-integration`
-- Admin baseline SHA: `d73d9a770d345a2ddd8af37d71731d2fa54bd64e`
-- Backend starting/final SHA: `3ed3443080f1c34acb7d77663735e1e05baea273`
-- Backend branch: `fix/backend-production-hardening`
-- Backend changes in Step 4: none
+- Integration verified on the public frontend branch.
+- Backend changes in Step 4: none.
 
 ## Implementation Summary
 
 - Added one central Axios API client in `src/api/client.js`.
-- Added `VITE_API_BASE_URL` support with same-origin `/api` as the default.
+- All API calls use a same-origin relative `/api` path — the backend URL is never embedded in the bundle.
 - Rebuilt `src/services/newsService.js` as the public backend facade.
 - Removed the local authoritative news dataset and artificial mock delays.
 - Added `PublicContentContext` to load categories, areas, and site settings from the backend.
@@ -152,7 +148,7 @@ Production hardening should configure hosting or reverse proxy support for:
 - `/sitemap.xml` to backend sitemap output
 - `/robots.txt` to backend robots output
 
-The Vite app defaults to same-origin `/api` when `VITE_API_BASE_URL` is not configured. For local cross-origin development, set `VITE_API_BASE_URL` explicitly instead of hardcoding backend URLs in components.
+The Vite app always calls `/api` on the same origin. The backend URL is configured via environment variables (never in source code) and forwarded by the dev proxy or Netlify redirect rules server-side. For local cross-origin development, set `VITE_DEV_API_PROXY_TARGET` in your `.env` file.
 
 ## Step 5 Readiness
 
