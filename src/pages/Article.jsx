@@ -7,7 +7,7 @@ import AdBanner from '../components/ui/AdBanner.jsx'
 import { timeAgo, formatNumber } from '../utils/format.js'
 import { useLang } from '../context/LanguageContext.jsx'
 import { ApiErrorState } from '../components/ui/ApiState.jsx'
-import { applyArticleMetadata, buildArticleMetadata } from '../utils/seo.js'
+import { applyArticleMetadata, buildArticleMetadata, pageCanonical, restoreHomeMetadata } from '../utils/seo.js'
 
 const IMAGE_FALLBACK = '/news-placeholder.svg'
 const VIDEO_EXT_RE = /\.(mp4|webm|mov)(\?|#|$)/i
@@ -76,8 +76,9 @@ export default function Article() {
 
   useEffect(() => {
     if (!article) return
-    applyArticleMetadata(buildArticleMetadata(article, lang, shareUrl))
-  }, [article, lang, shareUrl])
+    applyArticleMetadata(buildArticleMetadata(article, lang, pageCanonical(`/article/${slug}`)))
+    return () => restoreHomeMetadata()
+  }, [article, lang, slug])
 
   if (notFound) return (
     <div className="container-page py-20 text-center">

@@ -56,7 +56,7 @@ export default function Home() {
   const NEWS_COLS = useMemo(() => {
     const WANTED = [
       { match: ['kanyakumari'],                         headerBg: 'bg-primary'   },
-      { match: ['tamilnadu', 'tamil-nadu', 'tamil_nadu', 'tamil nadu'], headerBg: 'bg-secondary' },
+      { match: ['tamilnadu', 'tamil-nadu', 'tamil_nadu', 'tamil nadu', 'tamilnadu-news'], headerBg: 'bg-secondary' },
       { match: ['national'],                            headerBg: 'bg-green-700' },
       { match: ['world'],                               headerBg: 'bg-amber-600' },
     ]
@@ -103,7 +103,7 @@ export default function Home() {
 
   return (
     <div className="bg-white min-h-screen">
-      <h1 className="sr-only">{home?.site?.siteName || 'Kanyakumari News'}</h1>
+      <h1 className="sr-only">Kanyakumari News Today: Latest Nagercoil and District Updates</h1>
       <div className="container-page py-5 space-y-8">
         {homeError ? <ApiErrorState error={homeError} /> : home?.hero?.length ? (
           <section aria-label="Breaking news">

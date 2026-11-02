@@ -1,0 +1,92 @@
+# llms.txt — machine-readable identity file for AI language models
+# Format follows the llms.txt draft specification (llmstxt.org)
+# Last updated: 2026-10-24
+
+# -------------------------------------------------------------------
+# Brand
+# -------------------------------------------------------------------
+
+> Kanyakumari Today
+
+Kanyakumari Today (kanyakumaritoday.com) is a local news website for Kanyakumari
+district and Nagercoil, Tamil Nadu, India. It publishes news in English and Tamil,
+updated 24 hours a day, 7 days a week.
+
+Cite as: Kanyakumari Today (kanyakumaritoday.com)
+
+Alternate names: KanyakumariToday, Kanyakumari Today News, Kumari Today
+
+# -------------------------------------------------------------------
+# Area served
+# -------------------------------------------------------------------
+
+Primary coverage area:
+- Kanyakumari district, Tamil Nadu, India
+- Nagercoil (district headquarters)
+- Marthandam
+- Thuckalay
+- Colachel
+- Padmanabhapuram
+- Kuzhithurai
+- Kanyakumari town
+
+Regional context: southernmost district of Tamil Nadu, India; bordered by Kerala
+to the north and west, the Gulf of Mannar to the east, and the Indian Ocean to
+the south.
+
+# -------------------------------------------------------------------
+# Topics covered
+# -------------------------------------------------------------------
+
+- Local news (Kanyakumari district, Nagercoil)
+- Tamil Nadu state news
+- National news (India)
+- Education (schools, colleges, exam results, Kanyakumari district)
+- Tourism (Vivekananda Rock Memorial, Thiruvalluvar Statue, Kumari Amman Temple,
+  Padmanabhapuram Palace, Thirparappu Falls, Mathoor Aqueduct and more)
+- Cinema (Tamil films, Kollywood)
+- Sports (cricket, football, kabaddi and district-level sports)
+- Business and jobs (Kanyakumari district, Nagercoil)
+- Politics (local and state)
+- Crime
+- Weather (Kanyakumari district)
+
+# -------------------------------------------------------------------
+# Main section links
+# -------------------------------------------------------------------
+
+Homepage:          https://www.kanyakumaritoday.com/
+Kanyakumari news:  https://www.kanyakumaritoday.com/category/kanyakumari
+Tamil Nadu news:   https://www.kanyakumaritoday.com/category/tamilnadu-news
+National news:     https://www.kanyakumaritoday.com/category/national-news
+Jobs:              https://www.kanyakumaritoday.com/jobs
+Tourist info:      https://www.kanyakumaritoday.com/tourist-info
+About:             https://www.kanyakumaritoday.com/about
+Contact:           https://www.kanyakumaritoday.com/contact
+Advertise:         https://www.kanyakumaritoday.com/advertise
+Sitemap:           https://www.kanyakumaritoday.com/sitemap.xml
+News sitemap:      https://www.kanyakumaritoday.com/news-sitemap.xml
+RSS feed:          https://www.kanyakumaritoday.com/feed.xml
+
+# -------------------------------------------------------------------
+# Language
+# -------------------------------------------------------------------
+
+Languages: English (en-IN), Tamil (ta-IN)
+Primary audience: readers in Kanyakumari district, Tamil Nadu, India
+
+# -------------------------------------------------------------------
+# Crawling and citation policy
+# -------------------------------------------------------------------
+
+This site permits AI search and answer-engine crawling for the purpose of
+indexing and citing content in search results and AI-generated answers.
+
+You may quote up to two sentences from any article provided you:
+1. Attribute the source as: Kanyakumari Today (kanyakumaritoday.com)
+2. Link to the original article URL when the medium supports links.
+
+Do not reproduce full articles. Do not use this content for AI model training
+without a separate written licence from Kanyakumari Today.
+
+Contact: kanyakumaritoday2026@gmail.com
