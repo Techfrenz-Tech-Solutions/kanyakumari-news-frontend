@@ -1,7 +1,9 @@
 const CATEGORY_TA_BY_SLUG = {
   kanyakumari: 'கன்னியாகுமரி',
-  'tamil-nadu': 'தமிழ்நாடு',
+  'tamil-nadu': 'தமிழ்நாடு',      // legacy slug — 301s to tamilnadu-news
   tamilnadu: 'தமிழ்நாடு',
+  'tamilnadu-news': 'தமிழ்நாடு செய்திகள்',  // backend canonical slug
+  'national-news': 'தேசிய செய்திகள்',        // backend canonical slug
   india: 'இந்தியா',
   national: 'தேசிய',
   world: 'உலகம்',

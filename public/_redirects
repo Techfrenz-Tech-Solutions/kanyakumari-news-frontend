@@ -13,10 +13,20 @@ http://www.kanyakumaritoday.com/*  https://www.kanyakumaritoday.com/:splat  301!
 https://kanyakumaritoday.com/*  https://www.kanyakumaritoday.com/:splat  301!
 
 # Serve static SEO files -- must come BEFORE the SPA catch-all
-/sitemap.xml   /sitemap.xml   200
-/news-sitemap.xml  /news-sitemap.xml  200
-/robots.txt    /robots.txt    200
-/site.webmanifest  /site.webmanifest  200
+/sitemap.xml      /sitemap.xml      200
+/news-sitemap.xml /news-sitemap.xml 200
+/feed.xml         /feed.xml         200
+/llms.txt         /llms.txt         200
+/robots.txt       /robots.txt       200
+/site.webmanifest /site.webmanifest 200
+
+# Redirect /index.html -> / (301) so the homepage has a single canonical URL.
+# The "!" forces the redirect even though index.html exists as a static asset.
+/index.html    /    301!
+
+# Consolidate duplicate Tamil Nadu category — tamilnadu-news is the backend's
+# canonical slug; tamil-nadu is the old static-only slug that had no backend data.
+/category/tamil-nadu    /category/tamilnadu-news    301!
 
 # SPA catch-all (must be last)
 /*    /index.html   200

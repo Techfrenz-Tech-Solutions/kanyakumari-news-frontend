@@ -31,6 +31,18 @@ export default function Search() {
     return () => controller.abort()
   }, [q, category, sort])
 
+  // Keep search-result pages out of Google's index. The static shell ships
+  // `index, follow`; here we override to `noindex, follow` and restore the
+  // original directive on unmount so other routes remain indexable.
+  useEffect(() => {
+    const robots = document.head.querySelector('meta[name="robots"]')
+    const previous = robots ? robots.getAttribute('content') : ''
+    if (robots) robots.setAttribute('content', 'noindex, follow')
+    return () => {
+      if (robots) robots.setAttribute('content', previous)
+    }
+  }, [])
+
   function submit(e) {
     e.preventDefault()
     setParams(input.trim() ? { q: input.trim() } : {})

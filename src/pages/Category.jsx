@@ -8,6 +8,7 @@ import { useLang } from '../context/LanguageContext.jsx'
 import { usePublicContent } from '../context/PublicContentContext.jsx'
 import { ApiErrorState } from '../components/ui/ApiState.jsx'
 import { localizedTaxonomyLabel } from '../utils/localization.js'
+import { buildPageMetadata, applyPageMetadata, restoreHomeMetadata, CATEGORY_META } from '../utils/seo.js'
 
 const PAGE_SIZE = 6
 
@@ -71,6 +72,20 @@ export default function Category() {
         setPage(next)
       }).catch(setError).finally(() => setLoadingMore(false))
   }
+
+  // Per-page SEO: slug-specific title/description from CATEGORY_META lookup,
+  // falling back to the generic template for unknown slugs.
+  // h1 text is NOT changed here — visible heading changes await owner approval
+  // (see KEYWORD_PLAN.md). Only <title>, <meta description> and canonical change.
+  useEffect(() => {
+    const meta = CATEGORY_META[slug]
+    applyPageMetadata(buildPageMetadata({
+      title:       meta ? meta.title       : `${displayLabel} ${t.newsWord}`,
+      description: meta ? meta.description : `Latest ${displayLabel} news from Kanyakumari district, Tamil Nadu — breaking news, politics, tourism and more.`,
+      path: `/category/${slug}`,
+    }))
+    return () => restoreHomeMetadata()
+  }, [slug, displayLabel, t.newsWord])
 
   return (
     <div>

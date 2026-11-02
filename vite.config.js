@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 // The dev proxy target is only needed when running `vite` (dev server).
 // Production builds (`vite build`) never use the proxy, so the variable
 // is intentionally optional — Jenkins CI and Netlify builds don't need it.
+// Never hard-code the backend URL here — this file is committed to git.
 const devProxyTarget = process.env.VITE_DEV_API_PROXY_TARGET
 
 const devProxy = devProxyTarget
@@ -32,10 +33,10 @@ export default defineConfig(({ command }) => {
   return {
     plugins: [react()],
     server: {
-      port: 3000,
-      strictPort: true,
+      port: 3000,       // use port 3000 — less likely to conflict than 5173
+      strictPort: true,  // keep the configured URL stable for backend CORS
       open: false,
-      host: true,
+      host: true,        // expose on local network (useful for testing on phone/tablet)
       proxy: devProxy
         ? { '/api': devProxy, '/uploads': devProxy }
         : {},

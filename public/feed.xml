@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:media="http://search.yahoo.com/mrss/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kanyakumari Today</title>
+    <link>https://www.kanyakumaritoday.com/</link>
+    <description>Latest Kanyakumari news, Nagercoil updates and Kanyakumari district headlines from Tamil Nadu — breaking news, politics, tourism and more.</description>
+    <language>en-IN</language>
+    <lastBuildDate>Fri, 24 Oct 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://www.kanyakumaritoday.com/feed.xml" rel="self" type="application/rss+xml" />
+    <image>
+      <url>https://www.kanyakumaritoday.com/logo.png</url>
+      <title>Kanyakumari Today</title>
+      <link>https://www.kanyakumaritoday.com/</link>
+    </image>
+    <copyright>Copyright 2026 Kanyakumari Today. All rights reserved.</copyright>
+    <managingEditor>kanyakumaritoday2026@gmail.com (Kanyakumari Today)</managingEditor>
+    <webMaster>kanyakumaritoday2026@gmail.com (Kanyakumari Today)</webMaster>
+    <ttl>60</ttl>
+    <!-- Items are populated by running: node scripts/generate-feed.mjs -->
+    <!-- Set SITEMAP_API_BASE_URL to your backend URL before running. -->
+  </channel>
+</rss>

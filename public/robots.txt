@@ -1,27 +1,19 @@
+# robots.txt — Kanyakumari Today (kanyakumaritoday.com)
+# Updated: 2026-10-24
+#
+# Policy: allow all search and AI answer-engine crawlers.
+# Only /admin/, /api/ and UTM-tagged URLs are disallowed.
+# AI training bots are allowed (supports AEO/GEO visibility).
+# See public/llms.txt for citation and reproduction guidelines.
+
+# ── Default: allow everything, block only private paths ─────────────────────
 User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /api/
-Disallow: /search?
 Disallow: /*?utm_
 
-# Block AI training crawlers
-User-agent: GPTBot
-Disallow: /
-
-User-agent: ChatGPT-User
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: anthropic-ai
-Disallow: /
-
-User-agent: Claude-Web
-Disallow: /
-
-# Allow Google crawlers explicitly
+# ── Google search + news + image ────────────────────────────────────────────
 User-agent: Googlebot
 Allow: /
 
@@ -31,7 +23,93 @@ Allow: /
 User-agent: Googlebot-Image
 Allow: /
 
+# ── Bing ─────────────────────────────────────────────────────────────────────
+User-agent: Bingbot
+Allow: /
+
+# ── DuckDuckGo ───────────────────────────────────────────────────────────────
+User-agent: DuckDuckBot
+Allow: /
+
+# ── Apple ────────────────────────────────────────────────────────────────────
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# ── Yandex ───────────────────────────────────────────────────────────────────
+User-agent: YandexBot
+Allow: /
+
+# ── OpenAI (search + training) ───────────────────────────────────────────────
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+# ── Anthropic / Claude ───────────────────────────────────────────────────────
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# ── Perplexity ───────────────────────────────────────────────────────────────
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+# ── Google extended (AI training) ────────────────────────────────────────────
+User-agent: Google-Extended
+Allow: /
+
+# ── Amazon ───────────────────────────────────────────────────────────────────
+User-agent: Amazonbot
+Allow: /
+
+# ── Meta ─────────────────────────────────────────────────────────────────────
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# ── Other AI search bots ─────────────────────────────────────────────────────
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+# ── Crawl rate hint (not enforced by all bots) ───────────────────────────────
 Crawl-delay: 5
 
+# ── Sitemaps ─────────────────────────────────────────────────────────────────
 Sitemap: https://www.kanyakumaritoday.com/sitemap.xml
 Sitemap: https://www.kanyakumaritoday.com/news-sitemap.xml
+
+# ── Machine-readable identity ────────────────────────────────────────────────
+# See https://www.kanyakumaritoday.com/llms.txt for brand description,
+# area served, topics and citation guidelines.

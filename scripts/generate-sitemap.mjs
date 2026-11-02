@@ -15,33 +15,25 @@ const rootDir = resolve(__dirname, '..');
 const BASE_URL = 'https://www.kanyakumaritoday.com';
 const today = new Date().toISOString().slice(0, 10);
 
-// Static routes with their SEO metadata
+// Static routes — category slugs are the real backend slugs verified via /api/categories.
+// Do NOT add categories here that the backend does not return; the Category page
+// fetches by slug, so a slug the backend doesn't know returns empty content.
 const staticRoutes = [
-  { path: '/',                  changefreq: 'hourly',  priority: '1.0' },
-  { path: '/category/kanyakumari', changefreq: 'daily', priority: '0.9' },
-  { path: '/category/nagercoil',   changefreq: 'daily', priority: '0.9' },
-  { path: '/category/tamil-nadu',  changefreq: 'daily', priority: '0.9' },
-  { path: '/category/india',       changefreq: 'daily', priority: '0.9' },
-  { path: '/category/world',       changefreq: 'daily', priority: '0.9' },
-  { path: '/category/tourism',     changefreq: 'daily', priority: '0.9' },
-  { path: '/category/sports',      changefreq: 'daily', priority: '0.9' },
-  { path: '/category/business',    changefreq: 'daily', priority: '0.9' },
-  { path: '/category/education',   changefreq: 'daily', priority: '0.9' },
-  { path: '/category/weather',     changefreq: 'daily', priority: '0.9' },
-  { path: '/category/politics',    changefreq: 'daily', priority: '0.9' },
-  { path: '/category/crime',       changefreq: 'daily', priority: '0.9' },
-  { path: '/search',            changefreq: 'weekly',  priority: '0.5' },
-  { path: '/tourist-info',      changefreq: 'daily',   priority: '0.7' },
-  { path: '/jobs',              changefreq: 'daily',   priority: '0.7' },
-  { path: '/e-paper',           changefreq: 'daily',   priority: '0.7' },
-  { path: '/about',             changefreq: 'monthly', priority: '0.5' },
-  { path: '/contact',           changefreq: 'monthly', priority: '0.5' },
-  { path: '/advertise',         changefreq: 'monthly', priority: '0.5' },
-  { path: '/careers',           changefreq: 'monthly', priority: '0.5' },
-  { path: '/privacy',           changefreq: 'monthly', priority: '0.3' },
-  { path: '/terms',             changefreq: 'monthly', priority: '0.3' },
-  { path: '/disclaimer',        changefreq: 'monthly', priority: '0.3' },
-  { path: '/cookies',           changefreq: 'monthly', priority: '0.3' },
+  { path: '/',                        changefreq: 'hourly',  priority: '1.0' },
+  { path: '/category/kanyakumari',    changefreq: 'daily',   priority: '0.9' },
+  { path: '/category/tamilnadu-news', changefreq: 'daily',   priority: '0.9' },
+  { path: '/category/national-news',  changefreq: 'daily',   priority: '0.9' },
+  { path: '/tourist-info',            changefreq: 'daily',   priority: '0.7' },
+  { path: '/jobs',                    changefreq: 'daily',   priority: '0.7' },
+  { path: '/e-paper',                 changefreq: 'daily',   priority: '0.7' },
+  { path: '/about',                   changefreq: 'monthly', priority: '0.5' },
+  { path: '/contact',                 changefreq: 'monthly', priority: '0.5' },
+  { path: '/advertise',               changefreq: 'monthly', priority: '0.5' },
+  { path: '/careers',                 changefreq: 'monthly', priority: '0.5' },
+  { path: '/privacy',                 changefreq: 'monthly', priority: '0.3' },
+  { path: '/terms',                   changefreq: 'monthly', priority: '0.3' },
+  { path: '/disclaimer',              changefreq: 'monthly', priority: '0.3' },
+  { path: '/cookies',                 changefreq: 'monthly', priority: '0.3' },
 ];
 
 function escapeXml(str) {
