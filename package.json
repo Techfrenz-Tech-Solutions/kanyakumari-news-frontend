@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
+    "serve": "node scripts/serve.mjs",
     "test": "node --test",
     "test:browser": "node scripts/step4-browser.mjs",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
